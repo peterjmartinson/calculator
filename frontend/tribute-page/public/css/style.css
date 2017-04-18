@@ -1,0 +1,21 @@
+
+
+html {
+  color: black;
+}
+
+body {}
+
+main {}
+
+section {}
+
+footer {}
+
+footer.copyright {
+  color: blue;
+}
+
+footer.github {}
+
+footer.license {}
