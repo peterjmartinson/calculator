@@ -1,12 +1,21 @@
 
 
 html {
+  font-size: 10px;
+  font-family: 'Trebuchet MS',Helvetica,sans-serif;
   color: black;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 
 body {}
 
 main {}
+
+main.h1 {}
+
+main.h2 {}
 
 section {}
 
