@@ -9,9 +9,13 @@ html {
   padding: 0px;
 }
 
-body {}
+body {
+  font-size: 2rem;
+}
 
-main {}
+main {
+  border: 1px solid black;
+}
 
 main.h1 {}
 
