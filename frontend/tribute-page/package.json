@@ -1,0 +1,12 @@
+{
+  "name": "tribute-page",
+  "version": "1.0.0",
+  "description": "Presents a tribute to a historic individual.  Created for Free Code Camp frontend curriculum.",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "author": "Peter Martinson",
+  "license": "ISC"
+}
