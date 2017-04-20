@@ -19,9 +19,13 @@ main {
   padding: 10px;
 }
 
-main.h1 {}
+main > section {
+  text-align: center;
+}
 
-main.h2 {}
+main > h1 {}
+
+main > h2 {}
 
 section {
   border: 1px solid black;
@@ -35,12 +39,13 @@ footer {
   color: white;
   font-size: 1.5rem;
   font-weight: normal;
+  padding: 10px;
 }
 
-footer .copyright {
-  color: blue;
+footer .copyright {}
+
+footer .github {}
+
+footer .license {
+  float: right;
 }
-
-footer.github {}
-
-footer.license {}
