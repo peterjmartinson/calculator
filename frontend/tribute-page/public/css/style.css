@@ -1,9 +1,8 @@
-
-
 html {
   font-size: 10px;
   font-family: 'Trebuchet MS',Helvetica,sans-serif;
   color: black;
+  background: #ffffff;
   border: 0px;
   margin: 0px;
   padding: 0px;
@@ -11,21 +10,34 @@ html {
 
 body {
   font-size: 2rem;
+  /* remove the page border */
+  margin: 0;
 }
 
 main {
   border: 1px solid black;
+  padding: 10px;
 }
 
 main.h1 {}
 
 main.h2 {}
 
-section {}
+section {
+  border: 1px solid black;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0px 0px 5px black;
+}
 
-footer {}
+footer {
+  background: black;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: normal;
+}
 
-footer.copyright {
+footer .copyright {
   color: blue;
 }
 

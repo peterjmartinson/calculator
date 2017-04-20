@@ -17,7 +17,7 @@ const express       = require('express'),
       // fcc-tribute   = require('./app/pengo'),
 
       // Global Config
-      PORT          = process.env.PORT || 3000,
+      PORT          = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
