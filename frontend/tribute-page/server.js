@@ -13,9 +13,6 @@ const express       = require('express'),
       app           = express(),
       bodyParser    = require('body-parser'),
 
-      // Local Dependencies
-      // fcc-tribute   = require('./app/pengo'),
-
       // Global Config
       PORT          = process.env.PORT || 3000;
 
@@ -24,13 +21,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 /* ============================ ROUTES ============================ */
 
-app.use(express.static(__dirname + '/public'));     //for landing page
+app.use(express.static(__dirname + '/public'));
 
 app.get('/',function(req, res){
 	res.sendFile(__dirname + '/public');
-});
-
-app.post('/',function(req, res) {
 });
 
 /* =========================== RUN APP =========================== */
