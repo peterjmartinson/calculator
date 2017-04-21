@@ -1,6 +1,6 @@
 html {
   font-size: 10px;
-  font-family: 'Trebuchet MS',Helvetica,sans-serif;
+  font-family: 'Lora',serif;
   color: black;
   background: #ffffff;
   border: 0px;
@@ -23,11 +23,18 @@ main > section {
   text-align: center;
 }
 
-main > h1 {}
+main h1 {
+  font-weight: normal;
+  font-size: 4rem;
+  margin-bottom: 0px;
+}
 
-main > h2 {}
+main h2 {
+  font-weight: normal;
+}
 
 section {
+  font-family: 'Raleway',serif;
   border: 1px solid black;
   margin: 10px;
   padding: 10px;
@@ -35,6 +42,7 @@ section {
 }
 
 footer {
+  font-family: sans-serif;
   background: black;
   color: white;
   font-size: 1.5rem;
