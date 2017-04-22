@@ -61,6 +61,11 @@ figure {
   font-size: 1.5rem;
   font-style: italic;
   padding: 10px;
+  margin: 10px;
+}
+
+figure img {
+  width: 430px;
 }
 
 footer {
