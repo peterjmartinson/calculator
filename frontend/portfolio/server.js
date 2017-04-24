@@ -27,6 +27,10 @@ app.get('/',function(req, res){
 	res.sendFile(__dirname + '/public');
 });
 
+app.get('/test', function(req, res) {
+  res.sendFile(__dirname + '/public/test');
+});
+
 /* =========================== RUN APP =========================== */
 
 app.listen(PORT, function (){
