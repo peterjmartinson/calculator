@@ -27,6 +27,10 @@ app.get('/',function(req, res){
 	res.sendFile(__dirname + '/public');
 });
 
+app.get('/mockup', function(req, res) {
+  res.sendFile(__dirname + '/public/mockup');
+});
+
 app.get('/test', function(req, res) {
   res.sendFile(__dirname + '/public/test');
 });
