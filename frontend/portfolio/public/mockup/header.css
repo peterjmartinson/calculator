@@ -1,29 +1,30 @@
 header {
-  display: block;
+  display:         block;
   width:           100%;
   height:          64px;
-  background:      black;
+  background:      #061539;
+  color:           #7887ab;
   margin:          0px;
   padding-top:     32px;
   padding-bottom:  32px;
 }
 
 header hr {
-  width: 256px;
-  height: 1px;
-  border: 0;
-  background-image: linear-gradient(to right, rgba(256, 256, 256, 0), rgba(256, 256, 256, 0.75));
-  margin-top: 16px;
-  margin-bottom: 16px;
+  width:          256px;
+  height:         1px;
+  border:         0;
+  background:     #4f628e;
+  margin-top:     16px;
+  margin-bottom:  16px;
 }
 
 header a:hover {
-  color: orange;
+  color:           #d4b16a;
   text-decoration: none;
 }
 
 header a {
-  color: white;
+  color:           inherit;
   text-decoration: none;
 }
 
@@ -36,22 +37,13 @@ header #icon {
   padding:     0px;
 }
 
-header #name {
+header #name, #subtitle, #menu, #social {
   display: none;
 }
 
-header #subtitle {
-  display: none;
-}
-
-header #menu {
-  display: none;
-}
-
-header #social {
-  display: none;
-}
-
+/**
+ * desktop media query
+*/
 @media all and (min-width: 720px) {
 
   main {
@@ -59,19 +51,19 @@ header #social {
   }
 
   header {
-    display:         inline-block;
-    position:        fixed;
-    width:           256px;
-    height:          100%;
-    background:      black;
-    margin-top:      0px;
-    margin-bottom:   0px;
-    margin-left:     0px;
-    padding:         32px;
+    display:        inline-block;
+    position:       fixed;
+    width:          256px;
+    height:         100%;
+    margin-top:     0px;
+    margin-bottom:  0px;
+    margin-left:    0px;
+    padding:        32px;
+    text-align:     center;
   }
 
   header #icon {
-    display:        block;
+    display:        inherit;
     background:     url(./st_icon_bw_128.png) no-repeat;
     width:          128px;
     height:         128px;
@@ -81,28 +73,13 @@ header #social {
     padding:        0px;
   }
 
-  header #name {
-    display: block;
-    color:   #ffffff;
-    text-align: center;
-  }
-
-  header #subtitle {
-    display: block;
-    color:   #ffffff;
-    text-align: center;
+  header #name, #subtitle, #social {
+    display: inherit;
   }
 
   header #menu {
-    display: block;
-    color:   #ffffff;
-    text-align: center;
+    display: inherit;
     margin-top: 32px;
-  }
-
-  header #social {
-    display: block;
-    color:   #ffffff;
   }
 
 }
