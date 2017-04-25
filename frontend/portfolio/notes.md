@@ -15,3 +15,7 @@ Standard file structure:
 -       `- test.js
 -  package.json
 -  server.js
+
+
+@media queries
+1. You need to include the <meta name="viewport"...> in the HTML!!!
