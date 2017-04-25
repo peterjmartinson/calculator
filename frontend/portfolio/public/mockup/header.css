@@ -13,11 +13,13 @@ header hr {
   height: 1px;
   border: 0;
   background-image: linear-gradient(to right, rgba(256, 256, 256, 0), rgba(256, 256, 256, 0.75));
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 header a:hover {
   color: orange;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 header a {
@@ -52,26 +54,31 @@ header #social {
 
 @media all and (min-width: 720px) {
 
+  main {
+    margin-left: 320px;
+  }
+
   header {
     display:         inline-block;
     position:        fixed;
-    width:           300px;
+    width:           256px;
     height:          100%;
     background:      black;
     margin-top:      0px;
     margin-bottom:   0px;
     margin-left:     0px;
-    margin-right:    10px;
     padding:         32px;
   }
 
   header #icon {
-    display:     block;
-    background:  url(./st_icon_bw_128.png) no-repeat;
-    width:       128px;
-    height:      128px;
-    margin:      auto;
-    padding:     0px;
+    display:        block;
+    background:     url(./st_icon_bw_128.png) no-repeat;
+    width:          128px;
+    height:         128px;
+    margin:         auto;
+    margin-top:     32px;
+    margin-bottom:  32px;
+    padding:        0px;
   }
 
   header #name {
