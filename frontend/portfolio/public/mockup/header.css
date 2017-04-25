@@ -30,7 +30,7 @@ header a {
 
 header #icon {
   display:     block;
-  background:  url(./st_icon_bw_64.png) no-repeat;
+  background:  url(../assets/st_icon_bb_64.png) no-repeat;
   width:       64px;
   height:      64px;
   margin:      auto;
@@ -64,7 +64,7 @@ header #name, #subtitle, #menu, #social {
 
   header #icon {
     display:        inherit;
-    background:     url(./st_icon_bw_128.png) no-repeat;
+    background:     url(../assets/st_icon_bb_128.png) no-repeat;
     width:          128px;
     height:         128px;
     margin:         auto;
