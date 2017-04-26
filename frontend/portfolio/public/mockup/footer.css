@@ -56,9 +56,10 @@ footer #social a:hover {
     color:        #7887ab;
     font-size:    1.5rem;
     font-weight:  normal;
-    /* padding:      16px 16px 16px 336px; */
-    /* width:        100%; */
-    text-align: right;
+    padding:      16px 0px 16px 16px;
+    width:        calc(100% - 336px);
+    margin-left:  320px;
+    text-align: center;
   }
 
   footer #social {
