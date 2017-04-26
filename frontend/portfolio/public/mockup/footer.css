@@ -1,10 +1,11 @@
 footer {
-  background:      #061539;
-  color:           #7887ab;
-  font-size:       1.5rem;
-  font-weight:     normal;
-  padding:     16px;
-  width:           100%;
+  background:   #061539;
+  color:        #7887ab;
+  font-size:    1.5rem;
+  font-weight:  normal;
+  padding:      16px;
+  width:        100%;
+  text-align: center;
 }
 
 footer div {
@@ -22,46 +23,66 @@ footer a:hover {
   text-decoration: none;
 }
 
+
 footer #social {
   display: block;
-  text-align: center;
 }
 
 footer #social a {
   color: #061539;
+  background: #7887ab;
   text-decoration: none;
   font-weight: bold;
+  margin: 4px;
+  padding: 4px 4px 2px 4px;
   border: 1px solid #7887ab;
   border-radius: 2px;
-  padding: 4px 4px 2px 4px;
-  background: #7887ab;
-  margin: 4px;
 }
 
 footer #social a:hover {
   color: #7887ab;
-  text-decoration: none;
+  background: #061539;
   font-weight: normal;
   border: 1px solid #7887ab;
-  border-radius: 2px;
-  padding: 4px 4px 2px 4px;
-  background: #061539;
 }
 
-footer #copyright {
-  width: 32%;
-  text-align: left;
-  padding-left: 1%;
+/**
+ * desktop media query
+*/
+@media all and (min-width: 720px) {
+
+  footer {
+    background:   #061539;
+    color:        #7887ab;
+    font-size:    1.5rem;
+    font-weight:  normal;
+    /* padding:      16px 16px 16px 336px; */
+    /* width:        100%; */
+    text-align: right;
+  }
+
+  footer #social {
+    display: block;
+  }
+
+  footer #email {
+    display: none;
+  }
 }
 
-footer #github {
-  width: 33%;
-  text-align: center;
-}
 
-footer #license {
-  width: 32%;
-  text-align: right;
-  padding-right: 1%;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

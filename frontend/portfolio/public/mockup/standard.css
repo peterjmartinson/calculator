@@ -85,3 +85,13 @@ figure img {
   width: 430px;
 }
 
+/**
+ * desktop media query
+*/
+@media all and (min-width: 720px) {
+
+  main {
+    margin-left: 320px;
+  }
+
+}

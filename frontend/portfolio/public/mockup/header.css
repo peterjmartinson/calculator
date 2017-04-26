@@ -62,10 +62,6 @@ header #name, #subtitle, #menu {
 */
 @media all and (min-width: 720px) {
 
-  main {
-    margin-left: 320px;
-  }
-
   header {
     display:        inline-block;
     position:       fixed;
