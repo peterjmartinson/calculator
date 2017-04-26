@@ -28,14 +28,30 @@ header a {
   text-decoration: none;
 }
 
-header #icon {
+header #icon-container {
   display:     block;
-  background:  url(../assets/st_icon_bb_64.png) no-repeat;
   width:       64px;
   height:      64px;
   margin:      auto;
   padding:     0px;
 }
+  
+header #icon {
+  background:  url(../assets/st_icon_bb_64.png) no-repeat;
+  width:       64px;
+  height:      64px;
+  margin:      0px;
+  padding:     0px;
+}
+
+/* header #icon { */
+/*   display:     block; */
+/*   background:  url(../assets/st_icon_bb_64.png) no-repeat; */
+/*   width:       64px; */
+/*   height:      64px; */
+/*   margin:      auto; */
+/*   padding:     0px; */
+/* } */
 
 header #name, #subtitle, #menu, #social {
   display: none;
@@ -62,9 +78,8 @@ header #name, #subtitle, #menu, #social {
     text-align:     center;
   }
 
-  header #icon {
+  header #icon-container {
     display:        inherit;
-    background:     url(../assets/st_icon_bb_128.png) no-repeat;
     width:          128px;
     height:         128px;
     margin:         auto;
@@ -72,6 +87,25 @@ header #name, #subtitle, #menu, #social {
     margin-bottom:  32px;
     padding:        0px;
   }
+    
+  header #icon {
+    background:  url(../assets/st_icon_bb_128.png) no-repeat;
+    width:       128px;
+    height:      128px;
+    margin:      0px;
+    padding:     0px;
+  }
+
+  /* header #icon { */
+  /*   display:        inherit; */
+  /*   background:     url(../assets/st_icon_bb_128.png) no-repeat; */
+  /*   width:          128px; */
+  /*   height:         128px; */
+  /*   margin:         auto; */
+  /*   margin-top:     32px; */
+  /*   margin-bottom:  32px; */
+  /*   padding:        0px; */
+  /* } */
 
   header #name, #subtitle, #social {
     display: inherit;

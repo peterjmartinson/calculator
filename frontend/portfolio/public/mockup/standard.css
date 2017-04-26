@@ -61,10 +61,10 @@ main h2 {
 
 section {
   font-family: 'Lato',serif;
-  border: 1px solid black;
+  border: 0px solid black;
   margin: 10px;
   padding: 10px;
-  box-shadow: 0px 0px 5px black;
+  box-shadow: 0px 0px 0px black;
 }
 
 section p, li {
