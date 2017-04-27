@@ -54,7 +54,7 @@ main h2 {
 
 section {
   font-family: 'Lato',serif;
-  border: 1px solid black;
+  border: 0px solid black;
   min-height: 100vh;
   box-shadow: 0px 0px 0px black;
 }
@@ -132,12 +132,54 @@ header #name, #subtitle, #menu {
   display: none;
 }
 
+nav {
+  position: fixed;
+  bottom: 0px;
+  width: 100vw;
+}
+
+nav ul {
+  list-style-type: none;
+  background: #7887ab;
+  text-align: center;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  border-top: 2px solid #061539;
+}
+
+nav ul li {
+  display: inline-block;
+  width: 25%;
+  height:100%;
+}
+
+nav li > div {
+  border: 1px solid black;
+  padding: 22px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #061539;
+}
+
+nav i {
+  padding-bottom: 8px;
+}
+
+nav a:hover {
+  text-decoration: none;
+  color: #d4b16a;
+}
+
 
 footer {
   background:   #061539;
   color:        #7887ab;
   font-size:    1.5rem;
   font-weight:  normal;
+  margin-bottom: 96px;
   padding:      16px 0px 16px 0px;
   width:        100%;
   text-align: center;
@@ -186,6 +228,10 @@ footer #social a:hover {
 */
 @media all and (min-width: 720px) {
 
+  nav {
+    display: none;
+  }
+
   footer {
     background:   #061539;
     color:        #7887ab;
@@ -194,6 +240,7 @@ footer #social a:hover {
     padding:      16px 16px 16px 16px;
     width:        calc(100% - 352px);
     margin-left:  320px;
+    margin-bottom: 0px;
     text-align: center;
   }
 

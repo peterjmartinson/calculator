@@ -1,3 +1,6 @@
+  /* background:      #061539; */
+  /* color:           #7887ab; */
+  /* color:           #d4b16a; */
 nav {
   position: fixed;
   bottom: 0px;
@@ -6,10 +9,12 @@ nav {
 
 nav ul {
   list-style-type: none;
+  background: #7887ab;
   text-align: center;
   width: 100%;
   margin: 0px;
   padding: 0px;
+  border-top: 2px solid #061539;
 }
 
 nav ul li {
@@ -23,7 +28,19 @@ nav li > div {
   padding: 22px;
 }
 
+nav a {
+  text-decoration: none;
+  color: #061539;
+}
 
+nav i {
+  padding-bottom: 8px;
+}
+
+nav a:hover {
+  text-decoration: none;
+  color: #d4b16a;
+}
 
 
 
