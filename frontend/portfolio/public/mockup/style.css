@@ -39,17 +39,7 @@ h3 {
 main {
   border: 0px solid black;
   padding: 10px;
-  max-width: 1000px;
-}
-
-main h1 {
-  font-weight: normal;
-  font-size: 4rem;
-  margin-bottom: 0px;
-}
-
-main h2 {
-  font-weight: normal;
+  max-width: 1024px;
 }
 
 section {
@@ -66,20 +56,6 @@ section h2 {
 section p {
   padding: 16px;
   text-align: justify;
-}
-
-figure {
-  width: 450px;
-  float: right;
-  border: 1px solid black;
-  font-size: 1.5rem;
-  font-style: italic;
-  padding: 10px;
-  margin: 10px;
-}
-
-figure img {
-  width: 430px;
 }
 
 header {
@@ -173,7 +149,6 @@ nav a:hover {
   color: #d4b16a;
 }
 
-
 footer {
   background:   #061539;
   color:        #7887ab;
@@ -199,7 +174,6 @@ footer a:hover {
   color: #d4b16a;
   text-decoration: none;
 }
-
 
 footer #social {
   display: block;
@@ -228,27 +202,11 @@ footer #social a:hover {
 */
 @media all and (min-width: 720px) {
 
+  main {
+    margin-left: 320px;
+  }
+
   nav {
-    display: none;
-  }
-
-  footer {
-    background:   #061539;
-    color:        #7887ab;
-    font-size:    1.5rem;
-    font-weight:  normal;
-    padding:      16px 16px 16px 16px;
-    width:        calc(100% - 352px);
-    margin-left:  320px;
-    margin-bottom: 0px;
-    text-align: center;
-  }
-
-  footer #social {
-    display: block;
-  }
-
-  footer #email {
     display: none;
   }
 
@@ -291,8 +249,24 @@ footer #social a:hover {
     margin-top: 32px;
   }
 
-  main {
-    margin-left: 320px;
+  footer {
+    background:   #061539;
+    color:        #7887ab;
+    font-size:    1.5rem;
+    font-weight:  normal;
+    padding:      16px 16px 16px 16px;
+    width:        calc(100% - 352px);
+    margin-left:  320px;
+    margin-bottom: 0px;
+    text-align: center;
+  }
+
+  footer #social {
+    display: block;
+  }
+
+  footer #email {
+    display: none;
   }
 
 }
