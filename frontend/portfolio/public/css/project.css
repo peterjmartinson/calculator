@@ -1,0 +1,42 @@
+section#portfolio {
+  text-align: center;
+}
+
+section#portfolio div.project  {
+  display: inline-block;
+  border: 1px solid black;
+  text-align: center;
+  margin: 16px;
+  padding: 16px;
+}
+
+section#portfolio img {
+  display: block;
+  height: 256px;
+  width:  256px;
+  background: black;
+}
+
+section#portfolio ul {
+  list-style-type: none;
+  text-align: center;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+section#portfolio ul li {
+  display: inline-block;
+  width: 45%;
+}
+
+section#portfolio a {
+  text-decoration: none;
+  color: #0c1c45;
+}
+
+section#portfolio a:hover {
+  text-decoration: none;
+  color: #FF7600;
+}
+

@@ -1,0 +1,24 @@
+{
+  "name": "fcc-portfolio",
+  "version": "1.0.0",
+  "description": "Static portfolio page for Free Code Camp",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peterjmartinson/chingu-fcc-speedrun-challenge.git"
+  },
+  "author": "Peter Martinson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/peterjmartinson/chingu-fcc-speedrun-challenge/issues"
+  },
+  "homepage": "https://github.com/peterjmartinson/chingu-fcc-speedrun-challenge#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2"
+  }
+}
