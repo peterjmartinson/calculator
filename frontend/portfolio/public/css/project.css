@@ -1,3 +1,7 @@
+section#portfolio {
+  text-align: center;
+}
+
 section#portfolio div.project  {
   display: inline-block;
   border: 1px solid black;
@@ -25,3 +29,14 @@ section#portfolio ul li {
   display: inline-block;
   width: 45%;
 }
+
+section#portfolio a {
+  text-decoration: none;
+  color: #0c1c45;
+}
+
+section#portfolio a:hover {
+  text-decoration: none;
+  color: #FF7600;
+}
+

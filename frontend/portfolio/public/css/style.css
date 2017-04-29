@@ -79,7 +79,7 @@ header hr {
 }
 
 header a:hover {
-  color:            #455787;
+  color:            #FF7600;
   text-decoration:  none;
 }
 
@@ -155,7 +155,7 @@ nav i {
 
 nav a:hover {
   text-decoration:  none;
-  color:            #d4b16a;
+  color:            #FF7600;
 }
 
 footer {
@@ -180,7 +180,7 @@ footer a {
 }
 
 footer a:hover {
-  color:            #d4b16a;
+  color:            #FF7600;
   text-decoration:  none;
 }
 
