@@ -1,0 +1,44 @@
+/* html { */
+/*   display: flex; */
+/*   justify-content: center; */
+/*   align-items: center; */
+/*   height: 100vh; */
+/*   width: 100%; */
+/* } */
+/* body { */
+/*   background: orange; */
+/*   color: white; */
+/*   font-size: 10px */
+/* } */
+
+section#random-quote {
+  width: 600px;  
+  padding: 20px;
+  background: white;
+  color: orange;
+  border: 0px solid black;
+  border-radius: 5px;
+}
+
+#quote {
+  font-size: 3rem;
+}
+
+#author {
+  font-size: 1.5rem;
+  text-align: right;
+}
+
+section#random-quote button {
+  background: orange;
+  border: 0;
+  border-radius: 5px;
+  height: 40px;
+  width: 130px;
+  color: white;
+  font-size: 1rem;
+}
+
+section#random-quote button:focus {
+  outline:0;
+}

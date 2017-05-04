@@ -1,0 +1,284 @@
+/**
+ * Standard styling for FCC Projects
+ * Copyright 2017 Peter Martinson
+ * light blue:  #bec6da
+ * dark blue:   #0c1c45
+*/
+
+html {
+  font-size:    10px;
+  font-family:  'Josefin Sans',sans-serif;
+  color:        black;
+  background:   #ffffff;
+  border:       0px;
+  margin:       0px;
+  padding:      0px;
+}
+
+body {
+  font-size:  2rem;
+  margin:     auto;
+}
+
+h1 {
+  font-weight:    bold;
+  font-size:      3.5rem;
+  margin-bottom:  0px;
+}
+
+h2 {
+  font-weight:    normal;
+  font-size:      2.5rem;
+  margin-bottom:  0px;
+}
+
+h3 {
+  font-weight:    bold;
+  font-size:      2rem;
+  margin-bottom:  0px;
+}
+
+main {
+  border:     0px solid black;
+  padding:    10px;
+  max-width:  1024px;
+}
+
+section {
+  font-family:  'Lato',serif;
+  border:       0px solid black;
+  min-height:   100vh;
+  box-shadow:   0px 0px 0px black;
+}
+
+section h2 {
+  text-align:  center;
+}
+
+section p {
+  padding:     16px;
+  text-align:  justify;
+}
+
+header {
+  display:     block;
+  height:      64px;
+  background:  #0c1c45;
+  color:       #bec6da;
+  margin:      0px;
+  padding:     32px;
+}
+
+header hr {
+  width:          256px;
+  height:         1px;
+  border:         0;
+  background:     #bec6da;
+  margin-top:     16px;
+  margin-bottom:  16px;
+}
+
+header a:hover {
+  color:            #FF7600;
+  text-decoration:  none;
+}
+
+header a {
+  color:           inherit;
+  text-decoration: none;
+}
+
+header #icon-container {
+  display:     block;
+  margin:      0px;
+  padding:     0px;
+}
+  
+header #icon {
+  display:     inline-block;
+  background:  url(../assets/st_icon_bb_64.png) no-repeat;
+  width:       64px;
+  height:      64px;
+  margin:      0px;
+  padding:     0px;
+}
+
+header #icon-title {
+  display:      inline;
+  font-size:    3rem;
+  font-weight:  bold;
+  float:        right;
+  margin:       0px;
+  padding-top:  17px;
+}
+
+header #name, #subtitle, #menu {
+  display: none;
+}
+
+nav {
+  position:  fixed;
+  bottom:    0px;
+  width:     100vw;
+}
+
+nav ul {
+  list-style-type:  none;
+  color:            #0c1c45;
+  background:       #bec6da;
+  text-align:       center;
+  width:            100%;
+  margin:           0px;
+  padding:          0px;
+  border-top:       2px solid #bec6da;
+}
+
+nav ul li {
+  display:  inline-block;
+  width:    25%;
+  height:   100%;
+}
+
+nav li > div {
+  border:   1px solid black;
+  padding:  16px;
+}
+
+nav a {
+  text-decoration:  none;
+  color:            #0c1c45;
+}
+
+nav i {
+  padding-bottom: 8px;
+}
+
+nav a:hover {
+  text-decoration:  none;
+  color:            #FF7600;
+}
+
+footer {
+  background:     #0c1c45;
+  color:          #bec6da;
+  font-size:      1.5rem;
+  font-weight:    normal;
+  margin-bottom:  84px;
+  padding:        16px 0px 16px 0px;
+  width:          100%;
+  text-align:     center;
+}
+
+footer div {
+  display:  block;
+  margin:   16px;
+}
+
+footer a {
+  color:            inherit;
+  text-decoration:  none;
+}
+
+footer a:hover {
+  color:            #FF7600;
+  text-decoration:  none;
+}
+
+footer #social {
+  display: block;
+}
+
+footer #social a {
+  color:            #0c1c45;
+  background:       #bec6da;
+  text-decoration:  none;
+  font-weight:      bold;
+  margin:           4px;
+  padding:          4px 4px 2px 4px;
+  border:           1px solid #bec6da;
+  border-radius:    2px;
+}
+
+footer #social a:hover {
+  background:   #0c1c45;
+  color:        #bec6da;
+  font-weight:  normal;
+  border:       1px solid #0c1c45;
+}
+
+/**
+ * desktop media query
+*/
+@media all and (min-width: 720px) {
+
+  main {
+    margin-left: 320px;
+  }
+
+  nav {
+    display: none;
+  }
+
+  header {
+    display:        inline-block;
+    position:       fixed;
+    width:          256px;
+    height:         100%;
+    margin-top:     0px;
+    margin-bottom:  0px;
+    margin-left:    0px;
+    padding:        32px;
+    text-align:     center;
+  }
+
+  header #icon-container {
+    display:        inherit;
+    width:          128px;
+    height:         128px;
+    margin:         auto;
+    margin-top:     32px;
+    margin-bottom:  32px;
+    padding:        0px;
+  }
+    
+  header #icon {
+    background:  url(../assets/st_icon_bb_128.png) no-repeat;
+    width:       128px;
+    height:      128px;
+    margin:      0px;
+    padding:     0px;
+  }
+
+  header #icon-title {
+    display: none;
+  }
+
+  header #name, #subtitle {
+    display: inherit;
+  }
+
+  header #menu {
+    display:     inherit;
+    margin-top:  32px;
+  }
+
+  footer {
+    font-size:      1.5rem;
+    font-weight:    normal;
+    padding:        16px 16px 16px 16px;
+    width:          calc(100% - 352px);
+    margin-left:    320px;
+    margin-bottom:  0px;
+    text-align:     center;
+  }
+
+  footer #social {
+    display: block;
+  }
+
+  footer #email {
+    display: none;
+  }
+
+}
+
