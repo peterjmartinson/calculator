@@ -1,0 +1,19 @@
+{
+  "name": "local-weather",
+  "version": "1.0.0",
+  "description": "Display the local weather - FCC frontend project",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "author": "Peter Martinson",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2"
+  }
+}
