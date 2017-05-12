@@ -1,5 +1,10 @@
-//https://theysaidso.com/api/
-//http://api.icndb.com/jokes/random
+/**
+ * Random Quote Machine, FCC
+ * Produce random quotes from an online API
+ * 
+ * Copyright Peter Martinson
+*/
+
 $(document).ready(function() {
 
   var getQuote = function() {
@@ -12,8 +17,8 @@ $(document).ready(function() {
   }
 
   getQuote();
-
   $("#getMessage").on("click", getQuote);
+
   $("#postTweet").on("click", function() {
     var quote = document.getElementById("quote").innerHTML;
     if ( quote.length <= 140 ) {
