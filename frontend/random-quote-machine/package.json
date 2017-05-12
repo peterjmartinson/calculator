@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/peterjmartinson/chingu-fcc-speedrun-challenge/issues"
   },
-  "homepage": "https://github.com/peterjmartinson/chingu-fcc-speedrun-challenge#readme"
+  "homepage": "https://github.com/peterjmartinson/chingu-fcc-speedrun-challenge#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2"
+  }
 }

@@ -47,7 +47,7 @@ main {
 section {
   font-family:  'Lato',serif;
   border:       0px solid black;
-  min-height:   100vh;
+  /* min-height:   100vh; */
   box-shadow:   0px 0px 0px black;
 }
 
