@@ -21,16 +21,6 @@ $(document).ready(function() {
     });
   })
 
-  var weather_page = '';
-  weather_page += '  <section>';
-  weather_page += '    <div id="location"></div>';
-  weather_page += '    <div id="date"></div>';
-  weather_page += '    <div id="temperature"></div>';
-  weather_page += '    <div id="weather"></div>';
-  weather_page += '    <div id="weather-icon"></div>';
-  weather_page += '  </section>';
-  console.log(weather_page);
-
   // =================  FETCH WEATHER  =========================
   fetchLocation
     .then(function(coords) {
