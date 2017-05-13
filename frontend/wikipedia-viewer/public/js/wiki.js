@@ -7,7 +7,7 @@
  * 3. Clicking on an article opens a new window with Wikipedia
 */
 
-// $(document).ready(function() {
+$(document).ready(function() {
   
   'use strict';
 
@@ -37,6 +37,6 @@
   var dom = cacheDOM();
 
 
-// });
+});
 
 
