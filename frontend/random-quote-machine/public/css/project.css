@@ -1,0 +1,45 @@
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background: #0c1c45;
+}
+
+section#random-quote {
+  width: 600px;  
+  padding: 20px;
+  background: white;
+  color: #0c1c45;
+  border: 0px solid black;
+  border-radius: 5px;
+}
+
+#quote {
+  font-size: 3rem;
+}
+
+#author {
+  font-size: 1.5rem;
+  text-align: right;
+}
+
+section#random-quote button {
+  background: #0c1c45;
+  border: 0;
+  border-radius: 5px;
+  height: 40px;
+  width: 130px;
+  color: white;
+  font-size: 1rem;
+}
+
+section#random-quote button:hover {
+  background: #FF7600;
+  outline:0;
+}
+
+section#random-quote button:focus {
+  outline:0;
+}
