@@ -11,6 +11,8 @@ $(document).ready(function() {
   
   'use strict';
 
+  var dom = cacheDOM();
+  var random_button = '<button id="random">Get a Random Wikipedia Article</button>';
   function returnOne() {
     return 1;
   };
@@ -27,14 +29,21 @@ $(document).ready(function() {
 
   function populateDOM() {
     dom.instructions.innerHTML  = 'instructions';
-    dom.search.innerHTML        = 'search';
-    dom.search_button.innerHTML = 'search-button';
-    dom.random_button.innerHTML = 'random-button';
+    // dom.search.innerHTML        = 'search';
+    // dom.search_button.innerHTML = 'search-button';
+    dom.random_button.innerHTML = random_button;
     dom.results.innerHTML       = 'results';
   }
 
+  function getRandomArticle() {
+    var random_url = 'https://en.wikipedia.org/wiki/Special:Random';
+    window.open(random_url,'_blank');
+  }
+
+  function search() {}
+
   populateDOM();
-  var dom = cacheDOM();
+  $("#random").on("click", getRandomArticle);
 
 
 });

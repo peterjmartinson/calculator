@@ -14,16 +14,28 @@ section {
   color: #0c1c45;
   text-align: center;
   border: 0px solid black;
-  border-radius: 5px;
+  /* border-radius: 5px; */
 }
 
-section #temperature:hover {
-  color: #FF7600;
+section div {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+section button {
+  background: #0c1c45;
+  border: 0;
+  /* border-radius: 5px; */
+  height: 30px;
+  color: white;
+}
+
+section button:hover {
+  background: #FF7600;
+  color: #0c1c45;
   outline:0;
 }
 
-section #weather-icon {
-  min-width: 40px;
-  min-height: 40px;
-  background: black;
+section button:focus {
+  outline:0;
 }
