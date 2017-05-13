@@ -21,3 +21,9 @@ section #temperature:hover {
   color: #FF7600;
   outline:0;
 }
+
+section #weather-icon {
+  min-width: 40px;
+  min-height: 40px;
+  background: black;
+}
