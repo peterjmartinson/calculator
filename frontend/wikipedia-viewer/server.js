@@ -21,10 +21,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 /* ============================ ROUTES ============================ */
 
-app.use(express.static(__dirname + '/public'));
+// app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname));
 
 app.get('/',function(req, res){
 	res.sendFile(__dirname + '/public');
+});
+
+app.get('/test', function(req, res) {
+  res.sendFile(__dirname + '/test');
 });
 
 /* =========================== RUN APP =========================== */

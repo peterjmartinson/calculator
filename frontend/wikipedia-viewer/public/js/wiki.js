@@ -7,9 +7,13 @@
  * 3. Clicking on an article opens a new window with Wikipedia
 */
 
-$(document).ready(function() {
+// $(document).ready(function() {
   
   'use strict';
+
+  function returnOne() {
+    return 1;
+  };
 
   function cacheDOM() {
     return {
@@ -21,10 +25,18 @@ $(document).ready(function() {
     }
   }
 
+  function populateDOM() {
+    dom.instructions.innerHTML  = 'instructions';
+    dom.search.innerHTML        = 'search';
+    dom.search_button.innerHTML = 'search-button';
+    dom.random_button.innerHTML = 'random-button';
+    dom.results.innerHTML       = 'results';
+  }
+
+  populateDOM();
   var dom = cacheDOM();
 
-  console.log(dom);
 
-});
+// });
 
 
