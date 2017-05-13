@@ -20,7 +20,8 @@ $(document).ready(function() {
   function cacheDOM() {
     return {
       instructions  : document.getElementById("instructions"),
-      search        : document.getElementById("search"),
+      // search        : document.getElementById("search"),
+      search_input  : document.getElementById("search-input"),
       search_button : document.getElementById("search-button"),
       random_button : document.getElementById("random-button"),
       results       : document.getElementById("results")
@@ -33,7 +34,9 @@ $(document).ready(function() {
     // dom.search_button.innerHTML = 'search-button';
     dom.random_button.innerHTML = random_button;
     dom.results.innerHTML       = 'results';
+    // dom.search.method = 'GET';
   }
+  // console.log(dom.search.value);
 
   function getRandomArticle() {
     var random_url = 'https://en.wikipedia.org/wiki/Special:Random';
@@ -41,7 +44,11 @@ $(document).ready(function() {
   }
 
   function search() {}
+  function logValue() {
+    console.log($("#search-input").val());
+  }
 
+  $("#search-button").on("click", console.log("hello"));
   populateDOM();
   $("#random").on("click", getRandomArticle);
 
