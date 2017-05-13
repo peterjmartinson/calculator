@@ -1,14 +1,23 @@
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10%;
+  padding-bottom: 10%;
+  background: #0c1c45;
+}
+
 section {
-  text-align: center;
-}
-
-section a {
-  text-decoration: none;
+  width: 600px;  
+  padding: 20px;
+  background: white;
   color: #0c1c45;
+  text-align: center;
+  border: 0px solid black;
+  border-radius: 5px;
 }
 
-section a:hover {
-  text-decoration: none;
+section #temperature:hover {
   color: #FF7600;
+  outline:0;
 }
-
