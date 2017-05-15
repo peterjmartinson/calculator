@@ -48,8 +48,11 @@ $(document).ready(function() {
     console.log($("#search-input").val());
   }
 
-  $("#search-button").on("click", console.log("hello"));
   populateDOM();
+  var button = document.getElementById("search-button");
+  var value  = button.form.searchy.value;
+  button.onclick = function() { console.log(button.form.searchy.value); };
+  // $("#search-button").on("click", console.log($("#search-input").val()));
   $("#random").on("click", getRandomArticle);
 
 
