@@ -10,6 +10,11 @@
     dom.results.innerHTML       = 'results';
   }
 
+  function getRandomArticle() {
+    var random_url = 'https://en.wikipedia.org/wiki/Special:Random';
+    window.open(random_url,'_blank');
+  }
+
   populateDOM();
 
   dom.button.onclick = function() {
