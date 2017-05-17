@@ -7,9 +7,11 @@ main {
   background: #0c1c45;
 }
 
+/* need to figure out how to get this to always float under */
 section {
   width: 600px;  
-  padding: 20px;
+  padding: 10px;
+  margin: 10px;
   background: white;
   color: #0c1c45;
   text-align: center;
@@ -39,3 +41,14 @@ section button:hover {
 section button:focus {
   outline:0;
 }
+
+section ul {
+  list-style-type: none;
+  text-align: left;
+}
+
+section li {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
