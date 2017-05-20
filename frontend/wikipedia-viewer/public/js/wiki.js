@@ -41,10 +41,17 @@ console.log("in wiki.js");
   function listResults(res) {
     var list = '<ul>';
     res.query.search.forEach(function(e) {
+      console.log("========= another element");
+      for (var key in e) {
+        console.log(key + ' : ' + e[key]);
+      }
       var list_element = '';
+      var link = 'https://en.wikipedia.org/wiki/' + e.title.replace(/\s+/g,'_')
       list_element += '<li>';
+      list_element += '  <a href="' + link + '">';
       list_element += '  <strong>' + e.title + '</strong><br>';
       list_element += '  <em>' + e.snippet + '</em>';
+      list_element += '  </a>';
       list_element += '</li>';
       list += list_element;
     });
@@ -67,7 +74,7 @@ console.log("in wiki.js");
   dom.search.onclick = function() {
     var val = dom.search.form.searchy.value.replace(/\s+/g,'%20');
     var wiki_url = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + val;
-    // var wiki_url = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=alllinks&srsearch=' + val;
+    // var wiki_url = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + val;
     dom.results.innerHTML = 'Searching...';
 
     $.get(wiki_url, function(response) {
