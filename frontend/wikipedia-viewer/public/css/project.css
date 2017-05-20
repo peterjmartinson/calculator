@@ -54,6 +54,12 @@ section li {
   color: #bec6da;
 }
 
+section li a {
+  display: block;
+  color: #bec6da;
+  text-decoration: none;
+}
+
 section li:hover {
   border-left: 5px solid #FF7600;
 }
