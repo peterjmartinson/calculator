@@ -17,11 +17,18 @@ console.log("in wiki.js");
   dom.random       = document.getElementById("random-button");
 
   // ===  DEFINE FUNCTIONS  =======================================
+
+  /**
+   * Insert items into the DOM
+  */
   function populateDOM() {
     dom.instructions.innerHTML  = 'instructions';
     dom.results.innerHTML       = 'results';
   }
 
+  /**
+   * Open a new page with a random Wikipedia article
+  */
   function getRandomArticle() {
     var random_url = 'https://en.wikipedia.org/wiki/Special:Random';
     window.open(random_url,'_blank');
@@ -29,7 +36,7 @@ console.log("in wiki.js");
 
   /**
    * create an unordered list of search results
-   * @param [object] the AJAX response object
+   * @param {object} res - the AJAX response object
   */
   function listResults(res) {
     var list = '<ul>';
@@ -55,37 +62,46 @@ console.log("in wiki.js");
 
   $("#random").on("click", getRandomArticle);
   // dom.random.onclick = getRandomArticle();
+
+
   dom.search.onclick = function() {
-    // var val = dom.button.form.searchy.value.replace(/\s+/g,'%20');
-    // var wiki_url = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + val;
+    var val = dom.search.form.searchy.value.replace(/\s+/g,'%20');
+    var wiki_url = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + val;
+    // var wiki_url = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=alllinks&srsearch=' + val;
     dom.results.innerHTML = 'Searching...';
 
-    // $.get(wiki_url, function(response) {
-    //   dom.results.innerHTML = listResults(response);
-    //   console.log(response.query.search[0].title);
-    //   console.log(response.query.search[0].snippet);
-    // });
+    $.get(wiki_url, function(response) {
+      dom.results.innerHTML = listResults(response);
 
-    var mock_results = {query:{search:[
-      {
-        title : 'First result',
-        snippet : 'Lorem facilis nobis earum alias unde fugit! Modi enim'
-      },
-      {
-        title : 'Second result',
-        snippet : 'et inventore ab amet eius. Odit culpa eum excepturi quasi '
-      },
-      {
-        title : 'Third result',
-        snippet : 'rem suscipit omnis minima in cumque pariatur suscipit? Eum eaque '
-      },
-      {
-        title : 'Fourth result',
-        snippet : 'culpa sequi dicta voluptates odit est? Explicabo enim natus quo dolorum'
+      for (var key in response.query.search[0]) {
+        var property = response.query.search[0][key];
+        console.log(key + ' : ' + property);
       }
-    ]}};
 
-    dom.results.innerHTML = listResults(mock_results);
+      // console.log(response.query.search[0].title);
+      // console.log(response.query.search[0].snippet);
+    });
+
+    // var mock_results = {query:{search:[
+    //   {
+    //     title : 'First result',
+    //     snippet : 'Lorem facilis nobis earum alias unde fugit! Modi enim'
+    //   },
+    //   {
+    //     title : 'Second result',
+    //     snippet : 'et inventore ab amet eius. Odit culpa eum excepturi quasi '
+    //   },
+    //   {
+    //     title : 'Third result',
+    //     snippet : 'rem suscipit omnis minima in cumque pariatur suscipit? Eum eaque '
+    //   },
+    //   {
+    //     title : 'Fourth result',
+    //     snippet : 'culpa sequi dicta voluptates odit est? Explicabo enim natus quo dolorum'
+    //   }
+    // ]}};
+
+    // dom.results.innerHTML = listResults(mock_results);
   }
 
 }());
