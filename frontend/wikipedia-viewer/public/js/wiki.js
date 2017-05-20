@@ -41,14 +41,10 @@ console.log("in wiki.js");
   function listResults(res) {
     var list = '<ul>';
     res.query.search.forEach(function(e) {
-      console.log("========= another element");
-      for (var key in e) {
-        console.log(key + ' : ' + e[key]);
-      }
       var list_element = '';
       var link = 'https://en.wikipedia.org/wiki/' + e.title.replace(/\s+/g,'_')
       list_element += '<li>';
-      list_element += '  <a href="' + link + '">';
+      list_element += '  <a href="' + link + '" target="_blank">';
       list_element += '  <strong>' + e.title + '</strong><br>';
       list_element += '  <em>' + e.snippet + '</em>';
       list_element += '  </a>';
