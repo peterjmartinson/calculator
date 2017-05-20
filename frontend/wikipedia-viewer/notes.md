@@ -21,3 +21,5 @@ Second, using VanillaJS
     var value  = button.form.searchy.value;
     button.onclick = function() { console.log(button.form.searchy.value); };
 The second will log the contents, while the first will not.  It is as if the value gets sent _before_ jQuery can catch it - the value nabbed by jQuery is always the empty string.  I think it has something to do with the jQuery `ready` wrapper.
+
+3. Write the blog on "Figuring out how to navigate and use an API"
