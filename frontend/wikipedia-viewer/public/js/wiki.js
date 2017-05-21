@@ -21,7 +21,7 @@
    * Insert items into the DOM
   */
   function populateDOM() {
-    dom.instructions.innerHTML  = 'instructions';
+    dom.instructions.innerHTML  = 'Search for a specific item, or pull up a random article.';
     dom.results.innerHTML       = 'results';
   }
 
@@ -71,17 +71,8 @@
     var wiki_url = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + val;
     // var wiki_url = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=' + val;
     dom.results.innerHTML = 'Searching...';
-
     $.get(wiki_url, function(response) {
       dom.results.innerHTML = listResults(response);
-
-      for (var key in response.query.search[0]) {
-        var property = response.query.search[0][key];
-        console.log(key + ' : ' + property);
-      }
-
-      // console.log(response.query.search[0].title);
-      // console.log(response.query.search[0].snippet);
     });
 
     // var mock_results = {query:{search:[
