@@ -8,7 +8,6 @@
 */
 
 (function() {
-console.log("in wiki.js");
 
   var dom = {};
   dom.instructions = document.getElementById("instructions");
