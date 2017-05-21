@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  
+  <title>FCC | Wikipedia Viewer</title>
+  
+  <!-- javascript -->
+
+  <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script> -->
+  <script src="vendor/jquery-3.2.1.js"></script>
+
+  <!-- stylesheets -->
+
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Josefin+Sans">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato">
+  <!-- <script src="https://use.fontawesome.com/efbcfdb77a.js"></script> -->
+  <link rel="stylesheet" href="./vendor/font-awesome-4.7.0/css/font-awesome.min.css"/>
+  <link rel="stylesheet" href="./css/style.css" media="all">
+  <link rel="stylesheet" href="./css/project.css" media="all">
+</head>
+<body>
+
+  <header>
+    <a href="#home" id="icon-container">
+      <div id="icon"></div>
+      <div id="icon-title">PETER MARTINSON</div>
+    </a>
+    <div id="name">
+      <h1><a href="#home">PETER MARTINSON</a></h1>
+    </div>
+    <div id="subtitle">
+      <h2>web developer<br>data wrangler</h2>
+    </div>
+    <div id="menu">
+      <h3><a href="#about"    >ABOUT    </a></h3>
+      <hr>
+      <h3><a href="#portfolio">PORTFOLIO</a></h3>
+      <hr>
+      <h3><a href="#contact"  >CONTACT  </a></h3>
+      <hr>
+      <h3><a href="http://stonetelescope.wordpress.com">BLOG     </a></h3>
+    </div>
+  </header>
+
+  <main>
+    <div id="project-title"><h1>Wikipedia Viewer</h1></div>
+    <section>
+      <div id="instructions"></div>
+
+      <form action="javascript:console.log('button clicked')">
+        <input name="searchy" id="search-input" type="text"
+               placeholder="search Wikipedia" autofocus>
+        <button id="search-button">Search</button>
+      </form>
+
+      <div id="random-button"><button id="random">Get a Random Wikipedia Article</button></div>
+    </section>
+    <section>
+
+      <div id="results"></div>
+    </section>
+  </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <footer>
+    <h2>Stay in touch</h2>
+    <div id="social">
+      <a href="http://twitter.com/StoneTelescope" target="_blank"> <i class="fa fa-twitter" ></i> Twitter </a>
+      <a href="http://www.linkedin.com/in/peterjmartinson" target="_blank"> <i class="fa fa-linkedin"></i> LinkedIn </a>
+      <a href="http://github.com/peterjmartinson" target="_blank"> <i class="fa fa-github"  ></i> GitHub </a>
+      <a href="http://codepen.io/peterjmartinson/" target="_blank"> <i class="fa fa-codepen" ></i> CodePen </a>
+      <a href="http://stonetelescope.wordpress.com" target="_blank"> <i class="fa fa-wordpress" ></i> Wordpress </a>
+    </div>
+    <div id="email">
+      <h1><a href="mailto:peter.j.martinson@gmail.com">PETER MARTINSON</a></h1>
+    </div>
+    <a href="http://github.com/peterjmartinson" target="_blank">
+      <div id="copyright">Copyright &copy; 2017</div>
+    </a>
+  </footer>
+
+  <script src="./js/wiki.js"></script>
+  <!-- <script src="./js/test.test.js"></script> -->
+</body>
+</html>

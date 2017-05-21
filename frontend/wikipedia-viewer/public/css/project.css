@@ -1,0 +1,83 @@
+main {
+  display: relative;
+  padding-bottom: 10%;
+  background: #0c1c45;
+}
+
+main #project-title {
+  text-align: center;
+  color: #bec6da;
+  padding-bottom: 5%;
+}
+
+section {
+  padding: 10px;
+  margin: 10px;
+  background: white;
+  color: #0c1c45;
+  text-align: center;
+}
+
+section div {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+section button {
+  background: #0c1c45;
+  border: 0;
+  height: 30px;
+  color: #bec6da;
+  box-shadow: 2px 2px 3px 0px #0c1c45;
+}
+
+section button:hover {
+  background: #FF7600;
+  color: #0c1c45;
+  outline:0;
+}
+
+section button:focus {
+  outline:0;
+}
+
+section ul {
+  font-size: 1.5rem;
+  list-style-type: none;
+  text-align: left;
+  padding: 0;
+}
+
+section li {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 10px;
+  border-left: 5px solid #0c1c45;
+  background: #0c1c45;
+  color: #bec6da;
+  box-shadow: 2px 2px 3px 0px #0c1c45;
+}
+
+section li a {
+  display: block;
+  color: #bec6da;
+  text-decoration: none;
+}
+
+section li:hover {
+  border-left: 5px solid #FF7600;
+}
+
+section input {
+  border        : 1px solid #0c1c45;
+  background    : #bec6da;
+  border-radius : 0px;
+  width         : 75%;
+  height        : 26px;
+  padding-left  : 5px;
+  margin        : 0px;
+}
+
+section input:focus {
+  outline-width: 0px;
+}
