@@ -16,7 +16,6 @@
   "author": "Peter Martinson",
   "license": "MIT",
   "dependencies": {
-    "mocha": "^3.4.1"
   },
   "devDependencies": {
     "qunit": "^1.0.0"

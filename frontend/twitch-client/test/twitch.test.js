@@ -8,3 +8,6 @@ QUnit.test('there is a module', function(assert) {
 QUnit.test('fetchJSON() returns a value', function(assert) {
   assert.notEqual(twitch.fetchJSON(), '');
 });
+
+// QUnit.test('fetchJSON() returns some crazy data', function(assert) {
+//   assert.
