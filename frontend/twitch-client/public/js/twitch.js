@@ -26,3 +26,8 @@ twitch.isStreaming = function(object) {
 twitch.getLink = function(object) {
   return object._links.channel;
 }
+
+
+/*
+{"stream":null,"_links":{"self":"https://api.twitch.tv/kraken/streams/freecodecamp","channel":"https://api.twitch.tv/kraken/channels/freecodecamp"}}
+*/
