@@ -1,9 +1,11 @@
 var twitch = {};
 
-twitch.fetchJSON = function() {
-  $.getJSON('https://api.twitch.tv/kraken/streams/freecodecamp?callback=?', function(data) {
-    return data;
+twitch.fetchJSON = function(callback) {
+  var url = 'https://wind-bow.glitch.me/twitch-api/streams/freecodecamp?callback=?';
+
+  $.getJSON(url, function(data) {
     console.log(data);
+    callback(data);
   });
   // return true;
 }

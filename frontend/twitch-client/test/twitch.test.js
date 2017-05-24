@@ -1,13 +1,17 @@
 // Testing with QUnit
+var q = QUnit;
 
-QUnit.test('there is a module', function(assert) {
-  assert.equal(typeof twitch, 'object');
-  assert.equal(typeof twitch.fetchJSON, 'function');
+q.module('fetchJSON()');
+q.test('There is a module', function(assert) {
+  assert.equal(typeof twitch, 'object', 'twitch is an object');
+  assert.equal(typeof twitch.fetchJSON, 'function', 'fetchJSON is a function');
 });
 
-QUnit.test('fetchJSON() returns a value', function(assert) {
-  assert.notEqual(twitch.fetchJSON(), '');
+q.test('The AJAX call succeeds', function(assert) {
+  var done = assert.async();
+  twitch.fetchJSON(function(res) {
+    assert.notEqual(res, {}, 'the response is not empty');
+    assert.equal(typeof res, 'object', 'there was a response');
+    done();
+  });
 });
-
-// QUnit.test('fetchJSON() returns some crazy data', function(assert) {
-//   assert.
