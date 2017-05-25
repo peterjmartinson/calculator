@@ -25,4 +25,12 @@ twitch.isStreaming = function(object) {
 
 twitch.getLink = function(object) {
   return object._links.channel;
+};
+
+
+twitch.addStreamer = function(info) {
+  // info has a name property
+  var new_list_item = $( '<li id="streamer-' + info.name + '"></li>' );
+  new_list_item.appendTo( $( 'ul' ) );
+  return info;
 }

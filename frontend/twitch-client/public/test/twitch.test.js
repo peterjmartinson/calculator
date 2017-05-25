@@ -62,3 +62,36 @@ q.test('returns a link', function(assert) {
     done();
   });
 });
+
+q.module('The List');
+q.test('addStreamer is a function', function(assert) {
+  assert.equal(typeof twitch.addStreamer, 'function', 'addStreamer is a function');
+});
+
+q.test('addStreamer adds an element to the fixture', function(assert) {
+  var fixture = $( '#qunit-fixture' );
+
+  fixture.append( '<ul id="fixture-ul"></ul>' );
+  assert.equal( $( '#fixture-ul', fixture ).length, 1, 'div added successfully');
+  // twitch.addStreamer({name : 'freecodecamp'});
+  // assert.equal( $( 'li' ).length, 1, 'li added successfully');
+});
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
