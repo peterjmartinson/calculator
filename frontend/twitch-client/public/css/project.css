@@ -1,12 +1,12 @@
 main {
   display: relative;
   padding-bottom: 10%;
-  background: #0c1c45;
+  background: #552f00;
 }
 
 main #project-title {
   text-align: center;
-  color: #bec6da;
+  color: #ffd9aa;
   padding-bottom: 5%;
 }
 
@@ -14,7 +14,7 @@ section {
   padding: 10px;
   margin: 10px;
   background: white;
-  color: #0c1c45;
+  color: #552f00;
   text-align: center;
 }
 
@@ -24,16 +24,16 @@ section div {
 }
 
 section button {
-  background: #0c1c45;
+  background: #552f00;
   border: 0;
   height: 30px;
-  color: #bec6da;
-  box-shadow: 2px 2px 3px 0px #0c1c45;
+  color: #ffd9aa;
+  box-shadow: 2px 2px 3px 0px #552f00;
 }
 
 section button:hover {
-  background: #FF7600;
-  color: #0c1c45;
+  background: #6F8FA2;
+  color: #552f00;
   outline:0;
 }
 
@@ -52,25 +52,25 @@ section li {
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 10px;
-  border-left: 5px solid #0c1c45;
-  background: #0c1c45;
-  color: #bec6da;
-  box-shadow: 2px 2px 3px 0px #0c1c45;
+  border-left: 5px solid #552f00;
+  background: #552f00;
+  color: #ffd9aa;
+  box-shadow: 2px 2px 3px 0px #552f00;
 }
 
 section li a {
   display: block;
-  color: #bec6da;
+  color: #ffd9aa;
   text-decoration: none;
 }
 
 section li:hover {
-  border-left: 5px solid #FF7600;
+  border-left: 5px solid #6F8FA2;
 }
 
 section input {
-  border        : 1px solid #0c1c45;
-  background    : #bec6da;
+  border        : 1px solid #552f00;
+  background    : #ffd9aa;
   border-radius : 0px;
   width         : 75%;
   height        : 26px;

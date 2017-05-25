@@ -1,15 +1,15 @@
 /**
  * Standard styling for FCC Projects
  * Copyright 2017 Peter Martinson
- * light blue:  #bec6da
- * dark blue:   #0c1c45
+ * light:  #ffd9aa
+ * dark:   #552f00
 */
 
 html {
   font-size:    10px;
   font-family:  'Josefin Sans',sans-serif;
   color:        black;
-  background:   #0c1c45;
+  background:   #552f00;
   border:       0px;
   margin:       0px;
   padding:      0px;
@@ -64,8 +64,8 @@ section p {
 header {
   display:     block;
   height:      64px;
-  background:  #0c1c45;
-  color:       #bec6da;
+  background:  #552f00;
+  color:       #ffd9aa;
   margin:      0px;
   padding:     32px;
 }
@@ -74,13 +74,13 @@ header hr {
   width:          256px;
   height:         1px;
   border:         0;
-  background:     #bec6da;
+  background:     #ffd9aa;
   margin-top:     16px;
   margin-bottom:  16px;
 }
 
 header a:hover {
-  color:            #FF7600;
+  color:            #6F8FA2;
   text-decoration:  none;
 }
 
@@ -97,11 +97,15 @@ header #icon-container {
   
 header #icon {
   display:     inline-block;
-  background:  url(../assets/st_icon_bb_64.png) no-repeat;
+  background:  url(../assets/icon_d552F00_lFFD9AA_64px.png) no-repeat;
   width:       64px;
   height:      64px;
   margin:      0px;
   padding:     0px;
+}
+
+header #icon:hover {
+  background:  url(../assets/icon_d552F00_lFFD9AA_64px_link.png) no-repeat;
 }
 
 header #icon-title {
@@ -125,13 +129,13 @@ nav {
 
 nav ul {
   list-style-type:  none;
-  color:            #0c1c45;
-  background:       #bec6da;
+  color:            #552f00;
+  background:       #ffd9aa;
   text-align:       center;
   width:            100%;
   margin:           0px;
   padding:          0px;
-  border-top:       2px solid #bec6da;
+  border-top:       2px solid #ffd9aa;
 }
 
 nav ul li {
@@ -147,7 +151,7 @@ nav li > div {
 
 nav a {
   text-decoration:  none;
-  color:            #0c1c45;
+  color:            #552f00;
 }
 
 nav i {
@@ -156,12 +160,12 @@ nav i {
 
 nav a:hover {
   text-decoration:  none;
-  color:            #FF7600;
+  color:            #6F8FA2;
 }
 
 footer {
-  background:     #0c1c45;
-  color:          #bec6da;
+  background:     #552f00;
+  color:          #ffd9aa;
   font-size:      1.5rem;
   font-weight:    normal;
   margin-bottom:  84px;
@@ -181,7 +185,7 @@ footer a {
 }
 
 footer a:hover {
-  color:            #FF7600;
+  color:            #6F8FA2;
   text-decoration:  none;
 }
 
@@ -190,21 +194,21 @@ footer #social {
 }
 
 footer #social a {
-  color:            #0c1c45;
-  background:       #bec6da;
+  color:            #552f00;
+  background:       #ffd9aa;
   text-decoration:  none;
   font-weight:      bold;
   margin:           4px;
   padding:          4px 4px 2px 4px;
-  border:           1px solid #bec6da;
+  border:           1px solid #ffd9aa;
   border-radius:    2px;
 }
 
 footer #social a:hover {
-  background:   #0c1c45;
-  color:        #bec6da;
+  background:   #552f00;
+  color:        #ffd9aa;
   font-weight:  normal;
-  border:       1px solid #0c1c45;
+  border:       1px solid #552f00;
 }
 
 /**
