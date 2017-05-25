@@ -34,3 +34,8 @@ twitch.addStreamer = function(info) {
   new_list_item.appendTo( $( 'ul' ) );
   return info;
 }
+
+
+/*
+{"stream":null,"_links":{"self":"https://api.twitch.tv/kraken/streams/freecodecamp","channel":"https://api.twitch.tv/kraken/channels/freecodecamp"}}
+*/
