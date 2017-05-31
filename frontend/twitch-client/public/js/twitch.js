@@ -1,41 +1,70 @@
 var twitch = {};
 
-twitch.fetchJSON = function(channel, callback) {
-  var url = 'https://wind-bow.glitch.me/twitch-api/streams/';
+twitch.addStreamer = function(channel, response) {
+  var list_element = '',
+      url          = 'https://www.twitch.tv/',
+      now_streaming = {},
+      new_list_element;
+  console.log(channel + ":\n    " + JSON.stringify(response));
+  list_element += '<li>';
+  if (response == 404) {
+    url += channel;
+    list_element += '  <strong>' + channel + '</strong><br>';
+    list_element += '  <em>&nbsp;&nbsp;&nbsp;&nbsp;does not exist.</em>';
+    new_list_item = $(list_element);
+  } else {
+    if (response.stream) {
+    now_streaming = response.stream.game,
+    url += channel;
+    list_element += '  <a href="' + url + '" target="_blank">';
+    list_element += '  <strong>' + channel + '</strong><br>';
+    list_element += '  <em>&nbsp;&nbsp;&nbsp;&nbsp;is currently streaming ' + now_streaming + '</em>';
+    list_element += '  </a>';
+    new_list_item = $(list_element);
+    } else {
+      url += channel;
+      list_element += '  <a href="' + url + '" target="_blank">';
+      list_element += '  <strong>' + channel + '</strong><br>';
+      list_element += '  <em>&nbsp;&nbsp;&nbsp;&nbsp;is not currently streaming.</em>';
+      list_element += '  </a>';
+      new_list_item = $(list_element);
+    }
+  }
+  list_element += '</li>';
+  new_list_item.appendTo( $( 'ul' ) );
+  return response.stream;
+}
+
+twitch.fetchStreamer = function(channel, callback) {
+  var url = 'https://wind-bow.glitch.me/twitch-api/users/';
   var suffix = channel + '?callback=?';
   $.getJSON(url+suffix, function(data) {
-    callback(data);
+    if ( data.status != '422' && data.status != '404' ) {
+      callback(1, channel, twitch.addStreamer);
+    } else {
+      callback(0, channel, twitch.addStreamer);
+    }
   });
 };
 
-/**
- * determines whether or not a channel is streaming
- * @params {object} object - a response object from TwitchTV API
- * @returns {number} = 1 if streaming, = 2 if not streaming
- *
- * usage: twitch.fetchJSON('<channel>', twitch.isStreaming)
-*/
-twitch.isStreaming = function(object) {
-  if (object.stream) {
-    return 1;
+
+twitch.fetchJSON = function(exists, channel, callback) {
+  var url = 'https://wind-bow.glitch.me/twitch-api/streams/';
+  var suffix = channel + '?callback=?';
+  if (exists) {
+    console.log('not 404');
+    $.getJSON(url+suffix, function(data) {
+      callback(channel, data);
+    });
   } else {
-    return 0;
+    console.log(404);
+    callback(channel, 404);
   }
 };
 
-twitch.getLink = function(object) {
-  return object._links.channel;
-};
+twitch.fetchStreamer('ESL_SC2', twitch.fetchJSON);
+twitch.fetchStreamer('freecodecamp', twitch.fetchJSON);
+twitch.fetchStreamer('cretetion', twitch.fetchJSON);
+twitch.fetchStreamer('brunofin', twitch.fetchJSON);
+twitch.fetchStreamer('comster404', twitch.fetchJSON);
 
-
-twitch.addStreamer = function(info) {
-  // info has a name property
-  var new_list_item = $( '<li id="streamer-' + info.name + '"></li>' );
-  new_list_item.appendTo( $( 'ul' ) );
-  return info;
-}
-
-
-/*
-{"stream":null,"_links":{"self":"https://api.twitch.tv/kraken/streams/freecodecamp","channel":"https://api.twitch.tv/kraken/channels/freecodecamp"}}
-*/
