@@ -58,6 +58,20 @@ section li {
   box-shadow: 2px 2px 3px 0px #552f00;
 }
 
+section li .logo {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+section li img {
+  width: 64px;
+  height: 64px;
+}
+
+section li .streamer {
+  display: inline-block;
+}
+
 section li a {
   display: block;
   color: #ffd9aa;
