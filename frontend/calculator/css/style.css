@@ -1,0 +1,59 @@
+/* calculator styles */
+
+.primary {
+   background-color: #107691;
+}
+
+.gray-dark {
+   background-color: #354044;
+}
+
+.gray-light {
+   background-color: #f8fafa;
+}
+
+.white {
+   background-color: #ffffff;
+}
+
+.black {
+   background-color: #000000;
+}
+
+.accent {
+   background-color: #E97F13;
+}
+
+.calc-body {
+   width: 280px;
+   height: 410px;
+   padding: 5px 5px 5px 5px;
+   margin: auto;
+}
+
+.calc-button {
+   font-size: 24px;
+   border: 1px solid black;
+   width: 70px;
+   height: 70px;
+   float: left;
+   color: #000000;
+}
+
+.calc-button:hover {
+   background-color: #d9b310;
+}
+
+.calc-screen {
+   background-color: #000000;
+   color: #E97F13;
+   text-align: right;
+   vertical-align: middle;
+   font-size: 36px;
+   font-weight: bold;
+   border: 1px solid black;
+   width: auto;
+   height: 50px;
+   margin: auto;
+   padding: 0px 10px 0px 0px;
+}
