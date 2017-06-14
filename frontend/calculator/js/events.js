@@ -1,15 +1,6 @@
 window.onload = (function() {
   'use strict';
 
-  var dom = {};
-
-  var buttons = document.getElementsByClassName('calc-button');
-
-  function respondToClick(res) {
-    console.log(res);
-  }
-
-
   function key(b) {
     console.log("keypressed: " + b);
   }
