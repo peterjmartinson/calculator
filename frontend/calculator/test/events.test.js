@@ -31,3 +31,13 @@ q.module('operate()');
 q.test('It exists', function(assert) {
   assert.equal(typeof window.operate, 'function', 'operate is a function on window');
 });
+q.test('It performs the correct calculations', function(assert) {
+  assert.equal(window.operate(1, '+', 1), '2', '1+1=2');
+  assert.equal(window.operate(2, '-', 3), '-1', '2-3=-1');
+  assert.equal(window.operate(3, '-', 2), '1', '3-2=1');
+  assert.equal(window.operate(2, '*', 3), '6', '2*3=6');
+  assert.equal(window.operate(10, '/', 5), '2', '10/5=2');
+  assert.equal(window.operate(5, '/', 10), '0.5', '5/10=0.5');
+  assert.equal(window.operate(1, '/', 0), 'DIV BY 0', 'DIV BY 0');
+  assert.equal(window.operate('j', '/', 's'), 'NaN', 'NaN');
+});

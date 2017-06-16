@@ -61,6 +61,27 @@
      }
   }
 
+  // DETERMINE CALCULATOR STATE
+  function calState(A, B, C, oA, oB) {
+     if (A === 'DIV BY 0' || B === 'DIV BY 0') {
+        return 6;
+     }
+     if (A === 'ERROR' || B === 'ERROR') {
+        return 6;
+     } else if (oA === 'empty') {
+        return 1;
+     } else if (oA !== 'empty' && B === 'empty') {
+        return 2;
+     } else if (oA !== 'empty' && A !== 'empty' && oB === 'empty') {
+        return 3;
+     } else if (oB !== 'empty' && C === 'empty') {
+        return 4;
+     } else if (oB !== 'empty' && C !== 'empty') {
+        return 5;
+     }
+  }
+
   window.trim = trim;
   window.operate = operate;
+  window.calState = calState;
 }());
