@@ -1,4 +1,4 @@
-(function() {
+var Calculator = function() {
   'use strict';
 
   var calcState = {
@@ -81,7 +81,13 @@
      }
   }
 
-  window.trim = trim;
-  window.operate = operate;
-  window.calState = calState;
-}());
+  // next, how to test shy functions?
+
+  return {
+    trim     : trim,
+    operate  : operate,
+    calState : calState
+  };
+
+
+};
