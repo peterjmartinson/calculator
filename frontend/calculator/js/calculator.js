@@ -1,13 +1,13 @@
 var Calculator = function() {
   'use strict';
 
-  var calcState = {
-    regA       : 'empty',
-    regB       : 'empty',
-    regC       : 'empty',
-    opA        : 'empty',
-    opB        : 'empty',
-    screenFlag : 1, // 1 -> show regA, 2 -> show regB, 3 -> show regC
+  var buffer = {
+    register_a       : 'empty',
+    register_b       : 'empty',
+    register_c       : 'empty',
+    operator_a        : 'empty',
+    operator_b        : 'empty',
+    screen_flag : 1, // 1 -> show register_a, 2 -> show register_b, 3 -> show register_c
     screen     : '0',
   };
 
@@ -18,7 +18,6 @@ var Calculator = function() {
    * @returns {string} A <10 character string
   */
   function trim(num) {
-     console.log(num);
      var numLen, truncLen, tempVal;
      numLen = num.toString().length;
      truncLen = (Math.trunc(Number(num))).toString().length;
@@ -28,7 +27,6 @@ var Calculator = function() {
         tempVal = (Math.round(Number(num) * Math.pow(10, (9 - truncLen)))) / Math.pow(10, (9 - truncLen));
         num = tempVal.toString();
      }
-     console.log(num);
      return num.toString();
   }
 
@@ -81,12 +79,55 @@ var Calculator = function() {
      }
   }
 
-  // next, how to test shy functions?
+  function clearBuffer(buffer) {
+    buffer.screen_flag = 1;
+    buffer.register_a       = 'empty';
+    buffer.register_b       = 'empty';
+    buffer.register_c       = 'empty';
+    buffer.operator_a        = 'empty';
+    buffer.operator_b        = 'empty';
+  }
+
+  function updateScreen(buffer) {
+    var screen_html = document.getElementById('screen');
+    if (buffer.screen_flag === 1) {
+       if (buffer.register_a === 'empty') {
+          // this.screen = '0';
+          screen_html.innerHTML = '0';
+       } else {
+          // this.screen = this.regA;
+          screen_html.innerHTML = buffer.register_a.toString();
+       }
+    }
+    if (buffer.screen_flag === 2) {
+       // this.screen = this.regB;
+       screen_html.innerHTML = buffer.register_b.toString();
+    }
+    if (buffer.screen_flag === 3) {
+       // this.screen = this.regC;
+       screen_html.innerHTML = buffer.register_c.toString();
+    }
+  }
+
+  /*
+   * CLEAR THE BUFFER
+   */
+  function clear(buffer) {
+  // if (b === 'C') {
+     buffer.screen_flag = 1;
+     buffer.register_a = 'empty';
+     buffer.register_b = 'empty';
+     buffer.register_c = 'empty';
+     buffer.operator_a = 'empty';
+     buffer.operator_b = 'empty';
+  }
 
   return {
-    trim     : trim,
-    operate  : operate,
-    calState : calState
+    trim        : trim,
+    operate     : operate,
+    calState    : calState,
+    clearBuffer : clearBuffer,
+    updateScreen : updateScreen
   };
 
 

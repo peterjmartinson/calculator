@@ -102,4 +102,63 @@ q.test('It returns the correct states', function(assert) {
   oB = 'empty';
   assert.equal(calculator.calState(A, B, c, oA, oB), 6, 'state 6');
 });
-  
+
+q.module('clearBuffer');
+q.test('It exists', function(assert) {
+  assert.equal(typeof calculator.clearBuffer, 'function', 'clearBuffer is a function on Calculator');
+});
+q.test('It returns the correct states', function(assert) {
+  var test_buffer = {
+    screen_flag : 2,
+    register_a : '1',
+    register_b : '1',
+    register_c : '1',
+    operator_a : '+',
+    operator_b : '*'
+  };
+  var cleared_buffer = {
+    screen_flag : 1,
+    register_a : 'empty',
+    register_b : 'empty',
+    register_c : 'empty',
+    operator_a : 'empty',
+    operator_b : 'empty'
+  };
+  calculator.clearBuffer(test_buffer);
+  assert.deepEqual(test_buffer, cleared_buffer, 'clearBuffer resets the buffer');
+});
+
+q.module('updateScreen');
+q.test('It exists', function(assert) {
+  assert.equal(typeof calculator.updateScreen, 'function', 'updateScreen is a function on Calculator');
+});
+q.test('It returns the correct states', function(assert) {
+  var fixture = $( "#qunit-fixture" );
+  fixture.append("<div id='screen'>the screen</div>");
+  assert.equal( $( "div", fixture ).length, 1, 'div#screen added successfully');
+
+  var test_buffer = {
+    screen_flag : 1,
+    register_a : '1',
+    register_b : '2',
+    register_c : '3',
+    operator_a : '+',
+    operator_b : '*'
+  };
+
+  calculator.updateScreen(test_buffer);
+  assert.equal(document.getElementById('screen').innerHTML, '1', '1 is on the screen');
+
+  test_buffer.screen_flag = 2;
+  calculator.updateScreen(test_buffer);
+  assert.equal(document.getElementById('screen').innerHTML, '2', '2 is on the screen');
+
+  test_buffer.screen_flag = 3;
+  calculator.updateScreen(test_buffer);
+  assert.equal(document.getElementById('screen').innerHTML, '3', '3 is on the screen');
+});
+
+q.module('clear');
+q.test('It exists', function(assert) {
+  assert.equal(typeof calculator.clear, 'function', 'clear is a function on Calculator');
+});

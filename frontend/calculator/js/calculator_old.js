@@ -507,23 +507,3 @@ calcObj.inBuffer = {
    }
 };
 
-// need a whole bunch of click handlers
-document.getElementById('clear').onclick = calcObj.inBuffer.updateBuffer('C');
-document.getElementById('plus-minus').onclick = calcObj.inBuffer.updateBuffer('pm');
-document.getElementById('root').onclick = calcObj.inBuffer.updateBuffer('root');
-document.getElementById('divide').onclick = calcObj.inBuffer.updateBuffer('/');
-document.getElementById('seven').onclick = calcObj.inBuffer.updateBuffer('7');
-document.getElementById('eight').onclick = calcObj.inBuffer.updateBuffer('8');
-document.getElementById('nine').onclick = calcObj.inBuffer.updateBuffer('9');
-document.getElementById('times').onclick = calcObj.inBuffer.updateBuffer('*');
-document.getElementById('four').onclick = calcObj.inBuffer.updateBuffer('4');
-document.getElementById('five').onclick = calcObj.inBuffer.updateBuffer('5');
-document.getElementById('six').onclick = calcObj.inBuffer.updateBuffer('6');
-document.getElementById('minus').onclick = calcObj.inBuffer.updateBuffer('-');
-document.getElementById('one').onclick = calcObj.inBuffer.updateBuffer('1');
-document.getElementById('two').onclick = calcObj.inBuffer.updateBuffer('2');
-document.getElementById('three').onclick = calcObj.inBuffer.updateBuffer('3');
-document.getElementById('plus').onclick = calcObj.inBuffer.updateBuffer('+');
-document.getElementById('zero').onclick = calcObj.inBuffer.updateBuffer('0');
-document.getElementById('decimalpoint').onclick = calcObj.inBuffer.updateBuffer('.');
-document.getElementById('equals').onclick = calcObj.inBuffer.updateBuffer('=');
