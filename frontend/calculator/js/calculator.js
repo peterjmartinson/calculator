@@ -9,7 +9,13 @@ var Calculator = function() {
     operator_b        : 'empty',
     screen_flag : 1, // 1 -> show register_a, 2 -> show register_b, 3 -> show register_c
     screen     : '0',
+    state      : 1,
+    setState   : function() {
+
+    }
   };
+
+  
 
   /**
    * Trim all values to 10 characters or less
@@ -59,7 +65,17 @@ var Calculator = function() {
      }
   }
 
-  // DETERMINE CALCULATOR STATE
+  /*
+   * DETERMINE CALCULATOR STATE
+   *
+   *          A | B | C |opA|opB|
+   *         ---|---|---|---|---|
+   * Case 1) 0,A|   |   |   |   |
+   * Case 2)  A |   |   | + |   |
+   * Case 3)  A | B |   |+,*|   |
+   * Case 4)  A | B |   | + | * |
+   * Case 5)  A | B | C | + | * |
+   */
   function calState(A, B, C, oA, oB) {
      if (A === 'DIV BY 0' || B === 'DIV BY 0') {
         return 6;
@@ -79,15 +95,11 @@ var Calculator = function() {
      }
   }
 
-  function clearBuffer(buffer) {
-    buffer.screen_flag = 1;
-    buffer.register_a       = 'empty';
-    buffer.register_b       = 'empty';
-    buffer.register_c       = 'empty';
-    buffer.operator_a        = 'empty';
-    buffer.operator_b        = 'empty';
-  }
-
+  /**
+   * updates the screen element
+   *
+   * @params {object} the screen element
+  */
   function updateScreen(buffer) {
     var screen_html = document.getElementById('screen');
     if (buffer.screen_flag === 1) {
@@ -109,8 +121,10 @@ var Calculator = function() {
     }
   }
 
-  /*
-   * CLEAR THE BUFFER
+  /**
+   * clear the buffer
+   *
+   * @params {object} The whole buffer object
    */
   function clear(buffer) {
   // if (b === 'C') {
@@ -122,12 +136,18 @@ var Calculator = function() {
      buffer.operator_b = 'empty';
   }
 
+  function enterNumber(number) {
+  
+  }
+
   return {
     trim        : trim,
     operate     : operate,
     calState    : calState,
-    clearBuffer : clearBuffer,
-    updateScreen : updateScreen
+    clear       : clear,
+    updateScreen : updateScreen,
+    enterNumber : enterNumber,
+    setState    : buffer.setState
   };
 
 

@@ -103,9 +103,80 @@ q.test('It returns the correct states', function(assert) {
   assert.equal(calculator.calState(A, B, c, oA, oB), 6, 'state 6');
 });
 
-q.module('clearBuffer');
+// in order for this one to work, you need a way to set and get values in the buffer, which are currently private...
+q.module('buffer.setState');
 q.test('It exists', function(assert) {
-  assert.equal(typeof calculator.clearBuffer, 'function', 'clearBuffer is a function on Calculator');
+  assert.equal(typeof calculator.setState, 'function', 'setState is a function on C');
+});
+q.test('It returns the correct states', function(assert) {
+  var A = 'empty',
+      B = 'empty',
+      c = 'empty',
+      oA = 'empty',
+      oB = 'empty';
+  calculator.setState();
+  assert.equal(calculator.state, 1, 'state 1');
+  A = 'empty';
+  B = 'empty';
+  c = 'empty';
+  oA = '1';
+  oB = 'empty';
+  calculator.setState();
+  assert.equal(calculator.state, 2, 'state 2');
+  A = '1';
+  B = '1';
+  c = 'empty';
+  oA = '1';
+  oB = 'empty';
+  calculator.setState();
+  assert.equal(calculator.state, 3, 'state 3');
+  A = '1';
+  B = '1';
+  c = 'empty';
+  oA = '1';
+  oB = '1';
+  calculator.setState();
+  assert.equal(calculator.state, 4, 'state 4');
+  A = '1';
+  B = '1';
+  c = '1';
+  oA = '1';
+  oB = '1';
+  calculator.setState();
+  assert.equal(calculator.state, 5, 'state 5');
+  A = 'DIV BY 0';
+  B = 'empty';
+  c = 'empty';
+  oA = 'empty';
+  oB = 'empty';
+  calculator.setState();
+  assert.equal(calculator.state, 6, 'state 6');
+  A = 'empty';
+  B = 'DIV BY 0';
+  c = 'empty';
+  oA = 'empty';
+  oB = 'empty';
+  calculator.setState();
+  assert.equal(calculator.state, 6, 'state 6');
+  A = 'ERROR';
+  B = 'empty';
+  c = 'empty';
+  oA = 'empty';
+  oB = 'empty';
+  calculator.setState();
+  assert.equal(calculator.state, 6, 'state 6');
+  A = 'empty';
+  B = 'ERROR';
+  c = 'empty';
+  oA = 'empty';
+  oB = 'empty';
+  calculator.setState();
+  assert.equal(calculator.state, 6, 'state 6');
+});
+
+q.module('clear');
+q.test('It exists', function(assert) {
+  assert.equal(typeof calculator.clear, 'function', 'clear is a function on Calculator');
 });
 q.test('It returns the correct states', function(assert) {
   var test_buffer = {
@@ -124,8 +195,8 @@ q.test('It returns the correct states', function(assert) {
     operator_a : 'empty',
     operator_b : 'empty'
   };
-  calculator.clearBuffer(test_buffer);
-  assert.deepEqual(test_buffer, cleared_buffer, 'clearBuffer resets the buffer');
+  calculator.clear(test_buffer);
+  assert.deepEqual(test_buffer, cleared_buffer, 'clear resets the buffer');
 });
 
 q.module('updateScreen');
@@ -158,7 +229,7 @@ q.test('It returns the correct states', function(assert) {
   assert.equal(document.getElementById('screen').innerHTML, '3', '3 is on the screen');
 });
 
-q.module('clear');
+q.module('enterNumber');
 q.test('It exists', function(assert) {
-  assert.equal(typeof calculator.clear, 'function', 'clear is a function on Calculator');
+  assert.equal(typeof calculator.enterNumber, 'function', 'enterNumber is a function on Calculator');
 });
