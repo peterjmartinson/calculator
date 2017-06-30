@@ -23,28 +23,21 @@ twitch.addStreamer = function(channel, logo, response) {
     list_element += '  </div>'
     new_list_item = $(list_element);
   } else {
-    if (response.stream) {
-    now_streaming = response.stream.game,
     url += channel;
     list_element += '  <a href="' + url + '" target="_blank">';
     list_element += '    <div class="logo"><img src="' + logo + '"></div>';
     list_element += '    <div class="streamer">';
     list_element += '      <strong>' + channel + '</strong><br>';
-    list_element += '      <em>&nbsp;&nbsp;&nbsp;&nbsp;is currently streaming ' + now_streaming + '</em>';
+    if (response.stream) {
+      now_streaming = response.stream.game,
+      list_element += '      <em>&nbsp;&nbsp;&nbsp;&nbsp;is currently streaming ' + now_streaming + '</em>';
+    } else {
+      url += channel;
+      list_element += '      <em>&nbsp;&nbsp;&nbsp;&nbsp;is not currently streaming.</em>';
+    }
     list_element += '    </div>'
     list_element += '  </a>';
     new_list_item = $(list_element);
-    } else {
-      url += channel;
-      list_element += '  <a href="' + url + '" target="_blank">';
-      list_element += '    <div class="logo"><img src="' + logo + '"></div>';
-      list_element += '    <div class="streamer">';
-      list_element += '      <strong>' + channel + '</strong><br>';
-      list_element += '      <em>&nbsp;&nbsp;&nbsp;&nbsp;is not currently streaming.</em>';
-      list_element += '    </div>'
-      list_element += '  </a>';
-      new_list_item = $(list_element);
-    }
   }
   list_element += '</li>';
   new_list_item.appendTo( $( 'ul' ) );

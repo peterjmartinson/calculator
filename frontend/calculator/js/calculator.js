@@ -2,17 +2,14 @@ var Calculator = function() {
   'use strict';
 
   var buffer = {
-    register_a       : 'empty',
-    register_b       : 'empty',
-    register_c       : 'empty',
-    operator_a        : 'empty',
-    operator_b        : 'empty',
+    register_a  : 'empty',
+    register_b  : 'empty',
+    register_c  : 'empty',
+    operator_a  : 'empty',
+    operator_b  : 'empty',
+    screen      : '0',
     screen_flag : 1, // 1 -> show register_a, 2 -> show register_b, 3 -> show register_c
-    screen     : '0',
-    state      : 1,
-    setState   : function() {
-
-    }
+    state       : 1
   };
 
   
@@ -76,23 +73,22 @@ var Calculator = function() {
    * Case 4)  A | B |   | + | * |
    * Case 5)  A | B | C | + | * |
    */
-  function calState(A, B, C, oA, oB) {
-     if (A === 'DIV BY 0' || B === 'DIV BY 0') {
-        return 6;
-     }
-     if (A === 'ERROR' || B === 'ERROR') {
-        return 6;
-     } else if (oA === 'empty') {
-        return 1;
-     } else if (oA !== 'empty' && B === 'empty') {
-        return 2;
-     } else if (oA !== 'empty' && A !== 'empty' && oB === 'empty') {
-        return 3;
-     } else if (oB !== 'empty' && C === 'empty') {
-        return 4;
-     } else if (oB !== 'empty' && C !== 'empty') {
-        return 5;
-     }
+  function setState(buffer) {
+      if (buffer.register_a === 'DIV BY 0' || buffer.register_b === 'DIV BY 0') {
+        buffer.state = 6;
+      } else if (buffer.register_a === 'ERROR' || buffer.register_b === 'ERROR') {
+        buffer.state = 6;
+      } else if (buffer.operator_a === 'empty') {
+        buffer.state = 1;
+      } else if (buffer.operator_a !== 'empty' && buffer.register_b === 'empty') {
+        buffer.state = 2;
+      } else if (buffer.operator_a !== 'empty' && buffer.register_a !== 'empty' && buffer.operator_b === 'empty') {
+        buffer.state = 3;
+      } else if (buffer.operator_b !== 'empty' && buffer.register_c === 'empty') {
+        buffer.state = 4;
+      } else if (buffer.operator_b !== 'empty' && buffer.register_c !== 'empty') {
+        buffer.state = 5;
+      }
   }
 
   /**
@@ -143,11 +139,11 @@ var Calculator = function() {
   return {
     trim        : trim,
     operate     : operate,
-    calState    : calState,
+    setState    : setState,
     clear       : clear,
     updateScreen : updateScreen,
     enterNumber : enterNumber,
-    setState    : buffer.setState
+    buffer       : buffer
   };
 
 
