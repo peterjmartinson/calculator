@@ -47,67 +47,31 @@ q.test('It exists', function(assert) {
   assert.equal(typeof calculator.setState, 'function', 'setState is a function on C');
 });
 q.test('It returns the correct states', function(assert) {
-  calculator.buffer.register_a = 'empty';
-  calculator.buffer.register_b = 'empty';
-  calculator.buffer.register_c = 'empty';
-  calculator.buffer.operator_a = 'empty';
-  calculator.buffer.operator_b = 'empty';
-  calculator.setState(calculator.buffer);
+  setBuffer(['empty','empty','empty','empty','empty']);
+  calculator.setState();
   assert.equal(calculator.buffer.state, 1, 'state 1');
-  calculator.buffer.register_a = 'empty';
-  calculator.buffer.register_b = 'empty';
-  calculator.buffer.register_c = 'empty';
-  calculator.buffer.operator_a = '1';
-  calculator.buffer.operator_b = 'empty';
-  calculator.setState(calculator.buffer);
+  setBuffer(['empty', 'empty', 'empty', '1', 'empty']);
+  calculator.setState();
   assert.equal(calculator.buffer.state, 2, 'state 2');
-  calculator.buffer.register_a = '1';
-  calculator.buffer.register_b = '1';
-  calculator.buffer.register_c = 'empty';
-  calculator.buffer.operator_a = '1';
-  calculator.buffer.operator_b = 'empty';
+  setBuffer(['1', '1', 'empty', '1', 'empty']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 3, 'state 3');
-  calculator.buffer.register_a = '1';
-  calculator.buffer.register_b = '1';
-  calculator.buffer.register_c = 'empty';
-  calculator.buffer.operator_a = '1';
-  calculator.buffer.operator_b = '1';
+  setBuffer(['1', '1', 'empty', '1', '1']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 4, 'state 4');
-  calculator.buffer.register_a = '1';
-  calculator.buffer.register_b = '1';
-  calculator.buffer.register_c = '1';
-  calculator.buffer.operator_a = '1';
-  calculator.buffer.operator_b = '1';
+  setBuffer(['1', '1', '1', '1', '1']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 5, 'state 5');
-  calculator.buffer.register_a = 'DIV BY 0';
-  calculator.buffer.register_b = 'empty';
-  calculator.buffer.register_c = 'empty';
-  calculator.buffer.operator_a = 'empty';
-  calculator.buffer.operator_b = 'empty';
+  setBuffer(['DIV BY 0', 'empty', 'empty', 'empty', 'empty']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 6, 'state 6');
-  calculator.buffer.register_a = 'empty';
-  calculator.buffer.register_b = 'DIV BY 0';
-  calculator.buffer.register_c = 'empty';
-  calculator.buffer.operator_a = 'empty';
-  calculator.buffer.operator_b = 'empty';
+  setBuffer(['empty', 'DIV BY 0', 'empty', 'empty', 'empty']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 6, 'state 6');
-  calculator.buffer.register_a = 'ERROR';
-  calculator.buffer.register_b = 'empty';
-  calculator.buffer.register_c = 'empty';
-  calculator.buffer.operator_a = 'empty';
-  calculator.buffer.operator_b = 'empty';
+  setBuffer(['ERROR', 'empty', 'empty', 'empty', 'empty']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 6, 'state 6');
-  calculator.buffer.register_a = 'empty';
-  calculator.buffer.register_b = 'ERROR';
-  calculator.buffer.register_c = 'empty';
-  calculator.buffer.operator_a = 'empty';
-  calculator.buffer.operator_b = 'empty';
+  setBuffer(['empty', 'ERROR', 'empty', 'empty', 'empty']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 6, 'state 6');
 });
@@ -117,24 +81,9 @@ q.test('It exists', function(assert) {
   assert.equal(typeof calculator.clear, 'function', 'clear is a function on Calculator');
 });
 q.test('It returns the correct states', function(assert) {
-  var test_buffer = {
-    screen_flag : 2,
-    register_a : '1',
-    register_b : '1',
-    register_c : '1',
-    operator_a : '+',
-    operator_b : '*'
-  };
-  var cleared_buffer = {
-    screen_flag : 1,
-    register_a : 'empty',
-    register_b : 'empty',
-    register_c : 'empty',
-    operator_a : 'empty',
-    operator_b : 'empty'
-  };
-  calculator.clear(test_buffer);
-  assert.deepEqual(test_buffer, cleared_buffer, 'clear resets the buffer');
+  setBuffer(['1','1','1','+','*',2,'0',1]);
+  calculator.clear();
+  assert.deepEqual(calculator.buffer, default_buffer, 'clear resets the buffer');
 });
 
 q.module('updateScreen');
@@ -171,3 +120,32 @@ q.module('enterNumber');
 q.test('It exists', function(assert) {
   assert.equal(typeof calculator.enterNumber, 'function', 'enterNumber is a function on Calculator');
 });
+
+
+
+
+
+// ========= UTILITY FUNCTIONS
+
+setBuffer = function(buffer) {
+  calculator.buffer.register_a  = buffer[0]; 
+  calculator.buffer.register_b  = buffer[1]; 
+  calculator.buffer.register_c  = buffer[2]; 
+  calculator.buffer.operator_a  = buffer[3]; 
+  calculator.buffer.operator_b  = buffer[4]; 
+  calculator.buffer.screen_flag = buffer[5]; 
+  calculator.buffer.screen      = buffer[6]; 
+  calculator.buffer.state       = buffer[7]; 
+}
+
+
+var default_buffer = {
+  register_a  : 'empty',
+  register_b  : 'empty',
+  register_c  : 'empty',
+  operator_a  : 'empty',
+  operator_b  : 'empty',
+  screen      : '0',
+  screen_flag : 1,
+  state       : 1
+};

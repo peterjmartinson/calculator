@@ -73,7 +73,7 @@ var Calculator = function() {
    * Case 4)  A | B |   | + | * |
    * Case 5)  A | B | C | + | * |
    */
-  function setState(buffer) {
+  function setState() {
       if (buffer.register_a === 'DIV BY 0' || buffer.register_b === 'DIV BY 0') {
         buffer.state = 6;
       } else if (buffer.register_a === 'ERROR' || buffer.register_b === 'ERROR') {
@@ -122,17 +122,52 @@ var Calculator = function() {
    *
    * @params {object} The whole buffer object
    */
-  function clear(buffer) {
-  // if (b === 'C') {
+  function clear() {
      buffer.screen_flag = 1;
      buffer.register_a = 'empty';
      buffer.register_b = 'empty';
      buffer.register_c = 'empty';
      buffer.operator_a = 'empty';
      buffer.operator_b = 'empty';
+     setState();
   }
 
   function enterNumber(number) {
+    switch(buffer.state) {
+      case 1:
+        buffer.screen_flag = 1;
+        if (buffer.register_a === 'empty' || buffer.register_a === '0') {
+          buffer.register_a = number.toString();
+        } else if (buffer.register_a.toString().length < 10) {
+          buffer.register_a = buffer.register_a.toString() + number;
+        }
+        break;
+      case 2:
+         buffer.register_b = b.toString();
+         buffer.screen_flag = 2;
+         break;
+      case 3:
+         if (buffer.register_b.toString().length < 10) {
+            buffer.register_b = buffer.register_b.toString() + number;
+            buffer.screen_flag = 2;
+         }
+         break;
+      case 4:
+         buffer.register_c = b.toString();
+         buffer.screen_flag = 3;
+         break;
+      case 5:
+         if (buffer.register_c.toString().length < 10) {
+            buffer.register_c = buffer.register_c.toString() + number;
+            buffer.screen_flag = 3;
+         }
+         break;
+      case 6:
+         break;
+      default:
+         console.log("something other than NUMBER happened!");
+         break;
+    }
   
   }
 
