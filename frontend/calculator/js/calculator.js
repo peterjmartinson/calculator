@@ -143,7 +143,7 @@ var Calculator = function() {
         }
         break;
       case 2:
-         buffer.register_b = b.toString();
+         buffer.register_b = number.toString();
          buffer.screen_flag = 2;
          break;
       case 3:
@@ -153,7 +153,7 @@ var Calculator = function() {
          }
          break;
       case 4:
-         buffer.register_c = b.toString();
+         buffer.register_c = number.toString();
          buffer.screen_flag = 3;
          break;
       case 5:

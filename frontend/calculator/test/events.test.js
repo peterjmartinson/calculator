@@ -4,7 +4,6 @@ q.module('keyStroke()');
 q.test('There is a module', function(assert) {
   assert.equal(typeof window.keyStroke, 'function', 'keyStroke is a function');
 });
-
 q.test('It returns a value', function(assert) {
   assert.equal(window.keyStroke('clear'), 'clear', 'it returns `clear`');
   assert.equal(window.keyStroke('pm'), 'pm', 'it returns `pm`');
@@ -15,11 +14,9 @@ q.module('trim()');
 q.test('It exists', function(assert) {
   assert.equal(typeof calculator.trim, 'function', 'trim is a function on C');
 });
-
 q.test('It returns a string', function(assert) {
   assert.equal(typeof calculator.trim(1), 'string', 'trim returns a string');
 });
-
 q.test('It returns a string of less than 10 characters', function(assert) {
   var a = [1.11111111, 1.111111111, 1.1111111111, 1.11111111111, 1.111111111111];
   for (let i = 0; i < a.length; i++) {
@@ -119,6 +116,35 @@ q.test('It returns the correct states', function(assert) {
 q.module('enterNumber');
 q.test('It exists', function(assert) {
   assert.equal(typeof calculator.enterNumber, 'function', 'enterNumber is a function on Calculator');
+});
+q.test('The correct registers get filled', function(assert) {
+  var number = 5;
+  // state 1
+  setBuffer(['empty','empty','empty','empty','empty']);
+  calculator.setState();
+  calculator.enterNumber(number);
+  assert.ok(calculator.buffer.register_a == '5' && calculator.buffer.screen_flag == 1, 'state 1 updated correctly');
+  // state 2
+  setBuffer(['1','empty','empty','+','empty']);
+  calculator.setState();
+  calculator.enterNumber(number);
+  assert.ok(calculator.buffer.register_b == '5' && calculator.buffer.screen_flag == 2, 'state 2 updated correctly');
+  // state 3
+  setBuffer(['1','1','empty','+','empty']);
+  calculator.setState();
+  calculator.enterNumber(number);
+  assert.ok(calculator.buffer.register_b == '15' && calculator.buffer.screen_flag == 2, 'state 3 updated correctly');
+  // state 4
+  setBuffer(['1','1','empty','+','*']);
+  calculator.setState();
+  calculator.enterNumber(number);
+  assert.ok(calculator.buffer.register_c == '5' && calculator.buffer.screen_flag == 3, 'state 4 updated correctly');
+  // state 5
+  setBuffer(['1','1','1','+','*']);
+  calculator.setState();
+  calculator.enterNumber(number);
+  assert.ok(calculator.buffer.register_c == '15' && calculator.buffer.screen_flag == 3, 'state 4 updated correctly');
+
 });
 
 
