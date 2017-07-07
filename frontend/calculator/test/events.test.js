@@ -124,6 +124,10 @@ q.test('The correct registers get filled', function(assert) {
   calculator.setState();
   calculator.enterNumber(number);
   assert.ok(calculator.buffer.register_a == '5' && calculator.buffer.screen_flag == 1, 'state 1 updated correctly');
+  setBuffer(['27','empty','empty','empty','empty']);
+  calculator.setState();
+  calculator.enterNumber(number);
+  assert.ok(calculator.buffer.register_a == '275' && calculator.buffer.screen_flag == 1, 'state 1 updated correctly - append');
   // state 2
   setBuffer(['1','empty','empty','+','empty']);
   calculator.setState();
@@ -147,6 +151,23 @@ q.test('The correct registers get filled', function(assert) {
 
 });
 
+q.module('enterOperator');
+q.test('It exists', function(assert) {
+  assert.equal(typeof calculator.enterOperator, 'function', 'enterOperator is a function on Calculator');
+});
+q.test('The correct registers get filled', function(assert) {
+  var plus = '+';
+  var times = '*';
+  // state 1
+  setBuffer(['empty','empty','empty','empty','empty']);
+  calculator.setState();
+  calculator.enterOperator(plus);
+  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1 updated correctly');
+  setBuffer(['27','empty','empty','empty','empty']);
+  calculator.setState();
+  calculator.enterOperator(plus);
+  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1 updated correctly');
+});
 
 
 
