@@ -171,63 +171,63 @@ var Calculator = function() {
   
   }
 
-  // CHECK THIS - IT'S GOT A NESTED CASE!!!
   function enterOperator(operator) {
     switch (buffer.state) {
-            case 1:
-               buffer.operator_a = operator;
-               buffer.screen_flag = 1;
-               break;
-            case 2:
-               buffer.operator_a = operator;
-               buffer.screen_flag = 1;
-               break;
-            case 3:
-               if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (operator === '*' || operator === '/')) {
-                  buffer.operator_b = operator;
-                  buffer.screen_flag = 2;
-               } else {
-                  buffer.register_a = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
-                  buffer.operator_a = operator;
-                  buffer.screen_flag = 1;
-               }
-               break;
-            case 4:
-               if (operator === '+' || operator === '-') {
-                  buffer.register_b = operate(buffer.register_a, buffer.operator_a,
-                     operate(buffer.register_b, buffer.operator_b, buffer.register_b));
-                  buffer.register_a = 'empty';
-                  buffer.register_c = 'empty';
-                  buffer.operator_b = 'empty';
-                  buffer.operator_a = operator;
-                  buffer.screen_flag = 1;
-               } else {
-                  buffer.operator_b = operator;
-                  buffer.screen_flag = 2;
-               }
-               break;
-            case 5:
-               if (operator === '+' || operator === '-') {
-                  buffer.register_b = operate(buffer.register_a, buffer.operator_a,
-                     operate(buffer.register_b, buffer.operator_b, buffer.register_c));
-                  buffer.register_a = 'empty';
-                  buffer.register_c = 'empty';
-                  buffer.operator_b = 'empty';
-                  buffer.operator_a = operator;
-                  buffer.screen_flag = 1;
-               } else {
-                  buffer.register_b = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
-                  buffer.register_c = 'empty';
-                  buffer.operator_b = operator;
-                  buffer.screen_flag = 2;
-               }
-               break;
-            case 6:
-               break;
-            default:
-               console.log("something other than OPERATOR happened!");
-               break;
+      case 1:
+         buffer.operator_a = operator;
+         buffer.screen_flag = 1;
+         break;
+      case 2:
+         buffer.operator_a = operator;
+         buffer.screen_flag = 1;
+         break;
+      case 3:
+         if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (operator === '*' || operator === '/')) {
+            buffer.operator_b = operator;
+            buffer.screen_flag = 2;
+         } else {
+            buffer.register_a = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
+            buffer.operator_a = operator;
+            buffer.screen_flag = 1;
+         }
+         break;
+      case 4:
+         if (operator === '+' || operator === '-') {
+            buffer.register_b = operate(buffer.register_a, buffer.operator_a,
+               operate(buffer.register_b, buffer.operator_b, buffer.register_b));
+            buffer.register_a = 'empty';
+            buffer.register_c = 'empty';
+            buffer.operator_b = 'empty';
+            buffer.operator_a = operator;
+            buffer.screen_flag = 1;
+         } else {
+            buffer.operator_b = operator;
+            buffer.screen_flag = 2;
+         }
+         break;
+      case 5:
+         if (operator === '+' || operator === '-') {
+            buffer.register_b = operate(buffer.register_a, buffer.operator_a,
+               operate(buffer.register_b, buffer.operator_b, buffer.register_c));
+            buffer.register_a = 'empty';
+            buffer.register_c = 'empty';
+            buffer.operator_b = 'empty';
+            buffer.operator_a = operator;
+            buffer.screen_flag = 1;
+         } else {
+            buffer.register_b = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
+            buffer.register_c = 'empty';
+            buffer.operator_b = operator;
+            buffer.screen_flag = 2;
+         }
+         break;
+      case 6:
+         break;
+      default:
+         console.log("something other than OPERATOR happened!");
+         break;
     }
+    setState();
   }
 
   return {
