@@ -132,7 +132,7 @@ var Calculator = function() {
      setState();
   }
 
-  function enterNumber(number) {
+  function setNumber(number) {
     switch(buffer.state) {
       case 1:
         buffer.screen_flag = 1;
@@ -171,7 +171,7 @@ var Calculator = function() {
   
   }
 
-  function enterOperator(operator) {
+  function setOperator(operator) {
     switch (buffer.state) {
       case 1:
          buffer.operator_a = operator;
@@ -236,8 +236,8 @@ var Calculator = function() {
     setState    : setState,
     clear       : clear,
     updateScreen : updateScreen,
-    enterNumber : enterNumber,
-    enterOperator : enterOperator,
+    setNumber : setNumber,
+    setOperator : setOperator,
     buffer       : buffer
   };
 

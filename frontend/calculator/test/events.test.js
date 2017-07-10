@@ -109,47 +109,47 @@ q.test('It returns the correct states', function(assert) {
   assert.equal(document.getElementById('screen').innerHTML, '3', '3 is on the screen');
 });
 
-q.module('enterNumber');
+q.module('setNumber');
 q.test('It exists', function(assert) {
-  assert.equal(typeof calculator.enterNumber, 'function', 'enterNumber is a function on Calculator');
+  assert.equal(typeof calculator.setNumber, 'function', 'setNumber is a function on Calculator');
 });
 q.test('The correct registers get filled', function(assert) {
   var number = 5;
   // state 1
   setBuffer(['empty','empty','empty','empty','empty']);
   calculator.setState();
-  calculator.enterNumber(number);
+  calculator.setNumber(number);
   assert.ok(calculator.buffer.register_a == '5' && calculator.buffer.screen_flag == 1, 'state 1 updated correctly');
   setBuffer(['27','empty','empty','empty','empty']);
   calculator.setState();
-  calculator.enterNumber(number);
+  calculator.setNumber(number);
   assert.ok(calculator.buffer.register_a == '275' && calculator.buffer.screen_flag == 1, 'state 1 updated correctly - append');
   // state 2
   setBuffer(['1','empty','empty','+','empty']);
   calculator.setState();
-  calculator.enterNumber(number);
+  calculator.setNumber(number);
   assert.ok(calculator.buffer.register_b == '5' && calculator.buffer.screen_flag == 2, 'state 2 updated correctly');
   // state 3
   setBuffer(['1','1','empty','+','empty']);
   calculator.setState();
-  calculator.enterNumber(number);
+  calculator.setNumber(number);
   assert.ok(calculator.buffer.register_b == '15' && calculator.buffer.screen_flag == 2, 'state 3 updated correctly');
   // state 4
   setBuffer(['1','1','empty','+','*']);
   calculator.setState();
-  calculator.enterNumber(number);
+  calculator.setNumber(number);
   assert.ok(calculator.buffer.register_c == '5' && calculator.buffer.screen_flag == 3, 'state 4 updated correctly');
   // state 5
   setBuffer(['1','1','1','+','*']);
   calculator.setState();
-  calculator.enterNumber(number);
+  calculator.setNumber(number);
   assert.ok(calculator.buffer.register_c == '15' && calculator.buffer.screen_flag == 3, 'state 4 updated correctly');
 
 });
 
-q.module('enterOperator');
+q.module('setOperator');
 q.test('It exists', function(assert) {
-  assert.equal(typeof calculator.enterOperator, 'function', 'enterOperator is a function on Calculator');
+  assert.equal(typeof calculator.setOperator, 'function', 'setOperator is a function on Calculator');
 });
 q.test('The correct registers get filled', function(assert) {
   var plus = '+';
@@ -158,32 +158,42 @@ q.test('The correct registers get filled', function(assert) {
   setBuffer(['empty','empty','empty','empty','empty']);
   calculator.setState();
   assert.equal(calculator.buffer.state, '1', 'State is correct');
-  calculator.enterOperator(plus);
+  calculator.setOperator(plus);
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1: operator_a got +');
   setBuffer(['27','empty','empty','empty','empty']);
   calculator.setState();
-  calculator.enterOperator(plus);
+  calculator.setOperator(plus);
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1: operator_a got +');
   // state 2
   setBuffer(['27','empty','empty','+','empty']);
   calculator.setState();
   assert.equal(calculator.buffer.state, '2', 'State is correct');
-  calculator.enterOperator(plus);
+  calculator.setOperator(plus);
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
   setBuffer(['27','empty','empty','*','empty']);
   calculator.setState();
-  calculator.enterOperator(plus);
+  calculator.setOperator(plus);
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
   // state 3
-  assert.ok(false);
   setBuffer(['27','2','empty','+','empty']);
   calculator.setState();
   assert.equal(calculator.buffer.state, '3', 'State is correct');
-  calculator.enterOperator(plus);
+  calculator.setOperator(plus);
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
   setBuffer(['27','2','empty','*','empty']);
   calculator.setState();
-  calculator.enterOperator(plus);
+  calculator.setOperator(plus);
+  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
+  // state 4
+  setBuffer(['27','2','empty','+','+']);
+  calculator.setState();
+  assert.equal(calculator.buffer.state, '3', 'State is correct');
+  calculator.setOperator(plus);
+  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
+  setBuffer(['27','2','empty','+','*']);
+  calculator.setState();
+  assert.equal(calculator.buffer.state, '3', 'State is correct');
+  calculator.setOperator(plus);
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
 });
 
