@@ -159,42 +159,52 @@ q.test('The correct registers get filled', function(assert) {
   calculator.setState();
   assert.equal(calculator.buffer.state, '1', 'State is correct');
   calculator.setOperator(plus);
-  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1: operator_a got +');
+  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1: a');
   setBuffer(['27','empty','empty','empty','empty']);
   calculator.setState();
   calculator.setOperator(plus);
-  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1: operator_a got +');
+  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1: b');
   // state 2
   setBuffer(['27','empty','empty','+','empty']);
   calculator.setState();
   assert.equal(calculator.buffer.state, '2', 'State is correct');
   calculator.setOperator(plus);
-  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
+  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: a');
   setBuffer(['27','empty','empty','*','empty']);
   calculator.setState();
   calculator.setOperator(plus);
-  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
+  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: b');
   // state 3
   setBuffer(['27','2','empty','+','empty']);
   calculator.setState();
   assert.equal(calculator.buffer.state, '3', 'State is correct');
   calculator.setOperator(plus);
-  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
-  setBuffer(['27','2','empty','*','empty']);
+  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 3: a');
+  setBuffer(['27','2','empty','+','empty']);
   calculator.setState();
-  calculator.setOperator(plus);
-  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
+  calculator.setOperator(times);
+  assert.ok(calculator.buffer.operator_b == '*' && calculator.buffer.screen_flag == 2, 'state 3: b');
   // state 4
   setBuffer(['27','2','empty','+','+']);
   calculator.setState();
-  assert.equal(calculator.buffer.state, '3', 'State is correct');
+  assert.equal(calculator.buffer.state, '4', 'State is correct');
   calculator.setOperator(plus);
-  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
+  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 4: a');
   setBuffer(['27','2','empty','+','*']);
   calculator.setState();
-  assert.equal(calculator.buffer.state, '3', 'State is correct');
+  assert.equal(calculator.buffer.state, '4', 'State is correct');
   calculator.setOperator(plus);
-  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: operator_a got +');
+  assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 4: b');
+  setBuffer(['27','2','empty','+','+']);
+  calculator.setState();
+  assert.equal(calculator.buffer.state, '4', 'State is correct');
+  calculator.setOperator(times);
+  assert.ok(calculator.buffer.operator_b == '*' && calculator.buffer.screen_flag == 2, 'state 4: a');
+  setBuffer(['27','2','empty','+','*']);
+  calculator.setState();
+  assert.equal(calculator.buffer.state, '4', 'State is correct');
+  calculator.setOperator(times);
+  assert.ok(calculator.buffer.operator_b == '*' && calculator.buffer.screen_flag == 2, 'state 4: b');
 });
 
 

@@ -230,6 +230,49 @@ var Calculator = function() {
     setState();
   }
 
+  /*
+   * ENTER +/-
+   *
+   *          A | B | C |opA|opB|
+   *         ---|---|---|---|---|
+   * Case 1) 0,A|   |   |   |   | 
+   * Case 2)  A |   |   | + |   | 
+   * Case 3)  A | B |   |+,*|   | 
+   * Case 4)  A | B |   | + | * | 
+   * Case 5)  A | B | C | + | * | 
+   */
+  if (b === 'pm') {
+     switch (calState(this.regA, this.regB, this.regC, this.opA, this.opB)) {
+        case 1:
+           if (this.regA !== 'empty' && this.regA !== '0') {
+              this.regA = Number(this.regA * -1).toString();
+              this.screenFlag = 1;
+           }
+           break;
+        case 2:
+           this.regB = Number(this.regA * -1).toString();
+           this.screenFlag = 2;
+           break;
+        case 3:
+           this.regB = Number(this.regB * -1).toString();
+           this.screenFlag = 2;
+           break;
+        case 4:
+           this.regC = Number(this.regB * -1).toString();
+           this.screenFlag = 3;
+           break;
+        case 5:
+           this.regC = Number(this.regC * -1).toString();
+           this.screenFlag = 3;
+           break;
+        case 6:
+           break;
+        default:
+           console.log("something other than PLUS-MINUS happened!");
+           break;
+     }
+  }
+
   return {
     trim        : trim,
     operate     : operate,
