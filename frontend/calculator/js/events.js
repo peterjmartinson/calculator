@@ -1,6 +1,8 @@
 window.onload = (function() {
   'use strict';
 
+  let key_stroke = '';
+
   function keyStroke(label) {
     console.log("keypressed: " + label);
     return label
@@ -19,11 +21,6 @@ window.onload = (function() {
   }
 
   function getKeyName(key) {
-    // 187: =
-    // p: 80
-    // m: 77
-    // d: 68
-    // t: 49
     // console.log('keyCode: ' + key.keyCode);
     let button = '';
     switch(key.keyCode) {
@@ -36,10 +33,10 @@ window.onload = (function() {
       case 77:
         return '-';
         break;
-      case 68:
+      case 84:
         return '*';
         break;
-      case 49:
+      case 68:
         return '/';
         break;
       case 48:
@@ -80,12 +77,15 @@ window.onload = (function() {
   function keyHandler(key) {
     let key_name = getKeyName(key);
     if ( key_name ) {
+      keyStroke
       console.log(key_name);
     }
   }
 
   // need the following to register the function
   // the HTML only runs functions attached to the window
+  window.key_stroke = key_stroke;
   window.keyStroke = keyStroke;
+
 
 }());

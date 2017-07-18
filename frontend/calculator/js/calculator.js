@@ -1,6 +1,36 @@
 var Calculator = function() {
   'use strict';
 
+
+  const key_map = {
+      187: '=',
+      80: '+',
+      77: '-',
+      84: '*',
+      68: '/',
+      48: '0',
+      49: '1',
+      50: '2',
+      51: '3',
+      52: '4',
+      53: '5',
+      54: '6',
+      55: '7',
+      56: '8',
+      57: '9'
+  }
+
+  document.addEventListener('keyup', keyHandler, 0);
+
+  function keyHandler(key) {
+    callTheRightButtonFunction(key);
+  }
+
+  function callTheRightButtonFunction(key) {
+    console.log('key: ' + key_map[key.keyCode]);
+    // big ugly switch statement, as usual!
+  }
+
   var buffer = {
     register_a  : 'empty',
     register_b  : 'empty',
