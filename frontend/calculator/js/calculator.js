@@ -1,9 +1,18 @@
+// to do:
+// be strict about string vs. number, instead of using toString everywhere
+// make ONE global variable that holds the current entry.  Dump arguments from the function signatures
+// replace 'empty' with ''
+// Make two operate functions:
+//   operatePartial = <register_b> <operator_b> <register_c> -> <register_b>
+//   operateFinal   = <register_a> <operator_a> <register_b> -> <register_a>
+// or something like that.  point being, you want to just call a function, not come up with logic
 (function() {
 // var Calculator = function() {
   'use strict';
 
   let cowport = document.getElementById("cowport");
   let screen = document.getElementById('screen');
+  let entered = '';
   cowport.innerHTML = "hello";
   const key_map = {
       187: '=',
@@ -38,11 +47,12 @@
   }
 
   function keyHandler(key) {
+    entered = key_map[key.keyCode];
     if ( key.keyCode >= 48 && key.keyCode <= 57 ) {
-      setNumber(key_map[key.keyCode]);
+      setNumber();
     } else
     if ( key.keyCode == 80 || key.keyCode == 77 || key.keyCode == 84 || key.keyCode == 68 ) {
-      setOperator(key_map[key.keyCode]);
+      setOperator();
     } else
     if ( key.keyCode == 67 ) {
       clear();
@@ -183,39 +193,39 @@
      setState();
   }
 
-  function setNumber(number) {
+  function setNumber() {
     switch(buffer.state) {
       case 1:
         buffer.screen_flag = 1;
         if (buffer.register_a === 'empty' || buffer.register_a === '0') {
-          buffer.register_a = number.toString();
+          buffer.register_a = entered.toString();
         } else if (buffer.register_a.toString().length < 10) {
-          buffer.register_a = buffer.register_a.toString() + number;
+          buffer.register_a = buffer.register_a.toString() + entered;
         }
         break;
       case 2:
         buffer.screen_flag = 2;
         if (buffer.register_b === 'empty' || buffer.register_b === '0') {
-          buffer.register_b = number.toString();
+          buffer.register_b = entered.toString();
         } else if (buffer.register_b.toString().length < 10) {
-          buffer.register_b = buffer.register_b.toString() + number;
+          buffer.register_b = buffer.register_b.toString() + entered;
         }
         break;
       case 3:
         if (buffer.register_b === 'empty' || buffer.register_b === '0') {
-          buffer.register_b = number.toString();
+          buffer.register_b = entered.toString();
         } else if (buffer.register_b.toString().length < 10) {
-          buffer.register_b = buffer.register_b.toString() + number;
+          buffer.register_b = buffer.register_b.toString() + entered;
         }
         buffer.screen_flag = 2;
         break;
       case 4:
-         buffer.register_c = number.toString();
+         buffer.register_c = entered.toString();
          buffer.screen_flag = 3;
          break;
       case 5:
          if (buffer.register_c.toString().length < 10) {
-            buffer.register_c = buffer.register_c.toString() + number;
+            buffer.register_c = buffer.register_c.toString() + entered;
             buffer.screen_flag = 3;
          }
          break;
@@ -228,54 +238,54 @@
     setState();
   }
 
-  function setOperator(operator) {
+  function setOperator() {
     switch (buffer.state) {
       case 1:
-         buffer.operator_a = operator;
+         buffer.operator_a = entered;
          buffer.screen_flag = 1;
          break;
       case 2:
-         buffer.operator_a = operator;
+         buffer.operator_a = entered;
          buffer.screen_flag = 1;
          break;
       case 3:
-         if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (operator === '*' || operator === '/')) {
-            buffer.operator_b = operator;
+         if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (entered === '*' || entered === '/')) {
+            buffer.operator_b = entered;
             buffer.screen_flag = 2;
          } else {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
             buffer.register_b = 'empty';
-            buffer.operator_a = operator;
+            buffer.operator_a = entered;
             buffer.screen_flag = 1;
          }
          break;
       case 4:
-         if (operator === '+' || operator === '-') {
+         if (entered === '+' || entered === '-') {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a,
                operate(buffer.register_b, buffer.operator_b, buffer.register_b));
             buffer.register_b = 'empty';
             buffer.register_c = 'empty';
-            buffer.operator_a = operator;
+            buffer.operator_a = entered;
             buffer.operator_b = 'empty';
             buffer.screen_flag = 1;
          } else {
-            buffer.operator_b = operator;
+            buffer.operator_b = entered;
             buffer.screen_flag = 2;
          }
          break;
       case 5:
-         if (operator === '+' || operator === '-') {
+         if (entered === '+' || entered === '-') {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a,
                operate(buffer.register_b, buffer.operator_b, buffer.register_c));
             buffer.register_b = 'empty';
             buffer.register_c = 'empty';
-            buffer.operator_a = operator;
+            buffer.operator_a = entered;
             buffer.operator_b = 'empty';
             buffer.screen_flag = 1;
          } else {
             buffer.register_b = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
             buffer.register_c = 'empty';
-            buffer.operator_b = operator;
+            buffer.operator_b = entered;
             buffer.screen_flag = 2;
          }
          break;
