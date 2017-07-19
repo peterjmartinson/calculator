@@ -1,7 +1,10 @@
-var Calculator = function() {
+(function() {
+// var Calculator = function() {
   'use strict';
 
-
+  let cowport = document.getElementById("cowport");
+  let screen = document.getElementById('screen');
+  cowport.innerHTML = "hello";
   const key_map = {
       187: '=',
       80: '+',
@@ -17,10 +20,22 @@ var Calculator = function() {
       54: '6',
       55: '7',
       56: '8',
-      57: '9'
+      57: '9',
+      67: 'c'
   }
 
+
   document.addEventListener('keyup', keyHandler, 0);
+
+  function logBuffer() {
+    let output = '';
+    for (let property in buffer) {
+      if ( buffer.hasOwnProperty(property) ) {
+        output += buffer[property] + ' : ';
+      }
+    }
+    return output;
+  }
 
   function keyHandler(key) {
     if ( key.keyCode >= 48 && key.keyCode <= 57 ) {
@@ -28,13 +43,14 @@ var Calculator = function() {
     } else
     if ( key.keyCode == 80 || key.keyCode == 77 || key.keyCode == 84 || key.keyCode == 68 ) {
       setOperator(key_map[key.keyCode]);
+    } else
+    if ( key.keyCode == 67 ) {
+      clear();
     }
-    console.log(`${buffer.register_a} : ${buffer.register_b} : ${buffer.register_c} : ${buffer.operator_a} : ${buffer.operator_b}`);
-  }
-
-  function callTheRightButtonFunction(key) {
-    console.log('key: ' + key_map[key.keyCode]);
-    // big ugly switch statement, as usual!
+    setState();
+    updateScreen();
+    console.log(key.keyCode);
+    cowport.innerHTML = logBuffer();
   }
 
   var buffer = {
@@ -132,24 +148,23 @@ var Calculator = function() {
    *
    * @params {object} the screen element
   */
-  function updateScreen(buffer) {
-    var screen_html = document.getElementById('screen');
+  function updateScreen() {
     if (buffer.screen_flag === 1) {
        if (buffer.register_a === 'empty') {
           // this.screen = '0';
-          screen_html.innerHTML = '0';
+          screen.innerHTML = '0';
        } else {
           // this.screen = this.regA;
-          screen_html.innerHTML = buffer.register_a.toString();
+          screen.innerHTML = buffer.register_a.toString();
        }
     }
     if (buffer.screen_flag === 2) {
        // this.screen = this.regB;
-       screen_html.innerHTML = buffer.register_b.toString();
+       screen.innerHTML = buffer.register_b.toString();
     }
     if (buffer.screen_flag === 3) {
        // this.screen = this.regC;
-       screen_html.innerHTML = buffer.register_c.toString();
+       screen.innerHTML = buffer.register_c.toString();
     }
   }
 
@@ -179,15 +194,21 @@ var Calculator = function() {
         }
         break;
       case 2:
-         buffer.register_b = number.toString();
-         buffer.screen_flag = 2;
-         break;
+        buffer.screen_flag = 2;
+        if (buffer.register_b === 'empty' || buffer.register_b === '0') {
+          buffer.register_b = number.toString();
+        } else if (buffer.register_b.toString().length < 10) {
+          buffer.register_b = buffer.register_b.toString() + number;
+        }
+        break;
       case 3:
-         if (buffer.register_b.toString().length < 10) {
-            buffer.register_b = buffer.register_b.toString() + number;
-            buffer.screen_flag = 2;
-         }
-         break;
+        if (buffer.register_b === 'empty' || buffer.register_b === '0') {
+          buffer.register_b = number.toString();
+        } else if (buffer.register_b.toString().length < 10) {
+          buffer.register_b = buffer.register_b.toString() + number;
+        }
+        buffer.screen_flag = 2;
+        break;
       case 4:
          buffer.register_c = number.toString();
          buffer.screen_flag = 3;
@@ -204,7 +225,7 @@ var Calculator = function() {
          console.log("something other than NUMBER happened!");
          break;
     }
-  
+    setState();
   }
 
   function setOperator(operator) {
@@ -223,18 +244,19 @@ var Calculator = function() {
             buffer.screen_flag = 2;
          } else {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
+            buffer.register_b = 'empty';
             buffer.operator_a = operator;
             buffer.screen_flag = 1;
          }
          break;
       case 4:
          if (operator === '+' || operator === '-') {
-            buffer.register_b = operate(buffer.register_a, buffer.operator_a,
+            buffer.register_a = operate(buffer.register_a, buffer.operator_a,
                operate(buffer.register_b, buffer.operator_b, buffer.register_b));
-            buffer.register_a = 'empty';
+            buffer.register_b = 'empty';
             buffer.register_c = 'empty';
-            buffer.operator_b = 'empty';
             buffer.operator_a = operator;
+            buffer.operator_b = 'empty';
             buffer.screen_flag = 1;
          } else {
             buffer.operator_b = operator;
@@ -243,12 +265,12 @@ var Calculator = function() {
          break;
       case 5:
          if (operator === '+' || operator === '-') {
-            buffer.register_b = operate(buffer.register_a, buffer.operator_a,
+            buffer.register_a = operate(buffer.register_a, buffer.operator_a,
                operate(buffer.register_b, buffer.operator_b, buffer.register_c));
-            buffer.register_a = 'empty';
+            buffer.register_b = 'empty';
             buffer.register_c = 'empty';
-            buffer.operator_b = 'empty';
             buffer.operator_a = operator;
+            buffer.operator_b = 'empty';
             buffer.screen_flag = 1;
          } else {
             buffer.register_b = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
@@ -284,4 +306,4 @@ var Calculator = function() {
   };
 
 
-};
+}());
