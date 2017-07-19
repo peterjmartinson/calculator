@@ -23,7 +23,13 @@ var Calculator = function() {
   document.addEventListener('keyup', keyHandler, 0);
 
   function keyHandler(key) {
-    callTheRightButtonFunction(key);
+    if ( key.keyCode >= 48 && key.keyCode <= 57 ) {
+      setNumber(key_map[key.keyCode]);
+    } else
+    if ( key.keyCode == 80 || key.keyCode == 77 || key.keyCode == 84 || key.keyCode == 68 ) {
+      setOperator(key_map[key.keyCode]);
+    }
+    console.log(`${buffer.register_a} : ${buffer.register_b} : ${buffer.register_c} : ${buffer.operator_a} : ${buffer.operator_b}`);
   }
 
   function callTheRightButtonFunction(key) {
