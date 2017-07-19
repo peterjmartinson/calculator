@@ -1,6 +1,5 @@
 // to do:
 // be strict about string vs. number, instead of using toString everywhere
-// make ONE global variable that holds the current entry.  Dump arguments from the function signatures
 // replace 'empty' with ''
 // Make two operate functions:
 //   operatePartial = <register_b> <operator_b> <register_c> -> <register_b>
@@ -13,7 +12,6 @@
   let cowport = document.getElementById("cowport");
   let screen = document.getElementById('screen');
   let entered = '';
-  cowport.innerHTML = "hello";
   const key_map = {
       187: '=',
       80: '+',
@@ -153,11 +151,6 @@
       }
   }
 
-  /**
-   * updates the screen element
-   *
-   * @params {object} the screen element
-  */
   function updateScreen() {
     if (buffer.screen_flag === 1) {
        if (buffer.register_a === 'empty') {
@@ -178,11 +171,6 @@
     }
   }
 
-  /**
-   * clear the buffer
-   *
-   * @params {object} The whole buffer object
-   */
   function clear() {
      buffer.screen_flag = 1;
      buffer.register_a = 'empty';
@@ -302,7 +290,6 @@
   // .
   // square root
   // =
-  // update screen
   
   return {
     trim        : trim,
