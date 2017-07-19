@@ -5,8 +5,8 @@
 //   operatePartial = <register_b> <operator_b> <register_c> -> <register_b>
 //   operateFinal   = <register_a> <operator_a> <register_b> -> <register_a>
 // or something like that.  point being, you want to just call a function, not come up with logic
-(function() {
-// var Calculator = function() {
+// (function() {
+var Calculator = function() {
   'use strict';
 
   let cowport = document.getElementById("cowport");
@@ -93,15 +93,26 @@
      return num.toString();
   }
 
-  /**
-   * perform a single operation
-   *   pattern: A + B -> l o r
-   *
-   * @params {string} left of operator
-   * @params {string} operator
-   * @params {string} right of operator
-   * @returns {string}
-   */
+  function renderInside() {
+    if (buffer.register_c === 'empty') {
+      buffer.register_c = buffer.register_b
+    }
+    let result = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
+    buffer.register_b = result;
+    buffer.operator_b = 'empty';
+    buffer.register_c = 'empty';
+  }
+
+  function renderOutside() {
+    if (buffer.register_b === 'empty') {
+      buffer.register_b = buffer.register_a
+    }
+    let result = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
+    buffer.register_a = result;
+    buffer.operator_a = 'empty';
+    buffer.register_b = 'empty';
+  }
+
   function operate(l, o, r) {
      l = Number(l);
      r = Number(r);
@@ -286,6 +297,14 @@
     setState();
   }
 
+  function equal() {
+    if (register_b.toNumber() && register_c.toNumber() && operator_b != 'empty') {
+      renderInside();
+      renderOutside();
+    } else {
+      renderOutside();
+    }
+  }
   // +/-
   // .
   // square root
@@ -299,8 +318,11 @@
     updateScreen : updateScreen,
     setNumber : setNumber,
     setOperator : setOperator,
-    buffer       : buffer
+    buffer       : buffer,
+    renderInside : renderInside,
+    renderOutside : renderOutside
   };
 
 
-}());
+};
+// }());

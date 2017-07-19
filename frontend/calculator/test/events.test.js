@@ -1,4 +1,37 @@
-// var q = QUnit;
+var q = QUnit;
+
+q.module('operations');
+
+q.test('There is a module', function(assert) {
+  assert.equal(typeof calculator.operate, 'function', 'operate is a function');
+  assert.equal(typeof calculator.renderInside, 'function', 'renderInside is a function');
+  assert.equal(typeof calculator.renderOutside, 'function', 'renderOutside is a function');
+});
+
+q.test('operate() performs simple calculations', function(assert) {
+  let a = ['1', '+', '1'],
+      b = ['2', '-', '7'],
+      c = ['3', '*', '6'],
+      d = ['12', '/', '3'];
+  assert.equal(calculator.operate(a[0], a[1], a[2]), '2', '1+1=2');
+  assert.equal(calculator.operate(b[0], b[1], b[2]), '-5', '2-7=-5');
+  assert.equal(calculator.operate(c[0], c[1], c[2]), '18', '3*6=18');
+  assert.equal(calculator.operate(d[0], d[1], d[2]), '4', '12/3=4');
+});
+
+q.test('renderInside() performs simple calculations', function(assert) {
+  setBuffer(['1', '2', '3', '+', '*']);
+  calculator.renderInside();
+  let result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['1', '6', 'empty', '+', 'empty'], '2*3=6');
+  // put in a few more tests like this
+});
+
+// q.test('It returns a value', function(assert) {
+//   assert.equal(window.keyStroke('clear'), 'clear', 'it returns `clear`');
+//   assert.equal(window.keyStroke('pm'), 'pm', 'it returns `pm`');
+//   assert.equal(window.keyStroke(3), 3, 'it returns 3');
+// });
 
 // q.module('keyStroke()');
 // q.test('There is a module', function(assert) {
@@ -210,27 +243,27 @@
 
 
 
-// // ========= UTILITY FUNCTIONS
+// ========= UTILITY FUNCTIONS
 
-// setBuffer = function(buffer) {
-//   calculator.buffer.register_a  = buffer[0]; 
-//   calculator.buffer.register_b  = buffer[1]; 
-//   calculator.buffer.register_c  = buffer[2]; 
-//   calculator.buffer.operator_a  = buffer[3]; 
-//   calculator.buffer.operator_b  = buffer[4]; 
-//   calculator.buffer.screen_flag = buffer[5]; 
-//   calculator.buffer.screen      = buffer[6]; 
-//   calculator.buffer.state       = buffer[7]; 
-// }
+setBuffer = function(buffer) {
+  calculator.buffer.register_a  = buffer[0]; 
+  calculator.buffer.register_b  = buffer[1]; 
+  calculator.buffer.register_c  = buffer[2]; 
+  calculator.buffer.operator_a  = buffer[3]; 
+  calculator.buffer.operator_b  = buffer[4]; 
+  calculator.buffer.screen_flag = buffer[5]; 
+  calculator.buffer.screen      = buffer[6]; 
+  calculator.buffer.state       = buffer[7]; 
+}
 
 
-// var default_buffer = {
-//   register_a  : 'empty',
-//   register_b  : 'empty',
-//   register_c  : 'empty',
-//   operator_a  : 'empty',
-//   operator_b  : 'empty',
-//   screen      : '0',
-//   screen_flag : 1,
-//   state       : 1
-// };
+var default_buffer = {
+  register_a  : 'empty',
+  register_b  : 'empty',
+  register_c  : 'empty',
+  operator_a  : 'empty',
+  operator_b  : 'empty',
+  screen      : '0',
+  screen_flag : 1,
+  state       : 1
+};
