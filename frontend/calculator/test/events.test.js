@@ -4,8 +4,8 @@ q.module('operations');
 
 q.test('There is a module', function(assert) {
   assert.equal(typeof calculator.operate, 'function', 'operate is a function');
-  assert.equal(typeof calculator.renderInside, 'function', 'renderInside is a function');
-  assert.equal(typeof calculator.renderOutside, 'function', 'renderOutside is a function');
+  assert.equal(typeof calculator.reckonInside, 'function', 'reckonInside is a function');
+  assert.equal(typeof calculator.reckonOutside, 'function', 'reckonOutside is a function');
 });
 
 q.test('operate() performs simple calculations', function(assert) {
@@ -19,12 +19,70 @@ q.test('operate() performs simple calculations', function(assert) {
   assert.equal(calculator.operate(d[0], d[1], d[2]), '4', '12/3=4');
 });
 
-q.test('renderInside() performs simple calculations', function(assert) {
+q.test('reckonInside() performs simple calculations', function(assert) {
   setBuffer(['1', '2', '3', '+', '*']);
-  calculator.renderInside();
+  calculator.reckonInside();
   let result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['1', '6', 'empty', '+', 'empty'], '2*3=6');
-  // put in a few more tests like this
+  assert.deepEqual(result, ['1', '6', '3', '+', '*'], '2*3=6');
+
+  setBuffer(['1', '12', '3', '+', '/']);
+  calculator.reckonInside();
+  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['1', '4', '3', '+', '/'], '12/3=4');
+
+  setBuffer(['1', '2', '3', '-', '*']);
+  calculator.reckonInside();
+  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['1', '6', '3', '-', '*'], '2*3=6');
+
+  setBuffer(['1', '12', '3', '-', '/']);
+  calculator.reckonInside();
+  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['1', '4', '3', '-', '/'], '12/3=4');
+});
+
+q.test('reckonOutside() performs simple calculations', function(assert) {
+  setBuffer(['1', '2', '3', '+', '*']);
+  calculator.reckonOutside();
+  let result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['3', '2', '3', '+', '*'], '2*3=6');
+
+  setBuffer(['1', '12', '3', '+', '/']);
+  calculator.reckonOutside();
+  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['13', '12', '3', '+', '/'], '12/3=4');
+
+  setBuffer(['1', '2', '3', '-', '*']);
+  calculator.reckonOutside();
+  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['-1', '2', '3', '-', '*'], '2*3=6');
+
+  setBuffer(['1', '12', '3', '-', '/']);
+  calculator.reckonOutside();
+  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['-11', '12', '3', '-', '/'], '12/3=4');
+});
+
+q.test('equal() performs the whole calculation', function(assert) {
+  setBuffer(['1', '2', '3', '+', '*']);
+  calculator.equal();
+  let result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['7', '6', '3', '+', '*'], '1+(2*3)=7');
+
+  setBuffer(['1', '12', '3', '+', '/']);
+  calculator.equal();
+  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['5', '4', '3', '+', '/'], '1+(12/3)=5');
+
+  setBuffer(['1', '2', '3', '-', '*']);
+  calculator.equal();
+  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['-5', '6', '3', '-', '*'], '1-(2*3)=-5');
+
+  setBuffer(['1', '12', '3', '-', '/']);
+  calculator.equal();
+  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
+  assert.deepEqual(result, ['-3', '4', '3', '-', '/'], '1-(12/3)=-3');
 });
 
 // q.test('It returns a value', function(assert) {

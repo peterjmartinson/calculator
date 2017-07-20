@@ -93,24 +93,21 @@ var Calculator = function() {
      return num.toString();
   }
 
-  function renderInside() {
+  function reckonInside() {
     if (buffer.register_c === 'empty') {
       buffer.register_c = buffer.register_b
     }
     let result = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
     buffer.register_b = result;
-    buffer.operator_b = 'empty';
-    buffer.register_c = 'empty';
+    buffer.screen_flag = 2;
   }
 
-  function renderOutside() {
+  function reckonOutside() {
     if (buffer.register_b === 'empty') {
       buffer.register_b = buffer.register_a
     }
     let result = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
     buffer.register_a = result;
-    buffer.operator_a = 'empty';
-    buffer.register_b = 'empty';
   }
 
   function operate(l, o, r) {
@@ -298,11 +295,11 @@ var Calculator = function() {
   }
 
   function equal() {
-    if (register_b.toNumber() && register_c.toNumber() && operator_b != 'empty') {
-      renderInside();
-      renderOutside();
+    if (buffer.register_b != 'empty' && buffer.register_c != 'empty' && buffer.operator_b != 'empty') {
+      reckonInside();
+      reckonOutside();
     } else {
-      renderOutside();
+      reckonOutside();
     }
   }
   // +/-
@@ -319,8 +316,9 @@ var Calculator = function() {
     setNumber : setNumber,
     setOperator : setOperator,
     buffer       : buffer,
-    renderInside : renderInside,
-    renderOutside : renderOutside
+    reckonInside : reckonInside,
+    reckonOutside : reckonOutside,
+    equal : equal
   };
 
 
