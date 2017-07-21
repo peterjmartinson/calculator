@@ -10,7 +10,7 @@ var Calculator = function() {
   'use strict';
 
   let cowport = document.getElementById("cowport");
-  let screen = document.getElementById('screen');
+  let screen = document.getElementById("screen");
   let entered = '';
   const key_map = {
       187: '=',
