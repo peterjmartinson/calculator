@@ -22,67 +22,55 @@ q.test('operate() performs simple calculations', function(assert) {
 q.test('reckonInside() performs simple calculations', function(assert) {
   setBuffer(['1', '2', '3', '+', '*']);
   calculator.reckonInside();
-  let result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['1', '6', '3', '+', '*'], '2*3=6');
+  assert.deepEqual(getResult(), ['1', '6', '3', '+', '*'], '2*3=6');
 
   setBuffer(['1', '12', '3', '+', '/']);
   calculator.reckonInside();
-  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['1', '4', '3', '+', '/'], '12/3=4');
+  assert.deepEqual(getResult(), ['1', '4', '3', '+', '/'], '12/3=4');
 
   setBuffer(['1', '2', '3', '-', '*']);
   calculator.reckonInside();
-  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['1', '6', '3', '-', '*'], '2*3=6');
+  assert.deepEqual(getResult(), ['1', '6', '3', '-', '*'], '2*3=6');
 
   setBuffer(['1', '12', '3', '-', '/']);
   calculator.reckonInside();
-  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['1', '4', '3', '-', '/'], '12/3=4');
+  assert.deepEqual(getResult(), ['1', '4', '3', '-', '/'], '12/3=4');
 });
 
 q.test('reckonOutside() performs simple calculations', function(assert) {
   setBuffer(['1', '2', '3', '+', '*']);
   calculator.reckonOutside();
-  let result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['3', '2', '3', '+', '*'], '1+2=3');
+  assert.deepEqual(getResult(), ['3', '2', '3', '+', '*'], '1+2=3');
 
   setBuffer(['1', '12', '3', '+', '/']);
   calculator.reckonOutside();
-  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['13', '12', '3', '+', '/'], '1+12=12');
+  assert.deepEqual(getResult(), ['13', '12', '3', '+', '/'], '1+12=12');
 
   setBuffer(['1', '2', '3', '-', '*']);
   calculator.reckonOutside();
-  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['-1', '2', '3', '-', '*'], '1-2=-1');
+  assert.deepEqual(getResult(), ['-1', '2', '3', '-', '*'], '1-2=-1');
 
   setBuffer(['1', '12', '3', '-', '/']);
   calculator.reckonOutside();
-  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['-11', '12', '3', '-', '/'], '1-12=-11');
+  assert.deepEqual(getResult(), ['-11', '12', '3', '-', '/'], '1-12=-11');
 });
 
 q.test('equal() performs the whole calculation', function(assert) {
   setBuffer(['1', '2', '3', '+', '*']);
   calculator.equal();
-  let result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['7', '6', '3', '+', '*'], '1+(2*3)=7');
+  assert.deepEqual(getResult(), ['7', '6', '3', '+', '*'], '1+(2*3)=7');
 
   setBuffer(['1', '12', '3', '+', '/']);
   calculator.equal();
-  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['5', '4', '3', '+', '/'], '1+(12/3)=5');
+  assert.deepEqual(getResult(), ['5', '4', '3', '+', '/'], '1+(12/3)=5');
 
   setBuffer(['1', '2', '3', '-', '*']);
   calculator.equal();
-  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['-5', '6', '3', '-', '*'], '1-(2*3)=-5');
+  assert.deepEqual(getResult(), ['-5', '6', '3', '-', '*'], '1-(2*3)=-5');
 
   setBuffer(['1', '12', '3', '-', '/']);
   calculator.equal();
-  result = [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
-  assert.deepEqual(result, ['-3', '4', '3', '-', '/'], '1-(12/3)=-3');
+  assert.deepEqual(getResult(), ['-3', '4', '3', '-', '/'], '1-(12/3)=-3');
 });
 
 q.module('keyStroke()');
@@ -114,30 +102,39 @@ q.test('It exists', function(assert) {
   assert.equal(typeof calculator.setState, 'function', 'setState is a function on C');
 });
 q.test('It returns the correct states', function(assert) {
+
   setBuffer(['empty','empty','empty','empty','empty']);
   calculator.setState();
   assert.equal(calculator.buffer.state, 1, 'state 1');
+
   setBuffer(['empty', 'empty', 'empty', '+', 'empty']);
   calculator.setState();
   assert.equal(calculator.buffer.state, 2, 'state 2');
+
   setBuffer(['1', '1', 'empty', '1', 'empty']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 3, 'state 3');
+
   setBuffer(['1', '1', 'empty', '1', '1']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 4, 'state 4');
+
   setBuffer(['1', '1', '1', '1', '1']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 5, 'state 5');
+
   setBuffer(['DIV BY 0', 'empty', 'empty', 'empty', 'empty']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 6, 'state 6');
+
   setBuffer(['empty', 'DIV BY 0', 'empty', 'empty', 'empty']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 6, 'state 6');
+
   setBuffer(['ERROR', 'empty', 'empty', 'empty', 'empty']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 6, 'state 6');
+
   setBuffer(['empty', 'ERROR', 'empty', 'empty', 'empty']);
   calculator.setState(calculator.buffer);
   assert.equal(calculator.buffer.state, 6, 'state 6');
@@ -178,31 +175,39 @@ q.test('It exists', function(assert) {
   assert.equal(typeof calculator.setNumber, 'function', 'setNumber is a function on Calculator');
 });
 q.test('The correct registers get filled', function(assert) {
-  var number = 5;
+  calculator.setEntered('5');
+
   // state 1
   setBuffer(['empty','empty','empty','empty','empty']);
   calculator.setState();
-  calculator.setNumber(number);
+  console.log(getResult());
+  calculator.setNumber();
+  console.log(getResult());
   assert.ok(calculator.buffer.register_a == '5' && calculator.buffer.screen_flag == 1, 'state 1 updated correctly');
+
   setBuffer(['27','empty','empty','empty','empty']);
   calculator.setState();
   calculator.setNumber(number);
   assert.ok(calculator.buffer.register_a == '275' && calculator.buffer.screen_flag == 1, 'state 1 updated correctly - append');
+
   // state 2
   setBuffer(['1','empty','empty','+','empty']);
   calculator.setState();
   calculator.setNumber(number);
   assert.ok(calculator.buffer.register_b == '5' && calculator.buffer.screen_flag == 2, 'state 2 updated correctly');
+
   // state 3
   setBuffer(['1','1','empty','+','empty']);
   calculator.setState();
   calculator.setNumber(number);
   assert.ok(calculator.buffer.register_b == '15' && calculator.buffer.screen_flag == 2, 'state 3 updated correctly');
+
   // state 4
   setBuffer(['1','1','empty','+','*']);
   calculator.setState();
   calculator.setNumber(number);
   assert.ok(calculator.buffer.register_c == '5' && calculator.buffer.screen_flag == 3, 'state 4 updated correctly');
+
   // state 5
   setBuffer(['1','1','1','+','*']);
   calculator.setState();
@@ -275,7 +280,7 @@ q.test('The correct registers get filled', function(assert) {
 
 // ========= UTILITY FUNCTIONS
 
-setBuffer = function(buffer) {
+let setBuffer = function(buffer) {
   calculator.buffer.register_a  = buffer[0]; 
   calculator.buffer.register_b  = buffer[1]; 
   calculator.buffer.register_c  = buffer[2]; 
@@ -286,8 +291,18 @@ setBuffer = function(buffer) {
   calculator.buffer.state       = buffer[7]; 
 }
 
+let getResult = function() {
+  return [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b]
+}
 
-var default_buffer = {
+
+
+
+
+
+
+
+let default_buffer = {
   register_a  : 'empty',
   register_b  : 'empty',
   register_c  : 'empty',

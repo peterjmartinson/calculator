@@ -32,6 +32,14 @@ var Calculator = function() {
   }
 
 
+  function getEntered() {
+    return entered;
+  }
+
+  function setEntered(new_entered) {
+    entered = new_entered;
+  }
+
   document.addEventListener('keyup', keyHandler, 0);
 
   function logBuffer() {
@@ -45,7 +53,7 @@ var Calculator = function() {
   }
 
   function keyHandler(key) {
-    entered = key_map[key.keyCode];
+    setEntered(key_map[key.keyCode]);
     if ( key.keyCode >= 48 && key.keyCode <= 57 ) {
       setNumber();
     } else
@@ -194,34 +202,34 @@ var Calculator = function() {
       case 1:
         buffer.screen_flag = 1;
         if (buffer.register_a === 'empty' || buffer.register_a === '0') {
-          buffer.register_a = entered.toString();
+          buffer.register_a = getEntered().toString();
         } else if (buffer.register_a.toString().length < 10) {
-          buffer.register_a = buffer.register_a.toString() + entered;
+          buffer.register_a = buffer.register_a.toString() + getEntered();
         }
         break;
       case 2:
         buffer.screen_flag = 2;
         if (buffer.register_b === 'empty' || buffer.register_b === '0') {
-          buffer.register_b = entered.toString();
+          buffer.register_b = getEntered().toString();
         } else if (buffer.register_b.toString().length < 10) {
-          buffer.register_b = buffer.register_b.toString() + entered;
+          buffer.register_b = buffer.register_b.toString() + getEntered();
         }
         break;
       case 3:
         if (buffer.register_b === 'empty' || buffer.register_b === '0') {
-          buffer.register_b = entered.toString();
+          buffer.register_b = getEntered().toString();
         } else if (buffer.register_b.toString().length < 10) {
-          buffer.register_b = buffer.register_b.toString() + entered;
+          buffer.register_b = buffer.register_b.toString() + getEntered();
         }
         buffer.screen_flag = 2;
         break;
       case 4:
-         buffer.register_c = entered.toString();
+         buffer.register_c = getEntered().toString();
          buffer.screen_flag = 3;
          break;
       case 5:
          if (buffer.register_c.toString().length < 10) {
-            buffer.register_c = buffer.register_c.toString() + entered;
+            buffer.register_c = buffer.register_c.toString() + getEntered();
             buffer.screen_flag = 3;
          }
          break;
@@ -237,51 +245,51 @@ var Calculator = function() {
   function setOperator() {
     switch (buffer.state) {
       case 1:
-         buffer.operator_a = entered;
+         buffer.operator_a = getEntered();
          buffer.screen_flag = 1;
          break;
       case 2:
-         buffer.operator_a = entered;
+         buffer.operator_a = getEntered();
          buffer.screen_flag = 1;
          break;
       case 3:
-         if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (entered === '*' || entered === '/')) {
-            buffer.operator_b = entered;
+         if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (getEntered() === '*' || getEntered() === '/')) {
+            buffer.operator_b = getEntered();
             buffer.screen_flag = 2;
          } else {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
             buffer.register_b = 'empty';
-            buffer.operator_a = entered;
+            buffer.operator_a = getEntered();
             buffer.screen_flag = 1;
          }
          break;
       case 4:
-         if (entered === '+' || entered === '-') {
+         if (getEntered() === '+' || getEntered() === '-') {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a,
                operate(buffer.register_b, buffer.operator_b, buffer.register_b));
             buffer.register_b = 'empty';
             buffer.register_c = 'empty';
-            buffer.operator_a = entered;
+            buffer.operator_a = getEntered();
             buffer.operator_b = 'empty';
             buffer.screen_flag = 1;
          } else {
-            buffer.operator_b = entered;
+            buffer.operator_b = getEntered();
             buffer.screen_flag = 2;
          }
          break;
       case 5:
-         if (entered === '+' || entered === '-') {
+         if (getEntered() === '+' || getEntered() === '-') {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a,
                operate(buffer.register_b, buffer.operator_b, buffer.register_c));
             buffer.register_b = 'empty';
             buffer.register_c = 'empty';
-            buffer.operator_a = entered;
+            buffer.operator_a = getEntered();
             buffer.operator_b = 'empty';
             buffer.screen_flag = 1;
          } else {
             buffer.register_b = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
             buffer.register_c = 'empty';
-            buffer.operator_b = entered;
+            buffer.operator_b = getEntered();
             buffer.screen_flag = 2;
          }
          break;
@@ -308,17 +316,19 @@ var Calculator = function() {
   // =
   
   return {
-    trim        : trim,
-    operate     : operate,
-    setState    : setState,
-    clear       : clear,
-    updateScreen : updateScreen,
-    setNumber : setNumber,
-    setOperator : setOperator,
-    buffer       : buffer,
-    reckonInside : reckonInside,
+    trim          : trim,
+    operate       : operate,
+    setState      : setState,
+    clear         : clear,
+    updateScreen  : updateScreen,
+    setNumber     : setNumber,
+    setOperator   : setOperator,
+    buffer        : buffer,
+    reckonInside  : reckonInside,
     reckonOutside : reckonOutside,
-    equal : equal
+    equal         : equal,
+    getEntered    : getEntered,
+    setEntered    : setEntered
   };
 
 
