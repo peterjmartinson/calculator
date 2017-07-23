@@ -265,6 +265,10 @@ q.test('fills the correct registers', function(assert) {
   assert.ok(calculator.buffer.operator_b == '*' && calculator.buffer.screen_flag == 2, 'state 4: b');
 });
 
+q.module('routeEntry');
+q.test('exists', function(assert) {
+  assert.equal(typeof calculator.routeEntry, 'function', 'routeEntry is a function on Calculator');
+});
 
 
 

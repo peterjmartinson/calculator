@@ -54,6 +54,7 @@ var Calculator = function() {
 
   function keyHandler(key) {
     setEntry(key_map[key.keyCode]);
+    // routeEntry();
     if ( key.keyCode >= 48 && key.keyCode <= 57 ) {
       setNumber();
     } else
@@ -69,6 +70,33 @@ var Calculator = function() {
     cowport.innerHTML = logBuffer();
   }
 
+  function routeEntry(){
+    let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        operator = ['+', '-', '*', '/'];
+    if ( number.indexOf(entry) > 0 ) {
+      setNumber();
+    } else
+    if ( operator.indexOf(entry) > 0 ) {
+      setOperator();
+    } else
+    if ( entry === '=' ) {
+      clear();
+    } else
+    if ( entry === 'pm' ) {
+      flipSign();
+    // } else
+    // if ( entry === '.' ) {
+    //   setDecimal();
+    // } else
+    // if ( entry === 'root' ) {
+    //   takeSquareRoot();
+    }
+    setState();
+    updateScreen();
+    console.log(entry);
+    cowport.innerHTML = logBuffer();
+  }
+
   var buffer = {
     register_a  : '',
     register_b  : '',
@@ -79,8 +107,6 @@ var Calculator = function() {
     screen_flag : 1, // 1 -> show register_a, 2 -> show register_b, 3 -> show register_c
     state       : 1
   };
-
-  
 
   function trim(num) {
      var numLen, truncLen, tempVal;
@@ -299,11 +325,52 @@ var Calculator = function() {
     }
   }
 
-  // +/-
+  // /*
+  //  * ENTER +/-
+  //  *
+  //  *          A | B | C |opA|opB|
+  //  *         ---|---|---|---|---|
+  //  * Case 1) 0,A|   |   |   |   | 
+  //  * Case 2)  A |   |   | + |   | 
+  //  * Case 3)  A | B |   |+,*|   | 
+  //  * Case 4)  A | B |   | + | * | 
+  //  * Case 5)  A | B | C | + | * | 
+  //  */
+  // if (b === 'pm') {
+  //   switch (calState(this.regA, this.regB, this.regC, this.opA, this.opB)) {
+  //     case 1:
+  //       if (this.regA !== 'empty' && this.regA !== '0') {
+  //         this.regA = Number(this.regA * -1).toString();
+  //         this.screenFlag = 1;
+  //       }
+  //       break;
+  //     case 2:
+  //       this.regB = Number(this.regA * -1).toString();
+  //       this.screenFlag = 2;
+  //       break;
+  //     case 3:
+  //       this.regB = Number(this.regB * -1).toString();
+  //       this.screenFlag = 2;
+  //       break;
+  //     case 4:
+  //       this.regC = Number(this.regB * -1).toString();
+  //       this.screenFlag = 3;
+  //       break;
+  //     case 5:
+  //       this.regC = Number(this.regC * -1).toString();
+  //       this.screenFlag = 3;
+  //       break;
+  //     case 6:
+  //       break;
+  //     default:
+  //       console.log("something other than PLUS-MINUS happened!");
+  //       break;
+  //   }
+  // }
+
   // .
   // square root
-  // =
-  
+
   return {
     trim          : trim,
     operate       : operate,
@@ -317,7 +384,8 @@ var Calculator = function() {
     reckonOutside : reckonOutside,
     equal         : equal,
     getEntry      : getEntry,
-    setEntry      : setEntry
+    setEntry      : setEntry,
+    routeEntry    : routeEntry
   };
 
 
