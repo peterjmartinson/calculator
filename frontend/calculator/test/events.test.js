@@ -106,31 +106,31 @@ q.test('exists', function(assert) {
 });
 q.test('returns the correct states', function(assert) {
 
-  setBuffer(['empty','empty','empty','empty','empty']);
+  setBuffer(['','','','','']);
   assert.equal(calculator.buffer.state, 1, 'state 1');
 
-  setBuffer(['empty', 'empty', 'empty', '+', 'empty']);
+  setBuffer(['', '', '', '+', '']);
   assert.equal(calculator.buffer.state, 2, 'state 2');
 
-  setBuffer(['1', '1', 'empty', '1', 'empty']);
+  setBuffer(['1', '1', '', '1', '']);
   assert.equal(calculator.buffer.state, 3, 'state 3');
 
-  setBuffer(['1', '1', 'empty', '1', '1']);
+  setBuffer(['1', '1', '', '1', '1']);
   assert.equal(calculator.buffer.state, 4, 'state 4');
 
   setBuffer(['1', '1', '1', '1', '1']);
   assert.equal(calculator.buffer.state, 5, 'state 5');
 
-  setBuffer(['DIV BY 0', 'empty', 'empty', 'empty', 'empty']);
+  setBuffer(['DIV BY 0', '', '', '', '']);
   assert.equal(calculator.buffer.state, 6, 'state 6');
 
-  setBuffer(['empty', 'DIV BY 0', 'empty', 'empty', 'empty']);
+  setBuffer(['', 'DIV BY 0', '', '', '']);
   assert.equal(calculator.buffer.state, 6, 'state 6');
 
-  setBuffer(['ERROR', 'empty', 'empty', 'empty', 'empty']);
+  setBuffer(['ERROR', '', '', '', '']);
   assert.equal(calculator.buffer.state, 6, 'state 6');
 
-  setBuffer(['empty', 'ERROR', 'empty', 'empty', 'empty']);
+  setBuffer(['', 'ERROR', '', '', '']);
   assert.equal(calculator.buffer.state, 6, 'state 6');
 });
 
@@ -172,26 +172,26 @@ q.test('fills the correct registers', function(assert) {
   calculator.setEntry('5');
 
   // state 1
-  setBuffer(['empty','empty','empty','empty','empty']);
+  setBuffer(['','','','','']);
   calculator.setNumber();
   assert.ok(calculator.buffer.register_a == '5' && calculator.buffer.screen_flag == 1, 'state 1 updated correctly');
 
-  setBuffer(['27','empty','empty','empty','empty']);
+  setBuffer(['27','','','','']);
   calculator.setNumber();
   assert.ok(calculator.buffer.register_a == '275' && calculator.buffer.screen_flag == 1, 'state 1 updated correctly - append');
 
   // state 2
-  setBuffer(['1','empty','empty','+','empty']);
+  setBuffer(['1','','','+','']);
   calculator.setNumber();
   assert.ok(calculator.buffer.register_b == '5' && calculator.buffer.screen_flag == 2, 'state 2 updated correctly');
 
   // state 3
-  setBuffer(['1','1','empty','+','empty']);
+  setBuffer(['1','1','','+','']);
   calculator.setNumber();
   assert.ok(calculator.buffer.register_b == '15' && calculator.buffer.screen_flag == 2, 'state 3 updated correctly');
 
   // state 4
-  setBuffer(['1','1','empty','+','*']);
+  setBuffer(['1','1','','+','*']);
   calculator.setNumber();
   assert.ok(calculator.buffer.register_c == '5' && calculator.buffer.screen_flag == 3, 'state 4 updated correctly');
 
@@ -212,55 +212,55 @@ q.test('fills the correct registers', function(assert) {
 
   // state 1
   calculator.setEntry(plus);
-  setBuffer(['empty','empty','empty','empty','empty']);
+  setBuffer(['','','','','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1: a');
 
   calculator.setEntry(plus);
-  setBuffer(['27','empty','empty','empty','empty']);
+  setBuffer(['27','','','','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1: b');
 
   // state 2
   calculator.setEntry(plus);
-  setBuffer(['27','empty','empty','+','empty']);
+  setBuffer(['27','','','+','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: a');
 
   calculator.setEntry(plus);
-  setBuffer(['27','empty','empty','*','empty']);
+  setBuffer(['27','','','*','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: b');
 
   // state 3
   calculator.setEntry(plus);
-  setBuffer(['27','2','empty','+','empty']);
+  setBuffer(['27','2','','+','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 3: a');
 
   calculator.setEntry(times);
-  setBuffer(['27','2','empty','+','empty']);
+  setBuffer(['27','2','','+','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_b == '*' && calculator.buffer.screen_flag == 2, 'state 3: b');
 
   // state 4
   calculator.setEntry(plus);
-  setBuffer(['27','2','empty','+','+']);
+  setBuffer(['27','2','','+','+']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 4: a');
 
   calculator.setEntry(plus);
-  setBuffer(['27','2','empty','+','*']);
+  setBuffer(['27','2','','+','*']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 4: b');
 
   calculator.setEntry(times);
-  setBuffer(['27','2','empty','+','+']);
+  setBuffer(['27','2','','+','+']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_b == '*' && calculator.buffer.screen_flag == 2, 'state 4: a');
 
   calculator.setEntry(times);
-  setBuffer(['27','2','empty','+','*']);
+  setBuffer(['27','2','','+','*']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_b == '*' && calculator.buffer.screen_flag == 2, 'state 4: b');
 });
@@ -287,11 +287,11 @@ let getResult = function() {
 }
 
 let default_buffer = {
-  register_a  : 'empty',
-  register_b  : 'empty',
-  register_c  : 'empty',
-  operator_a  : 'empty',
-  operator_b  : 'empty',
+  register_a  : '',
+  register_b  : '',
+  register_c  : '',
+  operator_a  : '',
+  operator_b  : '',
   screen      : '0',
   screen_flag : 1,
   state       : 1

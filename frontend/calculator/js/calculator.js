@@ -1,6 +1,5 @@
 // to do:
-// be strict about string vs. number, instead of using toString everywhere
-// replace 'empty' with ''
+// replace '' with ''
 // Make two operate functions:
 //   operatePartial = <register_b> <operator_b> <register_c> -> <register_b>
 //   operateFinal   = <register_a> <operator_a> <register_b> -> <register_a>
@@ -11,6 +10,7 @@ var Calculator = function() {
 
   let cowport = document.getElementById("cowport");
   let screen = document.getElementById("screen");
+
   const key_map = {
       187: '=',
       80: '+',
@@ -29,7 +29,6 @@ var Calculator = function() {
       57: '9',
       67: 'c'
   }
-
 
   let Entry = '';
 
@@ -71,11 +70,11 @@ var Calculator = function() {
   }
 
   var buffer = {
-    register_a  : 'empty',
-    register_b  : 'empty',
-    register_c  : 'empty',
-    operator_a  : 'empty',
-    operator_b  : 'empty',
+    register_a  : '',
+    register_b  : '',
+    register_c  : '',
+    operator_a  : '',
+    operator_b  : '',
     screen      : '0',
     screen_flag : 1, // 1 -> show register_a, 2 -> show register_b, 3 -> show register_c
     state       : 1
@@ -117,7 +116,7 @@ var Calculator = function() {
   }
 
   function reckonInside() {
-    if (buffer.register_c === 'empty') {
+    if (buffer.register_c === '') {
       buffer.register_c = buffer.register_b
     }
     let result = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
@@ -126,7 +125,7 @@ var Calculator = function() {
   }
 
   function reckonOutside() {
-    if (buffer.register_b === 'empty') {
+    if (buffer.register_b === '') {
       buffer.register_b = buffer.register_a
     }
     let result = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
@@ -134,7 +133,7 @@ var Calculator = function() {
   }
 
   function equal() {
-    if (buffer.register_b != 'empty' && buffer.register_c != 'empty' && buffer.operator_b != 'empty') {
+    if (buffer.register_b != '' && buffer.register_c != '' && buffer.operator_b != '') {
       reckonInside();
       reckonOutside();
     } else {
@@ -158,22 +157,22 @@ var Calculator = function() {
         buffer.state = 6;
       } else if (buffer.register_a === 'ERROR' || buffer.register_b === 'ERROR') {
         buffer.state = 6;
-      } else if (buffer.operator_a === 'empty') {
+      } else if (buffer.operator_a === '') {
         buffer.state = 1;
-      } else if (buffer.operator_a !== 'empty' && buffer.register_b === 'empty') {
+      } else if (buffer.operator_a !== '' && buffer.register_b === '') {
         buffer.state = 2;
-      } else if (buffer.operator_a !== 'empty' && buffer.register_a !== 'empty' && buffer.operator_b === 'empty') {
+      } else if (buffer.operator_a !== '' && buffer.register_a !== '' && buffer.operator_b === '') {
         buffer.state = 3;
-      } else if (buffer.operator_b !== 'empty' && buffer.register_c === 'empty') {
+      } else if (buffer.operator_b !== '' && buffer.register_c === '') {
         buffer.state = 4;
-      } else if (buffer.operator_b !== 'empty' && buffer.register_c !== 'empty') {
+      } else if (buffer.operator_b !== '' && buffer.register_c !== '') {
         buffer.state = 5;
       }
   }
 
   function updateScreen() {
     if (buffer.screen_flag === 1) {
-       if (buffer.register_a === 'empty') {
+       if (buffer.register_a === '') {
           screen.innerHTML = '0';
        } else {
           screen.innerHTML = buffer.register_a;
@@ -189,11 +188,11 @@ var Calculator = function() {
 
   function clear() {
      buffer.screen_flag = 1;
-     buffer.register_a = 'empty';
-     buffer.register_b = 'empty';
-     buffer.register_c = 'empty';
-     buffer.operator_a = 'empty';
-     buffer.operator_b = 'empty';
+     buffer.register_a = '';
+     buffer.register_b = '';
+     buffer.register_c = '';
+     buffer.operator_a = '';
+     buffer.operator_b = '';
      setState();
   }
 
@@ -201,7 +200,7 @@ var Calculator = function() {
     switch(buffer.state) {
       case 1:
         buffer.screen_flag = 1;
-        if (buffer.register_a === 'empty' || buffer.register_a === '0') {
+        if (buffer.register_a === '' || buffer.register_a === '0') {
           buffer.register_a = getEntry();
         } else if (buffer.register_a.length < 10) {
           buffer.register_a = buffer.register_a + getEntry();
@@ -209,14 +208,14 @@ var Calculator = function() {
         break;
       case 2:
         buffer.screen_flag = 2;
-        if (buffer.register_b === 'empty' || buffer.register_b === '0') {
+        if (buffer.register_b === '' || buffer.register_b === '0') {
           buffer.register_b = getEntry();
         } else if (buffer.register_b.length < 10) {
           buffer.register_b = buffer.register_b + getEntry();
         }
         break;
       case 3:
-        if (buffer.register_b === 'empty' || buffer.register_b === '0') {
+        if (buffer.register_b === '' || buffer.register_b === '0') {
           buffer.register_b = getEntry();
         } else if (buffer.register_b.length < 10) {
           buffer.register_b = buffer.register_b + getEntry();
@@ -257,7 +256,7 @@ var Calculator = function() {
             buffer.screen_flag = 2;
          } else {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
-            buffer.register_b = 'empty';
+            buffer.register_b = '';
             buffer.operator_a = getEntry();
             buffer.screen_flag = 1;
          }
@@ -266,10 +265,10 @@ var Calculator = function() {
          if (getEntry() === '+' || getEntry() === '-') {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a,
                operate(buffer.register_b, buffer.operator_b, buffer.register_b));
-            buffer.register_b = 'empty';
-            buffer.register_c = 'empty';
+            buffer.register_b = '';
+            buffer.register_c = '';
             buffer.operator_a = getEntry();
-            buffer.operator_b = 'empty';
+            buffer.operator_b = '';
             buffer.screen_flag = 1;
          } else {
             buffer.operator_b = getEntry();
@@ -280,14 +279,14 @@ var Calculator = function() {
          if (getEntry() === '+' || getEntry() === '-') {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a,
                operate(buffer.register_b, buffer.operator_b, buffer.register_c));
-            buffer.register_b = 'empty';
-            buffer.register_c = 'empty';
+            buffer.register_b = '';
+            buffer.register_c = '';
             buffer.operator_a = getEntry();
-            buffer.operator_b = 'empty';
+            buffer.operator_b = '';
             buffer.screen_flag = 1;
          } else {
             buffer.register_b = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
-            buffer.register_c = 'empty';
+            buffer.register_c = '';
             buffer.operator_b = getEntry();
             buffer.screen_flag = 2;
          }
