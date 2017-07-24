@@ -317,48 +317,89 @@ var Calculator = function() {
     }
   }
 
-  // /*
-  //  * ENTER +/-
-  //  *
-  //  *          A | B | C |opA|opB|
-  //  *         ---|---|---|---|---|
-  //  * Case 1) 0,A|   |   |   |   | 
-  //  * Case 2)  A |   |   | + |   | 
-  //  * Case 3)  A | B |   |+,*|   | 
-  //  * Case 4)  A | B |   | + | * | 
-  //  * Case 5)  A | B | C | + | * | 
-  //  */
-  // if (b === 'pm') {
-  //   switch (calState(this.regA, this.regB, this.regC, this.opA, this.opB)) {
-  //     case 1:
-  //       if (this.regA !== 'empty' && this.regA !== '0') {
-  //         this.regA = Number(this.regA * -1).toString();
-  //         this.screenFlag = 1;
-  //       }
-  //       break;
-  //     case 2:
-  //       this.regB = Number(this.regA * -1).toString();
-  //       this.screenFlag = 2;
-  //       break;
-  //     case 3:
-  //       this.regB = Number(this.regB * -1).toString();
-  //       this.screenFlag = 2;
-  //       break;
-  //     case 4:
-  //       this.regC = Number(this.regB * -1).toString();
-  //       this.screenFlag = 3;
-  //       break;
-  //     case 5:
-  //       this.regC = Number(this.regC * -1).toString();
-  //       this.screenFlag = 3;
-  //       break;
-  //     case 6:
-  //       break;
-  //     default:
-  //       console.log("something other than PLUS-MINUS happened!");
-  //       break;
-  //   }
-  // }
+  function flipSign() {
+    switch (buffer.state) {
+      case 1:
+        if (buffer.register_a !== 'empty' && buffer.register_a !== '0') {
+          buffer.register_a = Number(buffer.register_a * -1).toString();
+          buffer.screen_flag = 1;
+        }
+        break;
+      case 2:
+        buffer.register_b = Number(buffer.register_a * -1).toString();
+        buffer.screen_flag = 2;
+        break;
+      case 3:
+        buffer.register_b = Number(buffer.register_b * -1).toString();
+        buffer.screen_flag = 2;
+        break;
+      case 4:
+        buffer.register_c = Number(buffer.register_b * -1).toString();
+        buffer.screen_flag = 3;
+        break;
+      case 5:
+        buffer.register_c = Number(buffer.register_c * -1).toString();
+        buffer.screen_flag = 3;
+        break;
+      case 6:
+        break;
+      default:
+        console.log("something other than PLUS-MINUS happened!");
+        break;
+    }
+  }
+  
+  function appendDecimal() {
+
+  }
+      // /*
+      //  * ENTER .
+      //  *
+      //  *          A | B | C |opA|opB|
+      //  *         ---|---|---|---|---|
+      //  * Case 1) 0,A|   |   |   |   | if 0/null, 0.->A; if length<10, A+='.'
+      //  * Case 2)  A |   |   | + |   | 0.->B, screenFlag=2 
+      //  * Case 3)  A | B |   |+,*|   | if length<10, B+='.'
+      //  * Case 4)  A | B |   | + | * | 0.->C, screenFlag=3
+      //  * Case 5)  A | B | C | + | * | if length<10, C+='.'
+      //  */
+      // if (b === '.') {
+      //    switch (calState(this.regA, this.regB, this.regC, this.opA, this.opB)) {
+      //       case 1:
+      //          if (this.regA.indexOf('.') === -1 && this.regA.length < 10) {
+      //             if (this.regA === 'empty' || this.regA === '0') {
+      //                this.regA = '0.';
+      //             } else {
+      //                this.regA = this.regA.toString() + '.';
+      //             }
+      //          }
+      //          break;
+      //       case 2:
+      //          this.regB = '0.';
+      //          this.screenFlag = 2;
+      //          break;
+      //       case 3:
+      //          if (this.regB.indexOf('.') === -1 && this.regB.length < 10) {
+      //             this.regB = this.regB.toString() + '.';
+      //          }
+      //          break;
+      //       case 4:
+      //          this.regC = '0.';
+      //          this.screenFlag = 3;
+      //          break;
+      //       case 5:
+      //          if (this.regC.indexOf('.') === -1 && this.regC.length < 10) {
+      //             this.regC = this.regC.toString() + '.';
+      //          }
+      //          break;
+      //       case 6:
+      //          break;
+      //       default:
+      //          console.log("something other than . happened!");
+      //          break;
+      //    }
+      // }
+
 
   // .
   // square root
@@ -377,7 +418,9 @@ var Calculator = function() {
     equal         : equal,
     getKeyPress   : getKeyPress,
     setKeyPress   : setKeyPress,
-    routeKeyPress : routeKeyPress
+    routeKeyPress : routeKeyPress,
+    flipSign      : flipSign,
+    appendDecimal : appendDecimal
   };
 
 

@@ -257,6 +257,9 @@ q.test('fills the correct registers', function(assert) {
   resetBuffer();
 });
 
+
+
+
 q.module('routeKeyPress');
 q.test('exists', function(assert) {
   assert.equal(typeof calculator.routeKeyPress, 'function', 'routeKeyPress is a function on Calculator');
@@ -275,6 +278,50 @@ q.test('sends an operator into a register', function(assert) {
   assert.equal(calculator.buffer.operator_b, '*', 'routeKeyPress sends * to operator b');
 });
 
+
+
+q.module('flipSign');
+q.test('exists', function(assert) {
+  assert.equal(typeof calculator.flipSign, 'function', 'It is a function');
+});
+
+q.test('sets the correct signs', function(assert) {
+  setBuffer(['1', '', '', '', '']);
+  calculator.setKeyPress('plusminus');
+  calculator.flipSign();
+
+  assert.equal(calculator.buffer.register_a, '-1', 'flipSign flipped register a');
+
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.setKeyPress('plusminus');
+  calculator.flipSign();
+
+  assert.equal(calculator.buffer.register_b, '-2', 'flipSign flipped register b');
+
+  setBuffer(['1', '2', '3', '+', '*']);
+  calculator.setKeyPress('plusminus');
+  calculator.flipSign();
+
+  assert.equal(calculator.buffer.register_c, '-3', 'flipSign flipped register c');
+
+  resetBuffer();
+});
+
+q.module('appendDecimal');
+q.test('exists', function(assert) {
+  assert.equal(typeof calculator.appendDecimal, 'function', 'is a function');
+});
+
+q.test('adds a decimal', function(assert) {
+  setBuffer(['1', '', '', '', '']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_a, '1.', 'added a decimal to register a');
+});
+
+
+// Need to add some tests for the router
 
 
 
