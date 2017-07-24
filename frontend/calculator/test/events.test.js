@@ -1,9 +1,9 @@
 /*jshint esversion:6, node:true */
 'use strict';
-
+console.log(JSON.stringify(calculator.buffer));
 const q = QUnit;
 
-q.module('operations');
+q.module('Fundamental Operations');
 
 q.test('exist', function(assert) {
   assert.equal(typeof calculator.operate, 'function', 'operate is a function');
@@ -74,16 +74,6 @@ q.test('equal() performs the whole calculation', function(assert) {
   setBuffer(['1', '12', '3', '-', '/']);
   calculator.equal();
   assert.deepEqual(getResult(), ['-3', '4', '3', '-', '/'], '1-(12/3)=-3');
-});
-
-q.module('keyStroke()');
-q.test('exists', function(assert) {
-  assert.equal(typeof window.keyStroke, 'function', 'keyStroke is a function');
-});
-q.test('returns a value', function(assert) {
-  assert.equal(window.keyStroke('clear'), 'clear', 'it returns `clear`');
-  assert.equal(window.keyStroke('pm'), 'pm', 'it returns `pm`');
-  assert.equal(window.keyStroke(3), 3, 'it returns 3');
 });
 
 q.module('trim()');
@@ -169,7 +159,7 @@ q.test('exists', function(assert) {
   assert.equal(typeof calculator.setNumber, 'function', 'setNumber is a function on Calculator');
 });
 q.test('fills the correct registers', function(assert) {
-  calculator.setEntry('5');
+  calculator.setKeyPress('5');
 
   // state 1
   setBuffer(['','','','','']);
@@ -211,68 +201,88 @@ q.test('fills the correct registers', function(assert) {
       times = '*';
 
   // state 1
-  calculator.setEntry(plus);
+  calculator.setKeyPress(plus);
   setBuffer(['','','','','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1: a');
 
-  calculator.setEntry(plus);
+  calculator.setKeyPress(plus);
   setBuffer(['27','','','','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 1: b');
 
   // state 2
-  calculator.setEntry(plus);
+  calculator.setKeyPress(plus);
   setBuffer(['27','','','+','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: a');
 
-  calculator.setEntry(plus);
+  calculator.setKeyPress(plus);
   setBuffer(['27','','','*','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 2: b');
 
   // state 3
-  calculator.setEntry(plus);
+  calculator.setKeyPress(plus);
   setBuffer(['27','2','','+','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 3: a');
 
-  calculator.setEntry(times);
+  calculator.setKeyPress(times);
   setBuffer(['27','2','','+','']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_b == '*' && calculator.buffer.screen_flag == 2, 'state 3: b');
 
   // state 4
-  calculator.setEntry(plus);
+  calculator.setKeyPress(plus);
   setBuffer(['27','2','','+','+']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 4: a');
 
-  calculator.setEntry(plus);
+  calculator.setKeyPress(plus);
   setBuffer(['27','2','','+','*']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_a == '+' && calculator.buffer.screen_flag == 1, 'state 4: b');
 
-  calculator.setEntry(times);
+  calculator.setKeyPress(times);
   setBuffer(['27','2','','+','+']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_b == '*' && calculator.buffer.screen_flag == 2, 'state 4: a');
 
-  calculator.setEntry(times);
+  calculator.setKeyPress(times);
   setBuffer(['27','2','','+','*']);
   calculator.setOperator();
   assert.ok(calculator.buffer.operator_b == '*' && calculator.buffer.screen_flag == 2, 'state 4: b');
+
+  resetBuffer();
 });
 
-q.module('routeEntry');
+q.module('routeKeyPress');
 q.test('exists', function(assert) {
-  assert.equal(typeof calculator.routeEntry, 'function', 'routeEntry is a function on Calculator');
+  assert.equal(typeof calculator.routeKeyPress, 'function', 'routeKeyPress is a function on Calculator');
 });
+
+q.test('sends a number into a register', function(assert) {
+  calculator.setKeyPress('4');
+  calculator.routeKeyPress();
+  assert.equal(calculator.buffer.register_a, '4', 'routeKeyPress sends 4 to register a');
+});
+
+q.test('sends an operator into a register', function(assert) {
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.setKeyPress('*');
+  calculator.routeKeyPress();
+  assert.equal(calculator.buffer.operator_b, '*', 'routeKeyPress sends * to operator b');
+});
+
 
 
 
 // ========= UTILITY FUNCTIONS
+
+let resetBuffer = function() {
+  setBuffer(['','','','','',1,'0',1]);
+}
 
 let setBuffer = function(buffer) {
   calculator.buffer.register_a  = buffer[0]; 
@@ -300,3 +310,5 @@ let default_buffer = {
   screen_flag : 1,
   state       : 1
 };
+
+// setBuffer(default_buffer);

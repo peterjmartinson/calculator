@@ -1,12 +1,16 @@
-// to do:
-// replace '' with ''
-// Make two operate functions:
-//   operatePartial = <register_b> <operator_b> <register_c> -> <register_b>
-//   operateFinal   = <register_a> <operator_a> <register_b> -> <register_a>
-// or something like that.  point being, you want to just call a function, not come up with logic
-// (function() {
 var Calculator = function() {
   'use strict';
+
+  var buffer = {
+    register_a  : '',
+    register_b  : '',
+    register_c  : '',
+    operator_a  : '',
+    operator_b  : '',
+    screen      : '0',
+    screen_flag : 1, // 1 -> show register_a, 2 -> show register_b, 3 -> show register_c
+    state       : 1
+  };
 
   let cowport = document.getElementById("cowport");
   let screen = document.getElementById("screen");
@@ -30,14 +34,14 @@ var Calculator = function() {
       67: 'c'
   }
 
-  let Entry = '';
+  let KeyPress = '';
 
-  function getEntry() {
-    return Entry;
+  function getKeyPress() {
+    return KeyPress;
   }
 
-  function setEntry(new_Entry) {
-    Entry = new_Entry.toString();
+  function setKeyPress(new_keypress) {
+    KeyPress = new_keypress.toString();
   }
 
   document.addEventListener('keyup', keyHandler, 0);
@@ -46,15 +50,15 @@ var Calculator = function() {
     let output = '';
     for (let property in buffer) {
       if ( buffer.hasOwnProperty(property) ) {
-        output += buffer[property] + ' : ';
+        output += buffer[property] + ', ';
       }
     }
     return output;
   }
 
   function keyHandler(key) {
-    setEntry(key_map[key.keyCode]);
-    // routeEntry();
+    setKeyPress(key_map[key.keyCode]);
+    // routeKeyPress();
     if ( key.keyCode >= 48 && key.keyCode <= 57 ) {
       setNumber();
     } else
@@ -70,43 +74,31 @@ var Calculator = function() {
     cowport.innerHTML = logBuffer();
   }
 
-  function routeEntry(){
+  function routeKeyPress(){
     let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         operator = ['+', '-', '*', '/'];
-    if ( number.indexOf(entry) > 0 ) {
+    if ( number.indexOf(KeyPress) > 0 ) {
       setNumber();
-    } else
-    if ( operator.indexOf(entry) > 0 ) {
-      setOperator();
-    } else
-    if ( entry === '=' ) {
-      clear();
-    } else
-    if ( entry === 'pm' ) {
-      flipSign();
-    // } else
-    // if ( entry === '.' ) {
-    //   setDecimal();
-    // } else
-    // if ( entry === 'root' ) {
-    //   takeSquareRoot();
     }
+    else if ( operator.indexOf(KeyPress) > 0 ) {
+      setOperator();
+    }
+    else if ( KeyPress === '=' ) { clear();
+    }
+    else if ( KeyPress === 'pm' ) {
+      flipSign();
+    }
+    // else if ( KeyPress === '.' ) {
+    //   setDecimal();
+    // }
+    // else if ( KeyPress === 'root' ) {
+    //   takeSquareRoot();
+    // }
     setState();
     updateScreen();
-    console.log(entry);
+    console.log(KeyPress);
     cowport.innerHTML = logBuffer();
   }
-
-  var buffer = {
-    register_a  : '',
-    register_b  : '',
-    register_c  : '',
-    operator_a  : '',
-    operator_b  : '',
-    screen      : '0',
-    screen_flag : 1, // 1 -> show register_a, 2 -> show register_b, 3 -> show register_c
-    state       : 1
-  };
 
   function trim(num) {
      var numLen, truncLen, tempVal;
@@ -227,34 +219,34 @@ var Calculator = function() {
       case 1:
         buffer.screen_flag = 1;
         if (buffer.register_a === '' || buffer.register_a === '0') {
-          buffer.register_a = getEntry();
+          buffer.register_a = getKeyPress();
         } else if (buffer.register_a.length < 10) {
-          buffer.register_a = buffer.register_a + getEntry();
+          buffer.register_a = buffer.register_a + getKeyPress();
         }
         break;
       case 2:
         buffer.screen_flag = 2;
         if (buffer.register_b === '' || buffer.register_b === '0') {
-          buffer.register_b = getEntry();
+          buffer.register_b = getKeyPress();
         } else if (buffer.register_b.length < 10) {
-          buffer.register_b = buffer.register_b + getEntry();
+          buffer.register_b = buffer.register_b + getKeyPress();
         }
         break;
       case 3:
         if (buffer.register_b === '' || buffer.register_b === '0') {
-          buffer.register_b = getEntry();
+          buffer.register_b = getKeyPress();
         } else if (buffer.register_b.length < 10) {
-          buffer.register_b = buffer.register_b + getEntry();
+          buffer.register_b = buffer.register_b + getKeyPress();
         }
         buffer.screen_flag = 2;
         break;
       case 4:
-         buffer.register_c = getEntry();
+         buffer.register_c = getKeyPress();
          buffer.screen_flag = 3;
          break;
       case 5:
          if (buffer.register_c.length < 10) {
-            buffer.register_c = buffer.register_c + getEntry();
+            buffer.register_c = buffer.register_c + getKeyPress();
             buffer.screen_flag = 3;
          }
          break;
@@ -269,51 +261,51 @@ var Calculator = function() {
   function setOperator() {
     switch (buffer.state) {
       case 1:
-         buffer.operator_a = getEntry();
+         buffer.operator_a = getKeyPress();
          buffer.screen_flag = 1;
          break;
       case 2:
-         buffer.operator_a = getEntry();
+         buffer.operator_a = getKeyPress();
          buffer.screen_flag = 1;
          break;
       case 3:
-         if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (getEntry() === '*' || getEntry() === '/')) {
-            buffer.operator_b = getEntry();
+         if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (getKeyPress() === '*' || getKeyPress() === '/')) {
+            buffer.operator_b = getKeyPress();
             buffer.screen_flag = 2;
          } else {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
             buffer.register_b = '';
-            buffer.operator_a = getEntry();
+            buffer.operator_a = getKeyPress();
             buffer.screen_flag = 1;
          }
          break;
       case 4:
-         if (getEntry() === '+' || getEntry() === '-') {
+         if (getKeyPress() === '+' || getKeyPress() === '-') {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a,
                operate(buffer.register_b, buffer.operator_b, buffer.register_b));
             buffer.register_b = '';
             buffer.register_c = '';
-            buffer.operator_a = getEntry();
+            buffer.operator_a = getKeyPress();
             buffer.operator_b = '';
             buffer.screen_flag = 1;
          } else {
-            buffer.operator_b = getEntry();
+            buffer.operator_b = getKeyPress();
             buffer.screen_flag = 2;
          }
          break;
       case 5:
-         if (getEntry() === '+' || getEntry() === '-') {
+         if (getKeyPress() === '+' || getKeyPress() === '-') {
             buffer.register_a = operate(buffer.register_a, buffer.operator_a,
                operate(buffer.register_b, buffer.operator_b, buffer.register_c));
             buffer.register_b = '';
             buffer.register_c = '';
-            buffer.operator_a = getEntry();
+            buffer.operator_a = getKeyPress();
             buffer.operator_b = '';
             buffer.screen_flag = 1;
          } else {
             buffer.register_b = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
             buffer.register_c = '';
-            buffer.operator_b = getEntry();
+            buffer.operator_b = getKeyPress();
             buffer.screen_flag = 2;
          }
          break;
@@ -383,11 +375,10 @@ var Calculator = function() {
     reckonInside  : reckonInside,
     reckonOutside : reckonOutside,
     equal         : equal,
-    getEntry      : getEntry,
-    setEntry      : setEntry,
-    routeEntry    : routeEntry
+    getKeyPress   : getKeyPress,
+    setKeyPress   : setKeyPress,
+    routeKeyPress : routeKeyPress
   };
 
 
 };
-// }());
