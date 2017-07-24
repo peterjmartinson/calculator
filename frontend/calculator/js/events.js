@@ -1,3 +1,4 @@
+/*jshint esversion:6, node:true */
 window.onload = (function() {
   'use strict';
 
