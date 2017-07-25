@@ -42,7 +42,6 @@ var Calculator = function() {
 
   function setKeyPress(new_keypress) {
     KeyPress = new_keypress.toString();
-    routeKeyPress();
   }
 
   document.addEventListener('keyup', keyHandler, 0);
@@ -58,30 +57,22 @@ var Calculator = function() {
   }
 
   function keyHandler(key) {
-    setKeyPress(key_map[key.keyCode]);
-    // routeKeyPress();
-    // if ( key.keyCode >= 48 && key.keyCode <= 57 ) {
-    //   setNumber();
-    // } else
-    // if ( key.keyCode == 80 || key.keyCode == 77 || key.keyCode == 84 || key.keyCode == 68 ) {
-    //   setOperator();
-    // } else
-    // if ( key.keyCode == 67 ) {
-    //   clear();
-    // }
-    // setState();
-    // updateScreen();
-    // console.log(key.keyCode);
-    // cowport.innerHTML = logBuffer();
+    sendKeyPress(key_map[key.keyCode]);
+  }
+
+  function sendKeyPress(key) {
+    setKeyPress(key);
+    routeKeyPress();
   }
 
   function routeKeyPress() {
+    console.log(KeyPress);
     let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         operator = ['+', '-', '*', '/'];
-    if ( number.indexOf(KeyPress) > 0 ) {
+    if ( number.indexOf(KeyPress) > -1 ) {
       setNumber();
     }
-    else if ( operator.indexOf(KeyPress) > 0 ) {
+    else if ( operator.indexOf(KeyPress) > -1 ) {
       setOperator();
     }
     else if ( KeyPress === '=' ) { 
@@ -101,7 +92,7 @@ var Calculator = function() {
     }
     setState();
     updateScreen();
-    console.log(KeyPress);
+    // console.log(KeyPress);
     cowport.innerHTML = logBuffer();
   }
 
@@ -121,6 +112,9 @@ var Calculator = function() {
   function operate(l, o, r) {
      l = Number(l);
      r = Number(r);
+     if ( !r || !o ) {
+       return trim(l);
+     }
      if (o === '+') {
         return trim((l + r));
      }
@@ -487,7 +481,8 @@ var Calculator = function() {
     routeKeyPress : routeKeyPress,
     flipSign      : flipSign,
     appendDecimal : appendDecimal,
-    calculateSquareRoot : calculateSquareRoot
+    calculateSquareRoot : calculateSquareRoot,
+    sendKeyPress  : sendKeyPress
   };
 
 
