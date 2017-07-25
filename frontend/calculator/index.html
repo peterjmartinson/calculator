@@ -19,40 +19,44 @@
         <div id="screen" class="calc-screen black">
         </div>
         <div>
-           <button class="calc-button accent" onclick="keyStroke('clear')"> C </button>
-           <button class="calc-button gray-dark" onclick="keyStroke('pm')"> &#177; </button>
-           <button class="calc-button gray-dark" onclick="keyStroke('root')"> &#8730; </button>
-           <button class="calc-button gray-dark" onclick="keyStroke('divide')"> &divide; </button>
+           <button class="calc-button accent" onclick="calculator.setKeyPress('clear')"> C </button>
+           <button class="calc-button gray-dark" onclick="calculator.setKeyPress('pm')"> &#177; </button>
+           <button class="calc-button gray-dark" onclick="calculator.setKeyPress('root')"> &#8730; </button>
+           <button class="calc-button gray-dark" onclick="calculator.setKeyPress('/')"> &divide; </button>
         </div>
         <div>
-           <button class="calc-button primary" onclick="keyStroke(7)"> 7 </button>
-           <button class="calc-button primary" onclick="keyStroke(8)"> 8 </button>
-           <button class="calc-button primary" onclick="keyStroke(9)"> 9 </button>
-           <button class="calc-button gray-dark" onclick="keyStroke('times')"> &times; </button>
+           <button class="calc-button primary" onclick="calculator.setKeyPress(7)"> 7 </button>
+           <button class="calc-button primary" onclick="calculator.setKeyPress(8)"> 8 </button>
+           <button class="calc-button primary" onclick="calculator.setKeyPress(9)"> 9 </button>
+           <button class="calc-button gray-dark" onclick="calculator.setKeyPress('*')"> &times; </button>
         </div>
         <div>
-           <button class="calc-button primary" onclick="keyStroke(4)"> 4 </button>
-           <button class="calc-button primary" onclick="keyStroke(5)"> 5 </button>
-           <button class="calc-button primary" onclick="keyStroke(6)"> 6 </button>
-           <button class="calc-button gray-dark" onclick="keyStroke('minus')"> - </button>
+           <button class="calc-button primary" onclick="calculator.setKeyPress(4)"> 4 </button>
+           <button class="calc-button primary" onclick="calculator.setKeyPress(5)"> 5 </button>
+           <button class="calc-button primary" onclick="calculator.setKeyPress(6)"> 6 </button>
+           <button class="calc-button gray-dark" onclick="calculator.setKeyPress('-')"> - </button>
         </div>
         <div>
-           <button class="calc-button primary" onclick="keyStroke(1)"> 1 </button>
-           <button class="calc-button primary" onclick="keyStroke(2)"> 2 </button>
-           <button class="calc-button primary" onclick="keyStroke(3)"> 3 </button>
-           <button class="calc-button gray-dark" onclick="keyStroke('plus')"> + </button>
+           <button class="calc-button primary" onclick="calculator.setKeyPress(1)"> 1 </button>
+           <button class="calc-button primary" onclick="calculator.setKeyPress(2)"> 2 </button>
+           <button class="calc-button primary" onclick="calculator.setKeyPress(3)"> 3 </button>
+           <button class="calc-button gray-dark" onclick="calculator.setKeyPress('+')"> + </button>
         </div>
         <div>
-           <button class="calc-button primary" style="width:140px" onclick="keyStroke(0)"> 0 </button>
-           <button class="calc-button primary" onclick="keyStroke('decimalpoint')"> .  </button>
-           <button class="calc-button gray-dark" onclick="keyStroke('equals')"> = </button>
+           <button class="calc-button primary" style="width:140px" onclick="calculator.setKeyPress(0)"> 0 </button>
+           <button class="calc-button primary" onclick="calculator.setKeyPress('.')"> .  </button>
+           <button class="calc-button gray-dark" onclick="calculator.setKeyPress('=')"> = </button>
         </div>
      </div>
      <div id="cowport">nothing yet</div>
 
-    <script src="js/events.js"></script>
+    <!-- <script src="js/events.js"></script> -->
     <script src="js/calculator.js"></script>
-    <script> Calculator(); </script>
+    <script>
+      let calculator = new Calculator;
+      calculator.setState();
+      calculator.updateScreen();
+    </script>
 
   </body>
 </html>

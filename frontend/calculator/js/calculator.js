@@ -31,7 +31,7 @@ var Calculator = function() {
       55: '7',
       56: '8',
       57: '9',
-      67: 'c'
+      67: 'clear'
   }
 
   let KeyPress = '';
@@ -42,6 +42,7 @@ var Calculator = function() {
 
   function setKeyPress(new_keypress) {
     KeyPress = new_keypress.toString();
+    routeKeyPress();
   }
 
   document.addEventListener('keyup', keyHandler, 0);
@@ -59,22 +60,22 @@ var Calculator = function() {
   function keyHandler(key) {
     setKeyPress(key_map[key.keyCode]);
     // routeKeyPress();
-    if ( key.keyCode >= 48 && key.keyCode <= 57 ) {
-      setNumber();
-    } else
-    if ( key.keyCode == 80 || key.keyCode == 77 || key.keyCode == 84 || key.keyCode == 68 ) {
-      setOperator();
-    } else
-    if ( key.keyCode == 67 ) {
-      clear();
-    }
-    setState();
-    updateScreen();
-    console.log(key.keyCode);
-    cowport.innerHTML = logBuffer();
+    // if ( key.keyCode >= 48 && key.keyCode <= 57 ) {
+    //   setNumber();
+    // } else
+    // if ( key.keyCode == 80 || key.keyCode == 77 || key.keyCode == 84 || key.keyCode == 68 ) {
+    //   setOperator();
+    // } else
+    // if ( key.keyCode == 67 ) {
+    //   clear();
+    // }
+    // setState();
+    // updateScreen();
+    // console.log(key.keyCode);
+    // cowport.innerHTML = logBuffer();
   }
 
-  function routeKeyPress(){
+  function routeKeyPress() {
     let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         operator = ['+', '-', '*', '/'];
     if ( number.indexOf(KeyPress) > 0 ) {
@@ -361,7 +362,7 @@ var Calculator = function() {
             if (buffer.register_a === '' || buffer.register_a === '0') {
                buffer.register_a = '0.';
             } else {
-               buffer.register_a = buffer.register_a.toString() + '.';
+               buffer.register_a = buffer.register_a + '.';
             }
          }
          break;
@@ -371,7 +372,7 @@ var Calculator = function() {
          break;
       case 3:
          if (buffer.register_b.indexOf('.') === -1 && buffer.register_b.length < 10) {
-            buffer.register_b = buffer.register_b.toString() + '.';
+            buffer.register_b = buffer.register_b + '.';
          }
          break;
       case 4:
@@ -380,7 +381,7 @@ var Calculator = function() {
          break;
       case 5:
          if (buffer.register_c.indexOf('.') === -1 && buffer.register_c.length < 10) {
-            buffer.register_c = buffer.register_c.toString() + '.';
+            buffer.register_c = buffer.register_c + '.';
          }
          break;
       case 6:
