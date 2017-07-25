@@ -318,8 +318,78 @@ q.test('adds a decimal', function(assert) {
   calculator.appendDecimal();
 
   assert.equal(calculator.buffer.register_a, '1.', 'added a decimal to register a');
+
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_b, '2.', 'added a decimal to register b');
+
+  setBuffer(['1', '2', '3', '+', '*']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_c, '3.', 'added a decimal to register c');
+
+  setBuffer(['', '', '', '', '']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_a, '0.', 'added 0. to register a');
+
+  setBuffer(['1', '', '', '+', '']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_b, '0.', 'added 0. to register b');
+
+  setBuffer(['1', '2', '', '+', '*']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_c, '0.', 'added 0. to register c');
+
+  resetBuffer();
 });
 
+q.module('calculateSquareRoot');
+q.test('exists', function(assert) {
+  assert.equal(typeof calculator.calculateSquareRoot, 'function', 'is a function');
+});
+
+q.test('calculates square roots', function(assert) {
+  setBuffer(['16', '', '', '', '']);
+  calculator.setKeyPress('root');
+  calculator.calculateSquareRoot();
+
+  assert.equal(calculator.buffer.register_a, '4', 'changed 16 to 4 in register a');
+
+  setBuffer(['16', '', '', '+', '']);
+  calculator.setKeyPress('root');
+  calculator.calculateSquareRoot();
+
+  assert.equal(calculator.buffer.register_b, '4', 'put 4 in register b');
+
+  setBuffer(['16', '25', '', '+', '']);
+  calculator.setKeyPress('root');
+  calculator.calculateSquareRoot();
+
+  assert.equal(calculator.buffer.register_b, '5', 'changed 25 to 5 in register b');
+
+  setBuffer(['16', '25', '', '+', '*']);
+  calculator.setKeyPress('root');
+  calculator.calculateSquareRoot();
+
+  assert.equal(calculator.buffer.register_c, '5', 'put 5 in register c');
+
+  setBuffer(['16', '25', '121', '+', '*']);
+  calculator.setKeyPress('root');
+  calculator.calculateSquareRoot();
+
+  assert.equal(calculator.buffer.register_c, '11', 'changed 121 to 11 in register c');
+
+  resetBuffer();
+});
 
 // Need to add some tests for the router
 
@@ -328,7 +398,7 @@ q.test('adds a decimal', function(assert) {
 // ========= UTILITY FUNCTIONS
 
 let resetBuffer = function() {
-  setBuffer(['','','','','',1,'0',1]);
+  setBuffer(['','','','','','0',1,1]);
 }
 
 let setBuffer = function(buffer) {
@@ -337,8 +407,8 @@ let setBuffer = function(buffer) {
   calculator.buffer.register_c  = buffer[2]; 
   calculator.buffer.operator_a  = buffer[3]; 
   calculator.buffer.operator_b  = buffer[4]; 
-  calculator.buffer.screen_flag = buffer[5]; 
   calculator.buffer.screen      = buffer[6]; 
+  calculator.buffer.screen_flag = buffer[5]; 
   calculator.buffer.state       = buffer[7]; 
   calculator.setState();
 }

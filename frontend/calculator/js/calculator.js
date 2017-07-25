@@ -348,61 +348,121 @@ var Calculator = function() {
         break;
     }
   }
-  
+
   function appendDecimal() {
-
+    switch (buffer.state) {
+      case 1:
+         if (buffer.register_a.indexOf('.') === -1 && buffer.register_a.length < 10) {
+            if (buffer.register_a === '' || buffer.register_a === '0') {
+               buffer.register_a = '0.';
+            } else {
+               buffer.register_a = buffer.register_a.toString() + '.';
+            }
+         }
+         break;
+      case 2:
+         buffer.register_b = '0.';
+         buffer.screen_flag = 2;
+         break;
+      case 3:
+         if (buffer.register_b.indexOf('.') === -1 && buffer.register_b.length < 10) {
+            buffer.register_b = buffer.register_b.toString() + '.';
+         }
+         break;
+      case 4:
+         buffer.register_c = '0.';
+         buffer.screen_flag = 3;
+         break;
+      case 5:
+         if (buffer.register_c.indexOf('.') === -1 && buffer.register_c.length < 10) {
+            buffer.register_c = buffer.register_c.toString() + '.';
+         }
+         break;
+      case 6:
+         break;
+      default:
+         console.log("something other than . happened!");
+         break;
+    }
   }
-      // /*
-      //  * ENTER .
-      //  *
-      //  *          A | B | C |opA|opB|
-      //  *         ---|---|---|---|---|
-      //  * Case 1) 0,A|   |   |   |   | if 0/null, 0.->A; if length<10, A+='.'
-      //  * Case 2)  A |   |   | + |   | 0.->B, screenFlag=2 
-      //  * Case 3)  A | B |   |+,*|   | if length<10, B+='.'
-      //  * Case 4)  A | B |   | + | * | 0.->C, screenFlag=3
-      //  * Case 5)  A | B | C | + | * | if length<10, C+='.'
-      //  */
-      // if (b === '.') {
-      //    switch (calState(this.regA, this.regB, this.regC, this.opA, this.opB)) {
-      //       case 1:
-      //          if (this.regA.indexOf('.') === -1 && this.regA.length < 10) {
-      //             if (this.regA === 'empty' || this.regA === '0') {
-      //                this.regA = '0.';
-      //             } else {
-      //                this.regA = this.regA.toString() + '.';
-      //             }
-      //          }
-      //          break;
-      //       case 2:
-      //          this.regB = '0.';
-      //          this.screenFlag = 2;
-      //          break;
-      //       case 3:
-      //          if (this.regB.indexOf('.') === -1 && this.regB.length < 10) {
-      //             this.regB = this.regB.toString() + '.';
-      //          }
-      //          break;
-      //       case 4:
-      //          this.regC = '0.';
-      //          this.screenFlag = 3;
-      //          break;
-      //       case 5:
-      //          if (this.regC.indexOf('.') === -1 && this.regC.length < 10) {
-      //             this.regC = this.regC.toString() + '.';
-      //          }
-      //          break;
-      //       case 6:
-      //          break;
-      //       default:
-      //          console.log("something other than . happened!");
-      //          break;
-      //    }
-      // }
 
-
-  // .
-  // square root
+  function calculateSquareRoot() {
+    switch (buffer.state) {
+      case 1:
+         if (buffer.register_a > 0) {
+            buffer.register_a = trim(Math.sqrt(Number(buffer.register_a)).toString());
+            buffer.screen_flag = 1;
+         } else if (buffer.register_a === '' || buffer.register_a === '0') {
+            buffer.register_a = '0';
+            buffer.screen_flag = 1;
+         } else {
+            buffer.register_a = 'ERROR';
+            buffer.register_b = '';
+            buffer.register_c = '';
+            buffer.opA = '';
+            buffer.opB = '';
+            buffer.screen_flag = 1;
+         }
+         break;
+      case 2:
+         if (buffer.register_a > 0) {
+            buffer.register_b = trim(Math.sqrt(Number(buffer.register_a)).toString());
+            buffer.screen_flag = 2;
+         } else {
+            buffer.register_a = 'ERROR';
+            buffer.register_b = '';
+            buffer.register_c = '';
+            buffer.opA = '';
+            buffer.opB = '';
+            buffer.screen_flag = 1;
+         }
+         break;
+      case 3:
+         if (buffer.register_b > 0) {
+            buffer.register_b = trim(Math.sqrt(Number(buffer.register_b)).toString());
+            buffer.screen_flag = 2;
+         } else {
+            buffer.register_a = 'ERROR';
+            buffer.register_b = '';
+            buffer.register_c = '';
+            buffer.opA = '';
+            buffer.opB = '';
+            buffer.screen_flag = 1;
+         }
+         break;
+      case 4:
+         if (buffer.register_b > 0) {
+            buffer.register_c = trim(Math.sqrt(Number(buffer.register_b)).toString());
+            buffer.screen_flag = 3;
+         } else {
+            buffer.register_a = 'ERROR';
+            buffer.register_b = '';
+            buffer.register_c = '';
+            buffer.opA = '';
+            buffer.opB = '';
+            buffer.screen_flag = 1;
+         }
+         break;
+      case 5:
+         if (buffer.register_c > 0) {
+            buffer.register_c = trim(Math.sqrt(Number(buffer.register_c)).toString());
+            buffer.screen_flag = 3;
+         } else {
+            buffer.register_a = 'ERROR';
+            buffer.register_b = '';
+            buffer.register_c = '';
+            buffer.opA = '';
+            buffer.opB = '';
+            buffer.screen_flag = 1;
+         }
+         break;
+      case 6:
+         break;
+      default:
+         console.log("something other than . happened!");
+         break;
+    }
+  }
 
   return {
     trim          : trim,
@@ -420,7 +480,8 @@ var Calculator = function() {
     setKeyPress   : setKeyPress,
     routeKeyPress : routeKeyPress,
     flipSign      : flipSign,
-    appendDecimal : appendDecimal
+    appendDecimal : appendDecimal,
+    calculateSquareRoot : calculateSquareRoot
   };
 
 
