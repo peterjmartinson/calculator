@@ -58,21 +58,21 @@ q.test('reckonOutside() performs simple calculations', function(assert) {
   assert.deepEqual(getResult(), ['-11', '12', '3', '-', '/'], '1-12=-11');
 });
 
-q.test('equal() performs the whole calculation', function(assert) {
+q.test('reckonAll() performs the whole calculation', function(assert) {
   setBuffer(['1', '2', '3', '+', '*']);
-  calculator.equal();
+  calculator.reckonAll();
   assert.deepEqual(getResult(), ['7', '6', '3', '+', '*'], '1+(2*3)=7');
 
   setBuffer(['1', '12', '3', '+', '/']);
-  calculator.equal();
+  calculator.reckonAll();
   assert.deepEqual(getResult(), ['5', '4', '3', '+', '/'], '1+(12/3)=5');
 
   setBuffer(['1', '2', '3', '-', '*']);
-  calculator.equal();
+  calculator.reckonAll();
   assert.deepEqual(getResult(), ['-5', '6', '3', '-', '*'], '1-(2*3)=-5');
 
   setBuffer(['1', '12', '3', '-', '/']);
-  calculator.equal();
+  calculator.reckonAll();
   assert.deepEqual(getResult(), ['-3', '4', '3', '-', '/'], '1-(12/3)=-3');
 });
 
@@ -278,6 +278,40 @@ q.test('sends an operator into a register', function(assert) {
   assert.equal(calculator.buffer.operator_b, '*', 'routeKeyPress sends * to operator b');
 });
 
+q.test('`pm` changes the sign of the displayed register', function(assert) {
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.setKeyPress('pm');
+  calculator.routeKeyPress();
+  assert.equal(calculator.buffer.register_b, '-2', 'routeKeyPress changes sign of a register');
+});
+
+q.test('appends a decimal point', function(assert) {
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.setKeyPress('.');
+  calculator.routeKeyPress();
+  assert.equal(calculator.buffer.register_b, '2.', 'routeKeyPress appends a decimal point');
+});
+  
+q.test('causes a square root to be taken', function(assert) {
+  setBuffer(['1', '9', '', '+', '']);
+  calculator.setKeyPress('root');
+  calculator.routeKeyPress();
+  assert.equal(calculator.buffer.register_b, '3', 'routeKeyPress takes a root');
+});
+  
+q.test('clears the screen', function(assert) {
+  setBuffer(['1', '9', '', '+', '']);
+  calculator.setKeyPress('clear');
+  calculator.routeKeyPress();
+  assert.deepEqual(calculator.buffer, default_buffer, 'routeKeyPress clears the screen');
+});
+
+q.test('performs a full calculation', function(assert) {
+  setBuffer(['1', '9', '', '+', '']);
+  calculator.setKeyPress('=');
+  calculator.routeKeyPress();
+  assert.deepEqual(calculator.buffer.register_a, '10', 'routeKeyPress responds to =');
+});
 
 
 q.module('flipSign');

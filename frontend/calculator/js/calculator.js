@@ -83,17 +83,21 @@ var Calculator = function() {
     else if ( operator.indexOf(KeyPress) > 0 ) {
       setOperator();
     }
-    else if ( KeyPress === '=' ) { clear();
+    else if ( KeyPress === '=' ) { 
+      reckonAll();
     }
     else if ( KeyPress === 'pm' ) {
       flipSign();
     }
-    // else if ( KeyPress === '.' ) {
-    //   setDecimal();
-    // }
-    // else if ( KeyPress === 'root' ) {
-    //   takeSquareRoot();
-    // }
+    else if ( KeyPress === '.' ) {
+      appendDecimal();
+    }
+    else if ( KeyPress === 'root' ) {
+      calculateSquareRoot();
+    }
+    else if ( KeyPress === 'clear' ) {
+      clear();
+    }
     setState();
     updateScreen();
     console.log(KeyPress);
@@ -150,7 +154,7 @@ var Calculator = function() {
     buffer.register_a = result.toString();
   }
 
-  function equal() {
+  function reckonAll() {
     if (buffer.register_b != '' && buffer.register_c != '' && buffer.operator_b != '') {
       reckonInside();
       reckonOutside();
@@ -205,12 +209,13 @@ var Calculator = function() {
   }
 
   function clear() {
-     buffer.screen_flag = 1;
      buffer.register_a = '';
      buffer.register_b = '';
      buffer.register_c = '';
      buffer.operator_a = '';
      buffer.operator_b = '';
+     buffer.screen     = '0';
+     buffer.screen_flag = 1;
      setState();
   }
 
@@ -475,7 +480,7 @@ var Calculator = function() {
     buffer        : buffer,
     reckonInside  : reckonInside,
     reckonOutside : reckonOutside,
-    equal         : equal,
+    reckonAll     : reckonAll,
     getKeyPress   : getKeyPress,
     setKeyPress   : setKeyPress,
     routeKeyPress : routeKeyPress,
