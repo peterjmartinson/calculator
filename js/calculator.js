@@ -1,7 +1,7 @@
 var Calculator = function() {
   'use strict';
 
-  var buffer = {
+  let buffer = {
     register_a  : '',
     register_b  : '',
     register_c  : '',
@@ -147,6 +147,7 @@ var Calculator = function() {
     }
     let result = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
     buffer.register_a = result.toString();
+    buffer.screen_flag = 1;
   }
 
   function reckonAll() {

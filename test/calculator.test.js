@@ -46,6 +46,13 @@ q.test('reckonInside() performs simple calculations', function(assert) {
   assert.deepEqual(getResult(), ['1', '4', '3', '-', '/'], '12/3=4');
 });
 
+q.test('reckonInside() sets the screen flag', function(assert) {
+  setBuffer(['1', '2', '3', '+', '*']);
+  calculator.reckonInside();
+  assert.equal(calculator.buffer.screen_flag, 2, 'to point at register b');
+});
+  
+
 q.test('reckonOutside() performs simple calculations', function(assert) {
   setBuffer(['1', '2', '3', '+', '*']);
   calculator.reckonOutside();
@@ -64,6 +71,12 @@ q.test('reckonOutside() performs simple calculations', function(assert) {
   assert.deepEqual(getResult(), ['-11', '12', '3', '-', '/'], '1-12=-11');
 });
 
+q.test('reckonOutside() sets the screen flag', function(assert) {
+  setBuffer(['1', '12', '3', '-', '/']);
+  calculator.reckonOutside();
+  assert.equal(calculator.buffer.screen_flag, 1, 'to point at register a');
+});
+  
 q.test('reckonAll() performs the whole calculation', function(assert) {
   setBuffer(['1', '2', '3', '+', '*']);
   calculator.reckonAll();
