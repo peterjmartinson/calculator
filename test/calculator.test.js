@@ -502,19 +502,138 @@ q.test('calculates square roots', function(assert) {
 
 
 q.module('Run some full calculations!');
+
 q.test('short sequences', function(assert) {
-  let sequence = '1+2=';
-  runCalculationSequence(sequence);
-  assert.equal(calculator.buffer.register_a, '3', '1+2=3');
-});
-q.test('short sequence 2', function(assert) {
+  let sequence;
+
+  calculator.sendKeyPress('clear');
   calculator.sendKeyPress('1');
   calculator.sendKeyPress('+');
   calculator.sendKeyPress('2');
   calculator.sendKeyPress('=');
   assert.equal(calculator.buffer.register_a, '3', '1+2=3');
+
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('3');
+  calculator.sendKeyPress('*');
+  calculator.sendKeyPress('5');
+  calculator.sendKeyPress('=');
+  assert.equal(calculator.buffer.register_a, '15', '3*5=15');
+
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('7');
+  calculator.sendKeyPress('-');
+  calculator.sendKeyPress('2');
+  calculator.sendKeyPress('2');
+  calculator.sendKeyPress('=');
+  assert.equal(calculator.buffer.register_a, '-15', '7-22=-15');
+
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('5');
+  calculator.sendKeyPress('6');
+  calculator.sendKeyPress('/');
+  calculator.sendKeyPress('7');
+  calculator.sendKeyPress('=');
+  assert.equal(calculator.buffer.register_a, '8', '56/7=8');
+
 });
 
+q.test('full sequences', function(assert) {
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('1');
+  calculator.sendKeyPress('+');
+  calculator.sendKeyPress('2');
+  calculator.sendKeyPress('*');
+  calculator.sendKeyPress('3');
+  calculator.sendKeyPress('=');
+  assert.equal(calculator.buffer.register_a, '7', '1+2*3=7');
+
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('7');
+  calculator.sendKeyPress('+');
+  calculator.sendKeyPress('1');
+  calculator.sendKeyPress('5');
+  calculator.sendKeyPress('/');
+  calculator.sendKeyPress('3');
+  calculator.sendKeyPress('=');
+  assert.equal(calculator.buffer.register_a, '12', '7+15/3=12');
+
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('1');
+  calculator.sendKeyPress('-');
+  calculator.sendKeyPress('2');
+  calculator.sendKeyPress('*');
+  calculator.sendKeyPress('3');
+  calculator.sendKeyPress('=');
+  assert.equal(calculator.buffer.register_a, '-5', '1-2*3=-5');
+
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('7');
+  calculator.sendKeyPress('+');
+  calculator.sendKeyPress('1');
+  calculator.sendKeyPress('5');
+  calculator.sendKeyPress('/');
+  calculator.sendKeyPress('3');
+  calculator.sendKeyPress('=');
+  assert.equal(calculator.buffer.register_a, '12', '7+15/3=12');
+
+});
+
+q.test('partial sequences', function(assert) {
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('1');
+  calculator.sendKeyPress('+');
+  calculator.sendKeyPress('2');
+  calculator.sendKeyPress('*');
+  calculator.sendKeyPress('3');
+  calculator.sendKeyPress('*');
+  assert.equal(calculator.buffer.register_b, '6', '2*3=6');
+
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('7');
+  calculator.sendKeyPress('+');
+  calculator.sendKeyPress('1');
+  calculator.sendKeyPress('5');
+  calculator.sendKeyPress('/');
+  calculator.sendKeyPress('3');
+  calculator.sendKeyPress('*');
+  assert.equal(calculator.buffer.register_b, '5', '15/3=5');
+
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('1');
+  calculator.sendKeyPress('-');
+  calculator.sendKeyPress('2');
+  calculator.sendKeyPress('*');
+  calculator.sendKeyPress('3');
+  calculator.sendKeyPress('*');
+  assert.equal(calculator.buffer.register_b, '6', '2*3=6');
+
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('1');
+  calculator.sendKeyPress('+');
+  calculator.sendKeyPress('2');
+  calculator.sendKeyPress('*');
+  calculator.sendKeyPress('3');
+  calculator.sendKeyPress('+');
+  assert.equal(calculator.buffer.register_a, '7', '1+2*3+ -> 7');
+
+  calculator.sendKeyPress('=');
+  assert.equal(calculator.buffer.register_a, '14', '7+7=14');
+
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('7');
+  calculator.sendKeyPress('+');
+  calculator.sendKeyPress('1');
+  calculator.sendKeyPress('5');
+  calculator.sendKeyPress('/');
+  calculator.sendKeyPress('3');
+  calculator.sendKeyPress('+');
+  assert.equal(calculator.buffer.register_a, '12', '7+15/3+ -> 12');
+
+  calculator.sendKeyPress('=');
+  assert.equal(calculator.buffer.register_a, '24', '12+12=24');
+
+});
 
 
 // ========= UTILITY FUNCTIONS
@@ -564,9 +683,8 @@ function runCalculationSequence(string) {
   let sequence = string.split('');
   console.log(string);
   console.log(sequence);
-  for (let step in sequence) {
-    calculator.sendKeyPress(step);
-    console.log(stringifyBuffer());
+  for (let i = 0; i < sequence.length; i++) {
+    calculator.sendKeyPress(sequence[i]);
   }
 }
 
