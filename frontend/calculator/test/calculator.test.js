@@ -1,6 +1,5 @@
 /*jshint esversion:6, node:true */
 'use strict';
-console.log(JSON.stringify(calculator.buffer));
 const q = QUnit;
 
 q.module('Fundamental Operations');
@@ -20,6 +19,13 @@ q.test('operate() performs simple calculations', function(assert) {
   assert.equal(calculator.operate(b[0], b[1], b[2]), '-5', '2-7=-5');
   assert.equal(calculator.operate(c[0], c[1], c[2]), '18', '3*6=18');
   assert.equal(calculator.operate(d[0], d[1], d[2]), '4', '12/3=4');
+});
+
+q.test('operate() handles blanks', function(assert) {
+  let a = ['1','',''],
+      b = ['1','+',''];
+  assert.equal(calculator.operate(a[0], a[1], a[2]), '1', 'in the operator');
+  assert.equal(calculator.operate(b[0], b[1], b[2]), '1', 'in right hand side');
 });
 
 q.test('reckonInside() performs simple calculations', function(assert) {
@@ -58,21 +64,21 @@ q.test('reckonOutside() performs simple calculations', function(assert) {
   assert.deepEqual(getResult(), ['-11', '12', '3', '-', '/'], '1-12=-11');
 });
 
-q.test('equal() performs the whole calculation', function(assert) {
+q.test('reckonAll() performs the whole calculation', function(assert) {
   setBuffer(['1', '2', '3', '+', '*']);
-  calculator.equal();
+  calculator.reckonAll();
   assert.deepEqual(getResult(), ['7', '6', '3', '+', '*'], '1+(2*3)=7');
 
   setBuffer(['1', '12', '3', '+', '/']);
-  calculator.equal();
+  calculator.reckonAll();
   assert.deepEqual(getResult(), ['5', '4', '3', '+', '/'], '1+(12/3)=5');
 
   setBuffer(['1', '2', '3', '-', '*']);
-  calculator.equal();
+  calculator.reckonAll();
   assert.deepEqual(getResult(), ['-5', '6', '3', '-', '*'], '1-(2*3)=-5');
 
   setBuffer(['1', '12', '3', '-', '/']);
-  calculator.equal();
+  calculator.reckonAll();
   assert.deepEqual(getResult(), ['-3', '4', '3', '-', '/'], '1-(12/3)=-3');
 });
 
@@ -257,6 +263,9 @@ q.test('fills the correct registers', function(assert) {
   resetBuffer();
 });
 
+
+
+
 q.module('routeKeyPress');
 q.test('exists', function(assert) {
   assert.equal(typeof calculator.routeKeyPress, 'function', 'routeKeyPress is a function on Calculator');
@@ -269,20 +278,219 @@ q.test('sends a number into a register', function(assert) {
 });
 
 q.test('sends an operator into a register', function(assert) {
+  setBuffer(['1', '', '', '', '']);
+  calculator.setKeyPress('+');
+  calculator.routeKeyPress();
+  assert.equal(calculator.buffer.operator_a, '+', 'routeKeyPress sends + to operator a');
+});
+
+q.test('sends an operator into a register', function(assert) {
   setBuffer(['1', '2', '', '+', '']);
   calculator.setKeyPress('*');
   calculator.routeKeyPress();
   assert.equal(calculator.buffer.operator_b, '*', 'routeKeyPress sends * to operator b');
 });
 
+q.test('`pm` changes the sign of the displayed register', function(assert) {
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.setKeyPress('pm');
+  calculator.routeKeyPress();
+  assert.equal(calculator.buffer.register_b, '-2', 'routeKeyPress changes sign of a register');
+});
+
+q.test('appends a decimal point', function(assert) {
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.setKeyPress('.');
+  calculator.routeKeyPress();
+  assert.equal(calculator.buffer.register_b, '2.', 'routeKeyPress appends a decimal point');
+});
+
+q.test('causes a square root to be taken', function(assert) {
+  setBuffer(['1', '9', '', '+', '']);
+  calculator.setKeyPress('root');
+  calculator.routeKeyPress();
+  assert.equal(calculator.buffer.register_b, '3', 'routeKeyPress takes a root');
+});
+
+q.test('clears the screen', function(assert) {
+  setBuffer(['1', '9', '', '+', '']);
+  calculator.setKeyPress('clear');
+  calculator.routeKeyPress();
+  assert.deepEqual(calculator.buffer, default_buffer, 'routeKeyPress clears the screen');
+});
+
+q.test('performs a full calculation', function(assert) {
+  setBuffer(['1', '9', '', '+', '']);
+  calculator.setKeyPress('=');
+  calculator.routeKeyPress();
+  assert.deepEqual(calculator.buffer.register_a, '10', 'routeKeyPress responds to =');
+});
+
+
+
+q.module('sendKeyPress');
+q.test('exists', function(assert) {
+  assert.equal(typeof calculator.sendKeyPress, 'function', 'sendKeyPress is a function on Calculator');
+});
+
+q.test('clears the screen', function(assert) {
+  setBuffer(['1', '9', '', '+', '']);
+  calculator.sendKeyPress('clear');
+  assert.deepEqual(calculator.buffer, default_buffer, 'sendKeyPress clears the screen');
+});
+
+q.test('sends a number into a register', function(assert) {
+  calculator.sendKeyPress('4');
+  assert.equal(calculator.buffer.register_a, '4', 'sendKeyPress sends 4 to register a');
+});
+
+q.test('sends an operator into a register', function(assert) {
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.sendKeyPress('*');
+  assert.equal(calculator.buffer.operator_b, '*', 'sendKeyPress sends * to operator b');
+});
+
+q.test('`pm` changes the sign of the displayed register', function(assert) {
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.sendKeyPress('pm');
+  assert.equal(calculator.buffer.register_b, '-2', 'sendKeyPress changes sign of a register');
+});
+
+q.test('appends a decimal point', function(assert) {
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.sendKeyPress('.');
+  assert.equal(calculator.buffer.register_b, '2.', 'sendKeyPress appends a decimal point');
+});
+
+q.test('causes a square root to be taken', function(assert) {
+  setBuffer(['1', '9', '', '+', '']);
+  calculator.sendKeyPress('root');
+  assert.equal(calculator.buffer.register_b, '3', 'sendKeyPress takes a root');
+});
+
+q.test('performs a full calculation', function(assert) {
+  setBuffer(['1', '9', '', '+', '']);
+  calculator.sendKeyPress('=');
+  assert.deepEqual(calculator.buffer.register_a, '10', 'sendKeyPress responds to =');
+});
+
+
+q.module('flipSign');
+q.test('exists', function(assert) {
+  assert.equal(typeof calculator.flipSign, 'function', 'It is a function');
+});
+
+q.test('sets the correct signs', function(assert) {
+  setBuffer(['1', '', '', '', '']);
+  calculator.setKeyPress('plusminus');
+  calculator.flipSign();
+
+  assert.equal(calculator.buffer.register_a, '-1', 'flipSign flipped register a');
+
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.setKeyPress('plusminus');
+  calculator.flipSign();
+
+  assert.equal(calculator.buffer.register_b, '-2', 'flipSign flipped register b');
+
+  setBuffer(['1', '2', '3', '+', '*']);
+  calculator.setKeyPress('plusminus');
+  calculator.flipSign();
+
+  assert.equal(calculator.buffer.register_c, '-3', 'flipSign flipped register c');
+
+  resetBuffer();
+});
+
+q.module('appendDecimal');
+q.test('exists', function(assert) {
+  assert.equal(typeof calculator.appendDecimal, 'function', 'is a function');
+});
+
+q.test('adds a decimal', function(assert) {
+  setBuffer(['1', '', '', '', '']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_a, '1.', 'added a decimal to register a');
+
+  setBuffer(['1', '2', '', '+', '']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_b, '2.', 'added a decimal to register b');
+
+  setBuffer(['1', '2', '3', '+', '*']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_c, '3.', 'added a decimal to register c');
+
+  setBuffer(['', '', '', '', '']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_a, '0.', 'added 0. to register a');
+
+  setBuffer(['1', '', '', '+', '']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_b, '0.', 'added 0. to register b');
+
+  setBuffer(['1', '2', '', '+', '*']);
+  calculator.setKeyPress('.');
+  calculator.appendDecimal();
+
+  assert.equal(calculator.buffer.register_c, '0.', 'added 0. to register c');
+
+  resetBuffer();
+});
+
+q.module('calculateSquareRoot');
+q.test('exists', function(assert) {
+  assert.equal(typeof calculator.calculateSquareRoot, 'function', 'is a function');
+});
+
+q.test('calculates square roots', function(assert) {
+  setBuffer(['16', '', '', '', '']);
+  calculator.setKeyPress('root');
+  calculator.calculateSquareRoot();
+
+  assert.equal(calculator.buffer.register_a, '4', 'changed 16 to 4 in register a');
+
+  setBuffer(['16', '', '', '+', '']);
+  calculator.setKeyPress('root');
+  calculator.calculateSquareRoot();
+
+  assert.equal(calculator.buffer.register_b, '4', 'put 4 in register b');
+
+  setBuffer(['16', '25', '', '+', '']);
+  calculator.setKeyPress('root');
+  calculator.calculateSquareRoot();
+
+  assert.equal(calculator.buffer.register_b, '5', 'changed 25 to 5 in register b');
+
+  setBuffer(['16', '25', '', '+', '*']);
+  calculator.setKeyPress('root');
+  calculator.calculateSquareRoot();
+
+  assert.equal(calculator.buffer.register_c, '5', 'put 5 in register c');
+
+  setBuffer(['16', '25', '121', '+', '*']);
+  calculator.setKeyPress('root');
+  calculator.calculateSquareRoot();
+
+  assert.equal(calculator.buffer.register_c, '11', 'changed 121 to 11 in register c');
+
+  resetBuffer();
+});
+
+// Need to add some tests for the router
 
 
 
 // ========= UTILITY FUNCTIONS
-
-let resetBuffer = function() {
-  setBuffer(['','','','','',1,'0',1]);
-}
 
 let setBuffer = function(buffer) {
   calculator.buffer.register_a  = buffer[0]; 
@@ -290,10 +498,14 @@ let setBuffer = function(buffer) {
   calculator.buffer.register_c  = buffer[2]; 
   calculator.buffer.operator_a  = buffer[3]; 
   calculator.buffer.operator_b  = buffer[4]; 
-  calculator.buffer.screen_flag = buffer[5]; 
   calculator.buffer.screen      = buffer[6]; 
+  calculator.buffer.screen_flag = buffer[5]; 
   calculator.buffer.state       = buffer[7]; 
   calculator.setState();
+}
+
+let resetBuffer = function() {
+  setBuffer(['','','','','','0',1,1]);
 }
 
 let getResult = function() {

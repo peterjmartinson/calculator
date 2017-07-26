@@ -31,7 +31,7 @@ var Calculator = function() {
       55: '7',
       56: '8',
       57: '9',
-      67: 'c'
+      67: 'clear'
   }
 
   let KeyPress = '';
@@ -57,46 +57,42 @@ var Calculator = function() {
   }
 
   function keyHandler(key) {
-    setKeyPress(key_map[key.keyCode]);
-    // routeKeyPress();
-    if ( key.keyCode >= 48 && key.keyCode <= 57 ) {
-      setNumber();
-    } else
-    if ( key.keyCode == 80 || key.keyCode == 77 || key.keyCode == 84 || key.keyCode == 68 ) {
-      setOperator();
-    } else
-    if ( key.keyCode == 67 ) {
-      clear();
-    }
-    setState();
-    updateScreen();
-    console.log(key.keyCode);
-    cowport.innerHTML = logBuffer();
+    sendKeyPress(key_map[key.keyCode]);
   }
 
-  function routeKeyPress(){
+  function sendKeyPress(key) {
+    setKeyPress(key);
+    routeKeyPress();
+  }
+
+  function routeKeyPress() {
+    console.log(KeyPress);
     let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         operator = ['+', '-', '*', '/'];
-    if ( number.indexOf(KeyPress) > 0 ) {
+    if ( number.indexOf(KeyPress) > -1 ) {
       setNumber();
     }
-    else if ( operator.indexOf(KeyPress) > 0 ) {
+    else if ( operator.indexOf(KeyPress) > -1 ) {
       setOperator();
     }
-    else if ( KeyPress === '=' ) { clear();
+    else if ( KeyPress === '=' ) { 
+      reckonAll();
     }
     else if ( KeyPress === 'pm' ) {
       flipSign();
     }
-    // else if ( KeyPress === '.' ) {
-    //   setDecimal();
-    // }
-    // else if ( KeyPress === 'root' ) {
-    //   takeSquareRoot();
-    // }
+    else if ( KeyPress === '.' ) {
+      appendDecimal();
+    }
+    else if ( KeyPress === 'root' ) {
+      calculateSquareRoot();
+    }
+    else if ( KeyPress === 'clear' ) {
+      clear();
+    }
     setState();
     updateScreen();
-    console.log(KeyPress);
+    // console.log(KeyPress);
     cowport.innerHTML = logBuffer();
   }
 
@@ -116,6 +112,9 @@ var Calculator = function() {
   function operate(l, o, r) {
      l = Number(l);
      r = Number(r);
+     if ( !r || !o ) {
+       return trim(l);
+     }
      if (o === '+') {
         return trim((l + r));
      }
@@ -150,7 +149,7 @@ var Calculator = function() {
     buffer.register_a = result.toString();
   }
 
-  function equal() {
+  function reckonAll() {
     if (buffer.register_b != '' && buffer.register_c != '' && buffer.operator_b != '') {
       reckonInside();
       reckonOutside();
@@ -205,12 +204,13 @@ var Calculator = function() {
   }
 
   function clear() {
-     buffer.screen_flag = 1;
      buffer.register_a = '';
      buffer.register_b = '';
      buffer.register_c = '';
      buffer.operator_a = '';
      buffer.operator_b = '';
+     buffer.screen     = '0';
+     buffer.screen_flag = 1;
      setState();
   }
 
@@ -317,51 +317,152 @@ var Calculator = function() {
     }
   }
 
-  // /*
-  //  * ENTER +/-
-  //  *
-  //  *          A | B | C |opA|opB|
-  //  *         ---|---|---|---|---|
-  //  * Case 1) 0,A|   |   |   |   | 
-  //  * Case 2)  A |   |   | + |   | 
-  //  * Case 3)  A | B |   |+,*|   | 
-  //  * Case 4)  A | B |   | + | * | 
-  //  * Case 5)  A | B | C | + | * | 
-  //  */
-  // if (b === 'pm') {
-  //   switch (calState(this.regA, this.regB, this.regC, this.opA, this.opB)) {
-  //     case 1:
-  //       if (this.regA !== 'empty' && this.regA !== '0') {
-  //         this.regA = Number(this.regA * -1).toString();
-  //         this.screenFlag = 1;
-  //       }
-  //       break;
-  //     case 2:
-  //       this.regB = Number(this.regA * -1).toString();
-  //       this.screenFlag = 2;
-  //       break;
-  //     case 3:
-  //       this.regB = Number(this.regB * -1).toString();
-  //       this.screenFlag = 2;
-  //       break;
-  //     case 4:
-  //       this.regC = Number(this.regB * -1).toString();
-  //       this.screenFlag = 3;
-  //       break;
-  //     case 5:
-  //       this.regC = Number(this.regC * -1).toString();
-  //       this.screenFlag = 3;
-  //       break;
-  //     case 6:
-  //       break;
-  //     default:
-  //       console.log("something other than PLUS-MINUS happened!");
-  //       break;
-  //   }
-  // }
+  function flipSign() {
+    switch (buffer.state) {
+      case 1:
+        if (buffer.register_a !== 'empty' && buffer.register_a !== '0') {
+          buffer.register_a = Number(buffer.register_a * -1).toString();
+          buffer.screen_flag = 1;
+        }
+        break;
+      case 2:
+        buffer.register_b = Number(buffer.register_a * -1).toString();
+        buffer.screen_flag = 2;
+        break;
+      case 3:
+        buffer.register_b = Number(buffer.register_b * -1).toString();
+        buffer.screen_flag = 2;
+        break;
+      case 4:
+        buffer.register_c = Number(buffer.register_b * -1).toString();
+        buffer.screen_flag = 3;
+        break;
+      case 5:
+        buffer.register_c = Number(buffer.register_c * -1).toString();
+        buffer.screen_flag = 3;
+        break;
+      case 6:
+        break;
+      default:
+        console.log("something other than PLUS-MINUS happened!");
+        break;
+    }
+  }
 
-  // .
-  // square root
+  function appendDecimal() {
+    switch (buffer.state) {
+      case 1:
+         if (buffer.register_a.indexOf('.') === -1 && buffer.register_a.length < 10) {
+            if (buffer.register_a === '' || buffer.register_a === '0') {
+               buffer.register_a = '0.';
+            } else {
+               buffer.register_a = buffer.register_a + '.';
+            }
+         }
+         break;
+      case 2:
+         buffer.register_b = '0.';
+         buffer.screen_flag = 2;
+         break;
+      case 3:
+         if (buffer.register_b.indexOf('.') === -1 && buffer.register_b.length < 10) {
+            buffer.register_b = buffer.register_b + '.';
+         }
+         break;
+      case 4:
+         buffer.register_c = '0.';
+         buffer.screen_flag = 3;
+         break;
+      case 5:
+         if (buffer.register_c.indexOf('.') === -1 && buffer.register_c.length < 10) {
+            buffer.register_c = buffer.register_c + '.';
+         }
+         break;
+      case 6:
+         break;
+      default:
+         console.log("something other than . happened!");
+         break;
+    }
+  }
+
+  function calculateSquareRoot() {
+    switch (buffer.state) {
+      case 1:
+         if (buffer.register_a > 0) {
+            buffer.register_a = trim(Math.sqrt(Number(buffer.register_a)).toString());
+            buffer.screen_flag = 1;
+         } else if (buffer.register_a === '' || buffer.register_a === '0') {
+            buffer.register_a = '0';
+            buffer.screen_flag = 1;
+         } else {
+            buffer.register_a = 'ERROR';
+            buffer.register_b = '';
+            buffer.register_c = '';
+            buffer.opA = '';
+            buffer.opB = '';
+            buffer.screen_flag = 1;
+         }
+         break;
+      case 2:
+         if (buffer.register_a > 0) {
+            buffer.register_b = trim(Math.sqrt(Number(buffer.register_a)).toString());
+            buffer.screen_flag = 2;
+         } else {
+            buffer.register_a = 'ERROR';
+            buffer.register_b = '';
+            buffer.register_c = '';
+            buffer.opA = '';
+            buffer.opB = '';
+            buffer.screen_flag = 1;
+         }
+         break;
+      case 3:
+         if (buffer.register_b > 0) {
+            buffer.register_b = trim(Math.sqrt(Number(buffer.register_b)).toString());
+            buffer.screen_flag = 2;
+         } else {
+            buffer.register_a = 'ERROR';
+            buffer.register_b = '';
+            buffer.register_c = '';
+            buffer.opA = '';
+            buffer.opB = '';
+            buffer.screen_flag = 1;
+         }
+         break;
+      case 4:
+         if (buffer.register_b > 0) {
+            buffer.register_c = trim(Math.sqrt(Number(buffer.register_b)).toString());
+            buffer.screen_flag = 3;
+         } else {
+            buffer.register_a = 'ERROR';
+            buffer.register_b = '';
+            buffer.register_c = '';
+            buffer.opA = '';
+            buffer.opB = '';
+            buffer.screen_flag = 1;
+         }
+         break;
+      case 5:
+         if (buffer.register_c > 0) {
+            buffer.register_c = trim(Math.sqrt(Number(buffer.register_c)).toString());
+            buffer.screen_flag = 3;
+         } else {
+            buffer.register_a = 'ERROR';
+            buffer.register_b = '';
+            buffer.register_c = '';
+            buffer.opA = '';
+            buffer.opB = '';
+            buffer.screen_flag = 1;
+         }
+         break;
+      case 6:
+         break;
+      default:
+         console.log("something other than . happened!");
+         break;
+    }
+  }
 
   return {
     trim          : trim,
@@ -374,10 +475,14 @@ var Calculator = function() {
     buffer        : buffer,
     reckonInside  : reckonInside,
     reckonOutside : reckonOutside,
-    equal         : equal,
+    reckonAll     : reckonAll,
     getKeyPress   : getKeyPress,
     setKeyPress   : setKeyPress,
-    routeKeyPress : routeKeyPress
+    routeKeyPress : routeKeyPress,
+    flipSign      : flipSign,
+    appendDecimal : appendDecimal,
+    calculateSquareRoot : calculateSquareRoot,
+    sendKeyPress  : sendKeyPress
   };
 
 
