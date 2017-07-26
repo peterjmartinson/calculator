@@ -499,13 +499,27 @@ q.test('calculates square roots', function(assert) {
   resetBuffer();
 });
 
-// Need to add some tests for the router
+
+
+q.module('Run some full calculations!');
+q.test('short sequences', function(assert) {
+  let sequence = '1+2=';
+  runCalculationSequence(sequence);
+  assert.equal(calculator.buffer.register_a, '3', '1+2=3');
+});
+q.test('short sequence 2', function(assert) {
+  calculator.sendKeyPress('1');
+  calculator.sendKeyPress('+');
+  calculator.sendKeyPress('2');
+  calculator.sendKeyPress('=');
+  assert.equal(calculator.buffer.register_a, '3', '1+2=3');
+});
 
 
 
 // ========= UTILITY FUNCTIONS
 
-let setBuffer = function(buffer) {
+function setBuffer(buffer) {
   calculator.buffer.register_a  = buffer[0]; 
   calculator.buffer.register_b  = buffer[1]; 
   calculator.buffer.register_c  = buffer[2]; 
@@ -517,13 +531,23 @@ let setBuffer = function(buffer) {
   calculator.setState();
 }
 
-let resetBuffer = function() {
+function resetBuffer() {
   setBuffer(['','','','','','0',1,1]);
 }
 
-let getResult = function() {
+function getResult() {
   return [calculator.buffer.register_a, calculator.buffer.register_b, calculator.buffer.register_c, calculator.buffer.operator_a, calculator.buffer.operator_b];
 }
+
+function stringifyBuffer() {
+  return calculator.buffer.register_a + ', '
+       + calculator.buffer.register_b + ', '
+       + calculator.buffer.register_c + ', '
+       + calculator.buffer.operator_a + ', '
+       + calculator.buffer.operator_b + ', '
+       + calculator.buffer.state;
+}
+  
 
 let default_buffer = {
   register_a  : '',
@@ -536,4 +560,28 @@ let default_buffer = {
   state       : 1
 };
 
-// setBuffer(default_buffer);
+function runCalculationSequence(string) {
+  let sequence = string.split('');
+  console.log(string);
+  console.log(sequence);
+  for (let step in sequence) {
+    calculator.sendKeyPress(step);
+    console.log(stringifyBuffer());
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

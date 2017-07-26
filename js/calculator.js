@@ -14,6 +14,7 @@ var Calculator = function() {
 
   let cowport = document.getElementById("cowport");
   let screen = document.getElementById("screen");
+  document.addEventListener('keydown', keyHandler, 0);
 
   const key_map = {
       187: '=',
@@ -36,6 +37,14 @@ var Calculator = function() {
 
   let KeyPress = '';
 
+  function sendKeyPress(key) {
+    setKeyPress(key);
+    routeKeyPress();
+    setState();
+    updateScreen();
+    cowport.innerHTML = logBuffer();
+  }
+
   function getKeyPress() {
     return KeyPress;
   }
@@ -44,7 +53,6 @@ var Calculator = function() {
     KeyPress = new_keypress.toString();
   }
 
-  document.addEventListener('keyup', keyHandler, 0);
 
   function logBuffer() {
     let output = '';
@@ -60,13 +68,7 @@ var Calculator = function() {
     sendKeyPress(key_map[key.keyCode]);
   }
 
-  function sendKeyPress(key) {
-    setKeyPress(key);
-    routeKeyPress();
-  }
-
   function routeKeyPress() {
-    console.log(KeyPress);
     let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         operator = ['+', '-', '*', '/'];
     if ( number.indexOf(KeyPress) > -1 ) {
@@ -90,10 +92,6 @@ var Calculator = function() {
     else if ( KeyPress === 'clear' ) {
       clear();
     }
-    setState();
-    updateScreen();
-    // console.log(KeyPress);
-    cowport.innerHTML = logBuffer();
   }
 
   function trim(num) {
