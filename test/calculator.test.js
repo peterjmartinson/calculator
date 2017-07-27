@@ -579,7 +579,7 @@ q.test('full sequences', function(assert) {
 
 });
 
-q.test('partial sequences', function(assert) {
+q.test('continued sequences', function(assert) {
   calculator.sendKeyPress('clear');
   calculator.sendKeyPress('1');
   calculator.sendKeyPress('+');
@@ -632,6 +632,29 @@ q.test('partial sequences', function(assert) {
 
   calculator.sendKeyPress('=');
   assert.equal(calculator.buffer.register_a, '24', '12+12=24');
+
+});
+
+q.test('aborted sequences', function(assert) {
+  calculator.sendKeyPress('clear');
+  console.log(stringifyBuffer());
+  calculator.sendKeyPress('7');
+  console.log(stringifyBuffer());
+  calculator.sendKeyPress('+');
+  console.log(stringifyBuffer());
+  calculator.sendKeyPress('1');
+  console.log(stringifyBuffer());
+  calculator.sendKeyPress('5');
+  console.log(stringifyBuffer());
+  calculator.sendKeyPress('/');
+  console.log(stringifyBuffer());
+  calculator.sendKeyPress('+');
+  console.log(stringifyBuffer());
+  assert.equal(calculator.buffer.register_a, '22', '7+15=12');
+
+});
+
+q.test('complex operations', function(assert) {
 
 });
 

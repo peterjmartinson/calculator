@@ -1,3 +1,7 @@
+/**
+ * replace `operate` with the reckon functions in setOperator
+ * you hit the "whoops" when you should not!!!
+*/
 var Calculator = function() {
   'use strict';
 
@@ -134,8 +138,10 @@ var Calculator = function() {
     if (buffer.register_c === '') {
       buffer.register_c = buffer.register_b
     }
+      console.log("before reckoning Inside\n" + logBuffer());
     let result = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
     buffer.register_b = result.toString();
+      console.log("after reckoning Inside\n" + logBuffer());
     buffer.screen_flag = 2;
   }
 
@@ -143,16 +149,22 @@ var Calculator = function() {
     if (buffer.register_b === '') {
       buffer.register_b = buffer.register_a
     }
+      console.log("before reckoning Outside\n" + logBuffer());
     let result = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
     buffer.register_a = result.toString();
+      console.log("after reckoning Outside\n" + logBuffer());
     buffer.screen_flag = 1;
   }
 
   function reckonAll() {
     if (buffer.register_b != '' && buffer.register_c != '' && buffer.operator_b != '') {
+      console.log("reckonAll - before reckonInside\n" + logBuffer());
       reckonInside();
+      console.log("reckonAll - before reckonOutside\n" + logBuffer());
       reckonOutside();
+      console.log("reckonAll - after reckonOutside\n" + logBuffer());
     } else {
+      console.log("whoops!");
       reckonOutside();
     }
   }
@@ -258,53 +270,54 @@ var Calculator = function() {
   }
 
   function setOperator() {
+    let key_press = getKeyPress();
     switch (buffer.state) {
       case 1:
-         buffer.operator_a = getKeyPress();
+         buffer.operator_a = key_press;
          buffer.screen_flag = 1;
          break;
       case 2:
-         buffer.operator_a = getKeyPress();
+         buffer.operator_a = key_press;
          buffer.screen_flag = 1;
          break;
       case 3:
-         if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (getKeyPress() === '*' || getKeyPress() === '/')) {
-            buffer.operator_b = getKeyPress();
+         if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (key_press === '*' || key_press === '/')) {
+            buffer.operator_b = key_press;
             buffer.screen_flag = 2;
          } else {
-            buffer.register_a = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
+            buffer.register_a = reckonOutside();
             buffer.register_b = '';
-            buffer.operator_a = getKeyPress();
+            buffer.operator_a = key_press;
             buffer.screen_flag = 1;
          }
          break;
       case 4:
-         if (getKeyPress() === '+' || getKeyPress() === '-') {
-            buffer.register_a = operate(buffer.register_a, buffer.operator_a,
-               operate(buffer.register_b, buffer.operator_b, buffer.register_b));
+         if (key_press === '+' || key_press === '-') {
+            buffer.register_a = reckonAll();
             buffer.register_b = '';
             buffer.register_c = '';
-            buffer.operator_a = getKeyPress();
+            buffer.operator_a = key_press;
             buffer.operator_b = '';
             buffer.screen_flag = 1;
          } else {
-            buffer.operator_b = getKeyPress();
+            buffer.operator_b = key_press;
             buffer.screen_flag = 2;
          }
          break;
       case 5:
-         if (getKeyPress() === '+' || getKeyPress() === '-') {
-            buffer.register_a = operate(buffer.register_a, buffer.operator_a,
-               operate(buffer.register_b, buffer.operator_b, buffer.register_c));
+         if (key_press === '+' || key_press === '-') {
+            console.log("before reckon\n" + logBuffer());
+            buffer.register_a = reckonAll();
+            console.log("after reckon\n" + logBuffer());
             buffer.register_b = '';
             buffer.register_c = '';
-            buffer.operator_a = getKeyPress();
+            buffer.operator_a = key_press;
             buffer.operator_b = '';
             buffer.screen_flag = 1;
          } else {
             buffer.register_b = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
             buffer.register_c = '';
-            buffer.operator_b = getKeyPress();
+            buffer.operator_b = key_press;
             buffer.screen_flag = 2;
          }
          break;
