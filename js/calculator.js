@@ -5,7 +5,7 @@
 var Calculator = function() {
   'use strict';
 
-  var whoops = 0;
+  let previous_keypress = '';
   let buffer = {
     register_a  : '',
     register_b  : '',
@@ -80,6 +80,9 @@ var Calculator = function() {
       setNumber();
     }
     else if ( operator.indexOf(KeyPress) > -1 ) {
+      if (previous_keypress == '=') {
+        buffer.operator_a = '';
+      }
       setOperator();
     }
     else if ( KeyPress === '=' ) { 
@@ -97,6 +100,7 @@ var Calculator = function() {
     else if ( KeyPress === 'clear' ) {
       clear();
     }
+    previous_keypress = getKeyPress();
   }
 
   function trim(num) {

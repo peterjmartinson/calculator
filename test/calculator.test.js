@@ -626,9 +626,7 @@ q.test('complex operations', function(assert) {
   calculator.sendKeyPress('clear');
   runCalculationSequence('9*6=');
   assert.equal(calculator.buffer.register_a, '54', '9*6=54');
-  console.log(stringifyBuffer());
   calculator.sendKeyPress('-');
-  console.log(stringifyBuffer());
   assert.notEqual(calculator.buffer.register_a, undefined, '54 stays in register a');
 
   calculator.sendKeyPress('clear');
