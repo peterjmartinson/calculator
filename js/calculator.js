@@ -139,10 +139,8 @@ var Calculator = function() {
     if (buffer.register_c === '') {
       buffer.register_c = buffer.register_b
     }
-      console.log("before reckoning Inside\n" + logBuffer());
     let result = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
     buffer.register_b = result.toString();
-      console.log("after reckoning Inside\n" + logBuffer());
     buffer.screen_flag = 2;
   }
 
@@ -150,24 +148,16 @@ var Calculator = function() {
     if (buffer.register_b === '') {
       buffer.register_b = buffer.register_a
     }
-      console.log("before reckoning Outside\n" + logBuffer());
     let result = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
     buffer.register_a = result.toString();
-      console.log("after reckoning Outside\n" + logBuffer());
     buffer.screen_flag = 1;
   }
 
   function reckonAll() {
-    whoops = 0;
     if (buffer.register_b != '' && buffer.register_c != '' && buffer.operator_b != '') {
-      console.log("reckonAll - before reckonInside\n" + logBuffer());
       reckonInside();
-      console.log("reckonAll - before reckonOutside\n" + logBuffer());
       reckonOutside();
-      console.log("reckonAll - after reckonOutside\n" + logBuffer());
-      whoops = 1;
     } else {
-      console.log("whoops! " + whoops);
       reckonOutside();
     }
   }
@@ -296,7 +286,7 @@ var Calculator = function() {
          break;
       case 4:
          if (key_press === '+' || key_press === '-') {
-            buffer.register_a = reckonAll();
+            reckonAll();
             buffer.register_b = '';
             buffer.register_c = '';
             buffer.operator_a = key_press;
@@ -309,9 +299,7 @@ var Calculator = function() {
          break;
       case 5:
          if (key_press === '+' || key_press === '-') {
-            console.log("before reckon\n" + logBuffer());
-            buffer.register_a = reckonAll();
-            console.log("after reckon\n" + logBuffer());
+            reckonAll();
             buffer.register_b = '';
             buffer.register_c = '';
             buffer.operator_a = key_press;
@@ -474,7 +462,7 @@ var Calculator = function() {
       case 6:
          break;
       default:
-         console.log("something other than . happened!");
+         console.log("something other than root happened!");
          break;
     }
   }

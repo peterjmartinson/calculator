@@ -1,5 +1,7 @@
 /*jshint esversion:6, node:true */
+
 'use strict';
+
 const q = QUnit;
 
 q.module('Fundamental Operations');
