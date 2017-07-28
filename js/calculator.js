@@ -136,6 +136,13 @@ var Calculator = function() {
   }
 
   function reckonInside() {
+    if (buffer.register_a == 'ERROR' || buffer.register_a == 'NaN') {
+      return;
+    }
+    if (buffer.register_c == '0' && buffer.operator_b == '/') {
+      divisionByZero();
+      return;
+    }
     if (buffer.register_c === '') {
       buffer.register_c = buffer.register_b
     }
@@ -145,6 +152,11 @@ var Calculator = function() {
   }
 
   function reckonOutside() {
+    if (buffer.register_a == 'ERROR' || buffer.register_a == 'NaN') return;
+    if (buffer.register_b == '0' && buffer.operator_a == '/') {
+      divisionByZero();
+      return;
+    }
     if (buffer.register_b === '') {
       buffer.register_b = buffer.register_a
     }
@@ -154,6 +166,7 @@ var Calculator = function() {
   }
 
   function reckonAll() {
+    if (buffer.register_a == 'ERROR' || buffer.register_a == 'NaN') return;
     if (buffer.register_b != '' && buffer.register_c != '' && buffer.operator_b != '') {
       reckonInside();
       reckonOutside();
@@ -161,6 +174,13 @@ var Calculator = function() {
       reckonOutside();
     }
   }
+
+  function divisionByZero() {
+    buffer.register_a = 'DIV BY 0';
+    buffer.register_b = 'DIV BY 0';
+    buffer.register_c = 'DIV BY 0';
+  }
+
 
   /*
    * DETERMINE CALCULATOR STATE
@@ -278,7 +298,7 @@ var Calculator = function() {
             buffer.operator_b = key_press;
             buffer.screen_flag = 2;
          } else {
-            buffer.register_a = reckonOutside();
+            reckonOutside();
             buffer.register_b = '';
             buffer.operator_a = key_press;
             buffer.screen_flag = 1;
