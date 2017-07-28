@@ -331,7 +331,7 @@ q.test('clears the screen', function(assert) {
   setBuffer(['1', '9', '', '+', '']);
   calculator.setKeyPress('clear');
   calculator.routeKeyPress();
-  assert.deepEqual(calculator.buffer, default_buffer, 'routeKeyPress clears the screen');
+  assert.equal(document.getElementById('screen').innerHTML, '0', 'routeKeyPress clears the screen');
 });
 
 q.test('performs a full calculation', function(assert) {
@@ -351,7 +351,7 @@ q.test('exists', function(assert) {
 q.test('clears the screen', function(assert) {
   setBuffer(['1', '9', '', '+', '']);
   calculator.sendKeyPress('clear');
-  assert.deepEqual(calculator.buffer, default_buffer, 'sendKeyPress clears the screen');
+  assert.equal(document.getElementById('screen').innerHTML, '0', 'sendKeyPress clears the screen');
 });
 
 q.test('sends a number into a register', function(assert) {
@@ -652,7 +652,6 @@ function setBuffer(buffer) {
   calculator.buffer.register_c  = buffer[2]; 
   calculator.buffer.operator_a  = buffer[3]; 
   calculator.buffer.operator_b  = buffer[4]; 
-  calculator.buffer.screen      = buffer[6]; 
   calculator.buffer.screen_flag = buffer[5]; 
   calculator.buffer.state       = buffer[7]; 
   calculator.setState();
@@ -682,7 +681,6 @@ let default_buffer = {
   register_c  : '',
   operator_a  : '',
   operator_b  : '',
-  screen      : '0',
   screen_flag : 1,
   state       : 1
 };

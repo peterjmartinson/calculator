@@ -1,24 +1,29 @@
 /**
- * 
- * 
+ * You kind of have two Screens - a variable, and the acutual calculator screen.
+ * See if you can put those together.
 */
 let Calculator = function() {
   'use strict';
 
 
-  let previous_keypress = '';
+  let key_press = '',
+      previous_keypress = '';
+
+  let register = ['','',''];
+  let operator = ['',''];
+  let screen_flag = 1;
+  let state = 1;
+
   let buffer = {
     register_a  : '',
     register_b  : '',
     register_c  : '',
     operator_a  : '',
     operator_b  : '',
-    screen      : '0',
     screen_flag : 1, // 1 -> show register_a, 2 -> show register_b, 3 -> show register_c
     state       : 1
   };
 
-  let key_press = '';
 
   function sendKeyPress(key) {
     setKeyPress(key);
@@ -212,7 +217,7 @@ let Calculator = function() {
      buffer.register_c = '';
      buffer.operator_a = '';
      buffer.operator_b = '';
-     buffer.screen     = '0';
+     document.getElementById('screen').innerHTML = '0';
      buffer.screen_flag = 1;
      setState();
   }
