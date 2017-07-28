@@ -5,6 +5,7 @@
 var Calculator = function() {
   'use strict';
 
+  var whoops = 0;
   let buffer = {
     register_a  : '',
     register_b  : '',
@@ -157,14 +158,16 @@ var Calculator = function() {
   }
 
   function reckonAll() {
+    whoops = 0;
     if (buffer.register_b != '' && buffer.register_c != '' && buffer.operator_b != '') {
       console.log("reckonAll - before reckonInside\n" + logBuffer());
       reckonInside();
       console.log("reckonAll - before reckonOutside\n" + logBuffer());
       reckonOutside();
       console.log("reckonAll - after reckonOutside\n" + logBuffer());
+      whoops = 1;
     } else {
-      console.log("whoops!");
+      console.log("whoops! " + whoops);
       reckonOutside();
     }
   }
