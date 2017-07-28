@@ -1,9 +1,10 @@
 /**
- * replace `operate` with the reckon functions in setOperator
- * you hit the "whoops" when you should not!!!
+ * 
+ * 
 */
-var Calculator = function() {
+let Calculator = function() {
   'use strict';
+
 
   let previous_keypress = '';
   let buffer = {
@@ -17,45 +18,22 @@ var Calculator = function() {
     state       : 1
   };
 
-  let cowport = document.getElementById("cowport");
-  let screen = document.getElementById("screen");
-  document.addEventListener('keydown', keyHandler, 0);
-
-  const key_map = {
-      187: '=',
-      80: '+',
-      77: '-',
-      84: '*',
-      68: '/',
-      48: '0',
-      49: '1',
-      50: '2',
-      51: '3',
-      52: '4',
-      53: '5',
-      54: '6',
-      55: '7',
-      56: '8',
-      57: '9',
-      67: 'clear'
-  }
-
-  let KeyPress = '';
+  let key_press = '';
 
   function sendKeyPress(key) {
     setKeyPress(key);
     routeKeyPress();
     setState();
     updateScreen();
-    cowport.innerHTML = logBuffer();
+    document.getElementById("cowport").innerHTML = logBuffer();
   }
 
   function getKeyPress() {
-    return KeyPress;
+    return key_press;
   }
 
   function setKeyPress(new_keypress) {
-    KeyPress = new_keypress.toString();
+    key_press = new_keypress.toString();
   }
 
 
@@ -69,35 +47,31 @@ var Calculator = function() {
     return output;
   }
 
-  function keyHandler(key) {
-    sendKeyPress(key_map[key.keyCode]);
-  }
-
   function routeKeyPress() {
     let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         operator = ['+', '-', '*', '/'];
-    if ( number.indexOf(KeyPress) > -1 ) {
+    if ( number.indexOf(key_press) > -1 ) {
       setNumber();
     }
-    else if ( operator.indexOf(KeyPress) > -1 ) {
+    else if ( operator.indexOf(key_press) > -1 ) {
       if (previous_keypress == '=') {
         buffer.operator_a = '';
       }
       setOperator();
     }
-    else if ( KeyPress === '=' ) { 
+    else if ( key_press === '=' ) { 
       reckonAll();
     }
-    else if ( KeyPress === 'pm' ) {
+    else if ( key_press === 'pm' ) {
       flipSign();
     }
-    else if ( KeyPress === '.' ) {
+    else if ( key_press === '.' ) {
       appendDecimal();
     }
-    else if ( KeyPress === 'root' ) {
+    else if ( key_press === 'root' ) {
       calculateSquareRoot();
     }
-    else if ( KeyPress === 'clear' ) {
+    else if ( key_press === 'clear' ) {
       clear();
     }
     previous_keypress = getKeyPress();
@@ -216,6 +190,7 @@ var Calculator = function() {
   }
 
   function updateScreen() {
+    let screen = document.getElementById("screen");
     if (buffer.screen_flag === 1) {
        if (buffer.register_a === '') {
           screen.innerHTML = '0';
