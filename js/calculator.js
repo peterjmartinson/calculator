@@ -1,6 +1,6 @@
 /**
- * You kind of have two Screens - a variable, and the acutual calculator screen.
- * See if you can put those together.
+ * 
+ * 
 */
 let Calculator = function() {
   'use strict';
@@ -60,7 +60,7 @@ let Calculator = function() {
     }
     else if ( operator.indexOf(key_press) > -1 ) {
       if (previous_keypress == '=') {
-        buffer.operator_a = '';
+        operator[0] = '';
       }
       setOperator();
     }
@@ -119,38 +119,38 @@ let Calculator = function() {
   }
 
   function reckonInside() {
-    if (buffer.register_a == 'ERROR' || buffer.register_a == 'NaN') {
+    if (register[0] == 'ERROR' || register[0] == 'NaN') {
       return;
     }
-    if (buffer.register_c == '0' && buffer.operator_b == '/') {
+    if (register[2] == '0' && operator[1] == '/') {
       divisionByZero();
       return;
     }
-    if (buffer.register_c === '') {
-      buffer.register_c = buffer.register_b
+    if (register[2] === '') {
+      register[2] = register[1]
     }
-    let result = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
-    buffer.register_b = result.toString();
+    let result = operate(register[1], operator[1], register[2]);
+    register[1] = result.toString();
     buffer.screen_flag = 2;
   }
 
   function reckonOutside() {
-    if (buffer.register_a == 'ERROR' || buffer.register_a == 'NaN') return;
-    if (buffer.register_b == '0' && buffer.operator_a == '/') {
+    if (register[0] == 'ERROR' || register[0] == 'NaN') return;
+    if (register[1] == '0' && operator[0] == '/') {
       divisionByZero();
       return;
     }
-    if (buffer.register_b === '') {
-      buffer.register_b = buffer.register_a
+    if (register[1] === '') {
+      register[1] = register[0]
     }
-    let result = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
-    buffer.register_a = result.toString();
+    let result = operate(register[0], operator[0], register[1]);
+    register[0] = result.toString();
     buffer.screen_flag = 1;
   }
 
   function reckonAll() {
-    if (buffer.register_a == 'ERROR' || buffer.register_a == 'NaN') return;
-    if (buffer.register_b != '' && buffer.register_c != '' && buffer.operator_b != '') {
+    if (register[0] == 'ERROR' || register[0] == 'NaN') return;
+    if (register[1] != '' && register[2] != '' && operator[1] != '') {
       reckonInside();
       reckonOutside();
     } else {
@@ -159,9 +159,9 @@ let Calculator = function() {
   }
 
   function divisionByZero() {
-    buffer.register_a = 'DIV BY 0';
-    buffer.register_b = 'DIV BY 0';
-    buffer.register_c = 'DIV BY 0';
+    register[0] = 'DIV BY 0';
+    register[1] = 'DIV BY 0';
+    register[2] = 'DIV BY 0';
   }
 
 
@@ -177,19 +177,19 @@ let Calculator = function() {
    * Case 5)  A | B | C | + | * |
    */
   function setState() {
-      if (buffer.register_a === 'DIV BY 0' || buffer.register_b === 'DIV BY 0') {
+      if (register[0] === 'DIV BY 0' || register[1] === 'DIV BY 0') {
         buffer.state = 6;
-      } else if (buffer.register_a === 'ERROR' || buffer.register_b === 'ERROR') {
+      } else if (register[0] === 'ERROR' || register[1] === 'ERROR') {
         buffer.state = 6;
-      } else if (buffer.operator_a === '') {
+      } else if (operator[0] === '') {
         buffer.state = 1;
-      } else if (buffer.operator_a !== '' && buffer.register_b === '') {
+      } else if (operator[0] !== '' && register[1] === '') {
         buffer.state = 2;
-      } else if (buffer.operator_a !== '' && buffer.register_a !== '' && buffer.operator_b === '') {
+      } else if (operator[0] !== '' && register[0] !== '' && operator[1] === '') {
         buffer.state = 3;
-      } else if (buffer.operator_b !== '' && buffer.register_c === '') {
+      } else if (operator[1] !== '' && register[2] === '') {
         buffer.state = 4;
-      } else if (buffer.operator_b !== '' && buffer.register_c !== '') {
+      } else if (operator[1] !== '' && register[2] !== '') {
         buffer.state = 5;
       }
   }
@@ -197,26 +197,26 @@ let Calculator = function() {
   function updateScreen() {
     let screen = document.getElementById("screen");
     if (buffer.screen_flag === 1) {
-       if (buffer.register_a === '') {
+       if (register[0] === '') {
           screen.innerHTML = '0';
        } else {
-          screen.innerHTML = buffer.register_a;
+          screen.innerHTML = register[0];
        }
     }
     if (buffer.screen_flag === 2) {
-       screen.innerHTML = buffer.register_b;
+       screen.innerHTML = register[1];
     }
     if (buffer.screen_flag === 3) {
-       screen.innerHTML = buffer.register_c;
+       screen.innerHTML = register[2];
     }
   }
 
   function clear() {
-     buffer.register_a = '';
-     buffer.register_b = '';
-     buffer.register_c = '';
-     buffer.operator_a = '';
-     buffer.operator_b = '';
+     register[0] = '';
+     register[1] = '';
+     register[2] = '';
+     operator[0] = '';
+     operator[1] = '';
      document.getElementById('screen').innerHTML = '0';
      buffer.screen_flag = 1;
      setState();
@@ -226,35 +226,35 @@ let Calculator = function() {
     switch(buffer.state) {
       case 1:
         buffer.screen_flag = 1;
-        if (buffer.register_a === '' || buffer.register_a === '0') {
-          buffer.register_a = getKeyPress();
-        } else if (buffer.register_a.length < 10) {
-          buffer.register_a = buffer.register_a + getKeyPress();
+        if (register[0] === '' || register[0] === '0') {
+          register[0] = getKeyPress();
+        } else if (register[0].length < 10) {
+          register[0] = register[0] + getKeyPress();
         }
         break;
       case 2:
         buffer.screen_flag = 2;
-        if (buffer.register_b === '' || buffer.register_b === '0') {
-          buffer.register_b = getKeyPress();
-        } else if (buffer.register_b.length < 10) {
-          buffer.register_b = buffer.register_b + getKeyPress();
+        if (register[1] === '' || register[1] === '0') {
+          register[1] = getKeyPress();
+        } else if (register[1].length < 10) {
+          register[1] = register[1] + getKeyPress();
         }
         break;
       case 3:
-        if (buffer.register_b === '' || buffer.register_b === '0') {
-          buffer.register_b = getKeyPress();
-        } else if (buffer.register_b.length < 10) {
-          buffer.register_b = buffer.register_b + getKeyPress();
+        if (register[1] === '' || register[1] === '0') {
+          register[1] = getKeyPress();
+        } else if (register[1].length < 10) {
+          register[1] = register[1] + getKeyPress();
         }
         buffer.screen_flag = 2;
         break;
       case 4:
-         buffer.register_c = getKeyPress();
+         register[2] = getKeyPress();
          buffer.screen_flag = 3;
          break;
       case 5:
-         if (buffer.register_c.length < 10) {
-            buffer.register_c = buffer.register_c + getKeyPress();
+         if (register[2].length < 10) {
+            register[2] = register[2] + getKeyPress();
             buffer.screen_flag = 3;
          }
          break;
@@ -270,49 +270,49 @@ let Calculator = function() {
     let key_press = getKeyPress();
     switch (buffer.state) {
       case 1:
-         buffer.operator_a = key_press;
+         operator[0] = key_press;
          buffer.screen_flag = 1;
          break;
       case 2:
-         buffer.operator_a = key_press;
+         operator[0] = key_press;
          buffer.screen_flag = 1;
          break;
       case 3:
-         if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (key_press === '*' || key_press === '/')) {
-            buffer.operator_b = key_press;
+         if ((operator[0] === '+' || operator[0] === '-') && (key_press === '*' || key_press === '/')) {
+            operator[1] = key_press;
             buffer.screen_flag = 2;
          } else {
             reckonOutside();
-            buffer.register_b = '';
-            buffer.operator_a = key_press;
+            register[1] = '';
+            operator[0] = key_press;
             buffer.screen_flag = 1;
          }
          break;
       case 4:
          if (key_press === '+' || key_press === '-') {
             reckonAll();
-            buffer.register_b = '';
-            buffer.register_c = '';
-            buffer.operator_a = key_press;
-            buffer.operator_b = '';
+            register[1] = '';
+            register[2] = '';
+            operator[0] = key_press;
+            operator[1] = '';
             buffer.screen_flag = 1;
          } else {
-            buffer.operator_b = key_press;
+            operator[1] = key_press;
             buffer.screen_flag = 2;
          }
          break;
       case 5:
          if (key_press === '+' || key_press === '-') {
             reckonAll();
-            buffer.register_b = '';
-            buffer.register_c = '';
-            buffer.operator_a = key_press;
-            buffer.operator_b = '';
+            register[1] = '';
+            register[2] = '';
+            operator[0] = key_press;
+            operator[1] = '';
             buffer.screen_flag = 1;
          } else {
-            buffer.register_b = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
-            buffer.register_c = '';
-            buffer.operator_b = key_press;
+            register[1] = operate(register[1], operator[1], register[2]);
+            register[2] = '';
+            operator[1] = key_press;
             buffer.screen_flag = 2;
          }
          break;
@@ -327,25 +327,25 @@ let Calculator = function() {
   function flipSign() {
     switch (buffer.state) {
       case 1:
-        if (buffer.register_a !== 'empty' && buffer.register_a !== '0') {
-          buffer.register_a = Number(buffer.register_a * -1).toString();
+        if (register[0] !== 'empty' && register[0] !== '0') {
+          register[0] = Number(register[0] * -1).toString();
           buffer.screen_flag = 1;
         }
         break;
       case 2:
-        buffer.register_b = Number(buffer.register_a * -1).toString();
+        register[1] = Number(register[0] * -1).toString();
         buffer.screen_flag = 2;
         break;
       case 3:
-        buffer.register_b = Number(buffer.register_b * -1).toString();
+        register[1] = Number(register[1] * -1).toString();
         buffer.screen_flag = 2;
         break;
       case 4:
-        buffer.register_c = Number(buffer.register_b * -1).toString();
+        register[2] = Number(register[1] * -1).toString();
         buffer.screen_flag = 3;
         break;
       case 5:
-        buffer.register_c = Number(buffer.register_c * -1).toString();
+        register[2] = Number(register[2] * -1).toString();
         buffer.screen_flag = 3;
         break;
       case 6:
@@ -359,30 +359,30 @@ let Calculator = function() {
   function appendDecimal() {
     switch (buffer.state) {
       case 1:
-         if (buffer.register_a.indexOf('.') === -1 && buffer.register_a.length < 10) {
-            if (buffer.register_a === '' || buffer.register_a === '0') {
-               buffer.register_a = '0.';
+         if (register[0].indexOf('.') === -1 && register[0].length < 10) {
+            if (register[0] === '' || register[0] === '0') {
+               register[0] = '0.';
             } else {
-               buffer.register_a = buffer.register_a + '.';
+               register[0] = register[0] + '.';
             }
          }
          break;
       case 2:
-         buffer.register_b = '0.';
+         register[1] = '0.';
          buffer.screen_flag = 2;
          break;
       case 3:
-         if (buffer.register_b.indexOf('.') === -1 && buffer.register_b.length < 10) {
-            buffer.register_b = buffer.register_b + '.';
+         if (register[1].indexOf('.') === -1 && register[1].length < 10) {
+            register[1] = register[1] + '.';
          }
          break;
       case 4:
-         buffer.register_c = '0.';
+         register[2] = '0.';
          buffer.screen_flag = 3;
          break;
       case 5:
-         if (buffer.register_c.indexOf('.') === -1 && buffer.register_c.length < 10) {
-            buffer.register_c = buffer.register_c + '.';
+         if (register[2].indexOf('.') === -1 && register[2].length < 10) {
+            register[2] = register[2] + '.';
          }
          break;
       case 6:
@@ -396,68 +396,68 @@ let Calculator = function() {
   function calculateSquareRoot() {
     switch (buffer.state) {
       case 1:
-         if (buffer.register_a > 0) {
-            buffer.register_a = trim(Math.sqrt(Number(buffer.register_a)).toString());
+         if (register[0] > 0) {
+            register[0] = trim(Math.sqrt(Number(register[0])).toString());
             buffer.screen_flag = 1;
-         } else if (buffer.register_a === '' || buffer.register_a === '0') {
-            buffer.register_a = '0';
+         } else if (register[0] === '' || register[0] === '0') {
+            register[0] = '0';
             buffer.screen_flag = 1;
          } else {
-            buffer.register_a = 'ERROR';
-            buffer.register_b = '';
-            buffer.register_c = '';
+            register[0] = 'ERROR';
+            register[1] = '';
+            register[2] = '';
             buffer.opA = '';
             buffer.opB = '';
             buffer.screen_flag = 1;
          }
          break;
       case 2:
-         if (buffer.register_a > 0) {
-            buffer.register_b = trim(Math.sqrt(Number(buffer.register_a)).toString());
+         if (register[0] > 0) {
+            register[1] = trim(Math.sqrt(Number(register[0])).toString());
             buffer.screen_flag = 2;
          } else {
-            buffer.register_a = 'ERROR';
-            buffer.register_b = '';
-            buffer.register_c = '';
+            register[0] = 'ERROR';
+            register[1] = '';
+            register[2] = '';
             buffer.opA = '';
             buffer.opB = '';
             buffer.screen_flag = 1;
          }
          break;
       case 3:
-         if (buffer.register_b > 0) {
-            buffer.register_b = trim(Math.sqrt(Number(buffer.register_b)).toString());
+         if (register[1] > 0) {
+            register[1] = trim(Math.sqrt(Number(register[1])).toString());
             buffer.screen_flag = 2;
          } else {
-            buffer.register_a = 'ERROR';
-            buffer.register_b = '';
-            buffer.register_c = '';
+            register[0] = 'ERROR';
+            register[1] = '';
+            register[2] = '';
             buffer.opA = '';
             buffer.opB = '';
             buffer.screen_flag = 1;
          }
          break;
       case 4:
-         if (buffer.register_b > 0) {
-            buffer.register_c = trim(Math.sqrt(Number(buffer.register_b)).toString());
+         if (register[1] > 0) {
+            register[2] = trim(Math.sqrt(Number(register[1])).toString());
             buffer.screen_flag = 3;
          } else {
-            buffer.register_a = 'ERROR';
-            buffer.register_b = '';
-            buffer.register_c = '';
+            register[0] = 'ERROR';
+            register[1] = '';
+            register[2] = '';
             buffer.opA = '';
             buffer.opB = '';
             buffer.screen_flag = 1;
          }
          break;
       case 5:
-         if (buffer.register_c > 0) {
-            buffer.register_c = trim(Math.sqrt(Number(buffer.register_c)).toString());
+         if (register[2] > 0) {
+            register[2] = trim(Math.sqrt(Number(register[2])).toString());
             buffer.screen_flag = 3;
          } else {
-            buffer.register_a = 'ERROR';
-            buffer.register_b = '';
-            buffer.register_c = '';
+            register[0] = 'ERROR';
+            register[1] = '';
+            register[2] = '';
             buffer.opA = '';
             buffer.opB = '';
             buffer.screen_flag = 1;
@@ -489,7 +489,9 @@ let Calculator = function() {
     flipSign      : flipSign,
     appendDecimal : appendDecimal,
     calculateSquareRoot : calculateSquareRoot,
-    sendKeyPress  : sendKeyPress
+    sendKeyPress  : sendKeyPress,
+    register      : register,
+    operator      : operator
   };
 
 
