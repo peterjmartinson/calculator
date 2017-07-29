@@ -30,7 +30,7 @@ let Calculator = function() {
     routeKeyPress();
     setState();
     updateScreen();
-    document.getElementById("cowport").innerHTML = logBuffer();
+    document.getElementById("cowport").innerHTML = logInternals();
   }
 
   function getKeyPress() {
@@ -49,13 +49,16 @@ let Calculator = function() {
     return screen_flag;
   }
 
-  function logBuffer() {
+  function logInternals() {
     let output = '';
-    for (let property in buffer) {
-      if ( buffer.hasOwnProperty(property) ) {
-        output += buffer[property] + ', ';
-      }
-    }
+    output += register[0] + ', ';
+    output += register[1] + ', ';
+    output += register[2] + ', ';
+    output += operator[0] + ', ';
+    output += operator[1] + ', ';
+    output += getScreenFlag() + ', ';
+    output += document.getElementById('screen').innerHTML + ', ';
+    output += buffer.state;
     return output;
   }
 
@@ -441,8 +444,8 @@ let Calculator = function() {
             register[0] = 'ERROR';
             register[1] = '';
             register[2] = '';
-            buffer.opA = '';
-            buffer.opB = '';
+            operator[0] = '';
+            operator[1] = '';
             setScreenFlag(1);
             // buffer.screen_flag = 1;
          }
@@ -456,8 +459,8 @@ let Calculator = function() {
             register[0] = 'ERROR';
             register[1] = '';
             register[2] = '';
-            buffer.opA = '';
-            buffer.opB = '';
+            operator[0] = '';
+            operator[1] = '';
             setScreenFlag(1);
             // buffer.screen_flag = 1;
          }
@@ -471,8 +474,8 @@ let Calculator = function() {
             register[0] = 'ERROR';
             register[1] = '';
             register[2] = '';
-            buffer.opA = '';
-            buffer.opB = '';
+            operator[0] = '';
+            operator[1] = '';
             setScreenFlag(1);
             // buffer.screen_flag = 1;
          }
@@ -486,8 +489,8 @@ let Calculator = function() {
             register[0] = 'ERROR';
             register[1] = '';
             register[2] = '';
-            buffer.opA = '';
-            buffer.opB = '';
+            operator[0] = '';
+            operator[1] = '';
             setScreenFlag(1);
             // buffer.screen_flag = 1;
          }
@@ -501,8 +504,8 @@ let Calculator = function() {
             register[0] = 'ERROR';
             register[1] = '';
             register[2] = '';
-            buffer.opA = '';
-            buffer.opB = '';
+            operator[0] = '';
+            operator[1] = '';
             setScreenFlag(1);
             // buffer.screen_flag = 1;
          }
