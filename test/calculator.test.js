@@ -124,38 +124,51 @@ q.test('can be set and gotten', function(assert) {
 
 });
 
-q.module('setState()');
-q.test('exists', function(assert) {
+q.module('state');
+q.test('has a setter and getter', function(assert) {
+  assert.equal(typeof calculator.getState, 'function', 'getState is a function on C');
   assert.equal(typeof calculator.setState, 'function', 'setState is a function on C');
+});
+q.test('can be set and gotten', function(assert) {
+  calculator.setState(1);
+  assert.equal(calculator.getState(), 1, 'screen_flag gets set and got');
+  calculator.setState(2);
+  assert.equal(calculator.getState(), 2, 'screen_flag gets set and got');
+
+});
+
+q.module('setCalculatorState()');
+q.test('exists', function(assert) {
+  assert.equal(typeof calculator.setCalculatorState, 'function', 'setCalculatorState is a function on C');
 });
 q.test('returns the correct states', function(assert) {
 
   setCalculator(['','','','','']);
-  assert.equal(calculator.buffer.state, 1, 'state 1');
+  assert.equal(calculator.getState(), 1, 'state 1');
 
   setCalculator(['', '', '', '+', '']);
-  assert.equal(calculator.buffer.state, 2, 'state 2');
+  assert.equal(calculator.getState(), 2, 'state 2');
 
   setCalculator(['1', '1', '', '1', '']);
-  assert.equal(calculator.buffer.state, 3, 'state 3');
+  assert.equal(calculator.getState(), 3, 'state 3');
 
   setCalculator(['1', '1', '', '1', '1']);
-  assert.equal(calculator.buffer.state, 4, 'state 4');
+  assert.equal(calculator.getState(), 4, 'state 4');
 
   setCalculator(['1', '1', '1', '1', '1']);
-  assert.equal(calculator.buffer.state, 5, 'state 5');
+  assert.equal(calculator.getState(), 5, 'state 5');
 
   setCalculator(['DIV BY 0', '', '', '', '']);
-  assert.equal(calculator.buffer.state, 6, 'state 6');
+  assert.equal(calculator.getState(), 6, 'state 6');
 
   setCalculator(['', 'DIV BY 0', '', '', '']);
-  assert.equal(calculator.buffer.state, 6, 'state 6');
+  assert.equal(calculator.getState(), 6, 'state 6');
 
   setCalculator(['ERROR', '', '', '', '']);
-  assert.equal(calculator.buffer.state, 6, 'state 6');
+  assert.equal(calculator.getState(), 6, 'state 6');
 
   setCalculator(['', 'ERROR', '', '', '']);
-  assert.equal(calculator.buffer.state, 6, 'state 6');
+  assert.equal(calculator.getState(), 6, 'state 6');
 });
 
 q.module('clear');
@@ -168,7 +181,7 @@ q.test('resets the calculator', function(assert) {
   assert.deepEqual(calculator.register, default_register, 'clear resets the registers');
   assert.deepEqual(calculator.operator, default_operator, 'clear resets the operators');
   assert.deepEqual(calculator.getScreenFlag(), 1, 'clear resets the screen flag');
-  assert.deepEqual(calculator.buffer.state, 1, 'clear resets the state');
+  assert.deepEqual(calculator.getState(), 1, 'clear resets the state');
   assert.deepEqual(document.getElementById('screen').innerHTML, '0', 'clear resets the screen');
 });
 
@@ -665,8 +678,8 @@ function setCalculator(arr) {
   calculator.operator[0]   = arr[3]; 
   calculator.operator[1]   = arr[4]; 
   calculator.setScreenFlag(arr[5]); 
-  calculator.buffer.state  = arr[7]; 
-  calculator.setState();
+  calculator.setState(arr[7]); 
+  calculator.setCalculatorState();
 }
 
 function setBuffer(buffer) {
@@ -677,7 +690,7 @@ function setBuffer(buffer) {
   calculator.operator[1]  = buffer[4]; 
   calculator.buffer.screen_flag = buffer[5]; 
   calculator.buffer.state       = buffer[7]; 
-  calculator.setState();
+  calculator.setCalculatorState();
 }
 
 function resetBuffer() {
@@ -694,7 +707,7 @@ function stringifyBuffer() {
        + calculator.register[2] + ', '
        + calculator.operator[0] + ', '
        + calculator.operator[1] + ', '
-       + calculator.buffer.state;
+       + calculator.getState();
 }
   
 
