@@ -14,16 +14,6 @@ let Calculator = function() {
   let screen_flag = 1;
   let state = 1;
 
-  let buffer = {
-    register_a  : '',
-    register_b  : '',
-    register_c  : '',
-    operator_a  : '',
-    operator_b  : '',
-    screen_flag : 1, // 1 -> show register_a, 2 -> show register_b, 3 -> show register_c
-    state       : 1
-  };
-
   function setState(new_state) {
     state = new_state;
   }
@@ -40,12 +30,12 @@ let Calculator = function() {
     document.getElementById("cowport").innerHTML = logInternals();
   }
 
-  function getKeyPress() {
-    return key_press;
-  }
-
   function setKeyPress(new_keypress) {
     key_press = new_keypress.toString();
+  }
+
+  function getKeyPress() {
+    return key_press;
   }
 
   function setScreenFlag(flag) {
@@ -533,7 +523,6 @@ let Calculator = function() {
     updateScreen  : updateScreen,
     setNumber     : setNumber,
     setOperator   : setOperator,
-    buffer        : buffer,
     reckonInside  : reckonInside,
     reckonOutside : reckonOutside,
     reckonAll     : reckonAll,
