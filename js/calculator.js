@@ -139,7 +139,6 @@ let Calculator = function() {
     let result = operate(register[1], operator[1], register[2]);
     register[1] = result.toString();
     setScreenFlag(2);
-    // buffer.screen_flag = 2;
   }
 
   function reckonOutside() {
@@ -154,7 +153,6 @@ let Calculator = function() {
     let result = operate(register[0], operator[0], register[1]);
     register[0] = result.toString();
     setScreenFlag(1);
-    // buffer.screen_flag = 1;
   }
 
   function reckonAll() {
@@ -206,7 +204,6 @@ let Calculator = function() {
   function updateScreen() {
     let screen = document.getElementById("screen");
     if (getScreenFlag() === 1) {
-    // if (buffer.screen_flag === 1) {
        if (register[0] === '') {
           screen.innerHTML = '0';
        } else {
@@ -214,11 +211,9 @@ let Calculator = function() {
        }
     }
     if (getScreenFlag() === 2) {
-    // if (buffer.screen_flag === 2) {
        screen.innerHTML = register[1];
     }
     if (getScreenFlag() === 3) {
-    // if (buffer.screen_flag === 3) {
        screen.innerHTML = register[2];
     }
   }
@@ -231,7 +226,6 @@ let Calculator = function() {
      operator[1] = '';
      document.getElementById('screen').innerHTML = '0';
      setScreenFlag(1);
-     // buffer.screen_flag = 1;
      setCalculatorState();
   }
 
@@ -239,7 +233,6 @@ let Calculator = function() {
     switch(getState()) {
       case 1:
         setScreenFlag(1);
-        // buffer.screen_flag = 1;
         if (register[0] === '' || register[0] === '0') {
           register[0] = getKeyPress();
         } else if (register[0].length < 10) {
@@ -248,7 +241,6 @@ let Calculator = function() {
         break;
       case 2:
         setScreenFlag(2);
-        // buffer.screen_flag = 2;
         if (register[1] === '' || register[1] === '0') {
           register[1] = getKeyPress();
         } else if (register[1].length < 10) {
@@ -262,18 +254,15 @@ let Calculator = function() {
           register[1] = register[1] + getKeyPress();
         }
         setScreenFlag(2);
-        // buffer.screen_flag = 2;
         break;
       case 4:
          register[2] = getKeyPress();
          setScreenFlag(3);
-         // buffer.screen_flag = 3;
          break;
       case 5:
          if (register[2].length < 10) {
             register[2] = register[2] + getKeyPress();
             setScreenFlag(3);
-            // buffer.screen_flag = 3;
          }
          break;
       case 6:
@@ -290,24 +279,20 @@ let Calculator = function() {
       case 1:
          operator[0] = key_press;
          setScreenFlag(1);
-         // buffer.screen_flag = 1;
          break;
       case 2:
          operator[0] = key_press;
          setScreenFlag(1);
-         // buffer.screen_flag = 1;
          break;
       case 3:
          if ((operator[0] === '+' || operator[0] === '-') && (key_press === '*' || key_press === '/')) {
             operator[1] = key_press;
             setScreenFlag(2);
-            // buffer.screen_flag = 2;
          } else {
             reckonOutside();
             register[1] = '';
             operator[0] = key_press;
             setScreenFlag(1);
-            // buffer.screen_flag = 1;
          }
          break;
       case 4:
@@ -318,11 +303,9 @@ let Calculator = function() {
             operator[0] = key_press;
             operator[1] = '';
             setScreenFlag(1);
-            // buffer.screen_flag = 1;
          } else {
             operator[1] = key_press;
             setScreenFlag(2);
-            // buffer.screen_flag = 2;
          }
          break;
       case 5:
@@ -333,13 +316,11 @@ let Calculator = function() {
             operator[0] = key_press;
             operator[1] = '';
             setScreenFlag(1);
-            // buffer.screen_flag = 1;
          } else {
             register[1] = operate(register[1], operator[1], register[2]);
             register[2] = '';
             operator[1] = key_press;
             setScreenFlag(2);
-            // buffer.screen_flag = 2;
          }
          break;
       case 6:
@@ -356,28 +337,23 @@ let Calculator = function() {
         if (register[0] !== 'empty' && register[0] !== '0') {
           register[0] = Number(register[0] * -1).toString();
           setScreenFlag(1);
-          // buffer.screen_flag = 1;
         }
         break;
       case 2:
         register[1] = Number(register[0] * -1).toString();
         setScreenFlag(2);
-        // buffer.screen_flag = 2;
         break;
       case 3:
         register[1] = Number(register[1] * -1).toString();
         setScreenFlag(2);
-        // buffer.screen_flag = 2;
         break;
       case 4:
         register[2] = Number(register[1] * -1).toString();
         setScreenFlag(3);
-        // buffer.screen_flag = 3;
         break;
       case 5:
         register[2] = Number(register[2] * -1).toString();
         setScreenFlag(3);
-        // buffer.screen_flag = 3;
         break;
       case 6:
         break;
@@ -401,7 +377,6 @@ let Calculator = function() {
       case 2:
          register[1] = '0.';
          setScreenFlag(2);
-         // buffer.screen_flag = 2;
          break;
       case 3:
          if (register[1].indexOf('.') === -1 && register[1].length < 10) {
@@ -411,7 +386,6 @@ let Calculator = function() {
       case 4:
          register[2] = '0.';
          setScreenFlag(3);
-         // buffer.screen_flag = 3;
          break;
       case 5:
          if (register[2].indexOf('.') === -1 && register[2].length < 10) {
@@ -432,11 +406,9 @@ let Calculator = function() {
          if (register[0] > 0) {
             register[0] = trim(Math.sqrt(Number(register[0])).toString());
             setScreenFlag(1);
-            // buffer.screen_flag = 1;
          } else if (register[0] === '' || register[0] === '0') {
             register[0] = '0';
             setScreenFlag(1);
-            // buffer.screen_flag = 1;
          } else {
             register[0] = 'ERROR';
             register[1] = '';
@@ -444,14 +416,12 @@ let Calculator = function() {
             operator[0] = '';
             operator[1] = '';
             setScreenFlag(1);
-            // buffer.screen_flag = 1;
          }
          break;
       case 2:
          if (register[0] > 0) {
             register[1] = trim(Math.sqrt(Number(register[0])).toString());
             setScreenFlag(2);
-            // buffer.screen_flag = 2;
          } else {
             register[0] = 'ERROR';
             register[1] = '';
@@ -459,14 +429,12 @@ let Calculator = function() {
             operator[0] = '';
             operator[1] = '';
             setScreenFlag(1);
-            // buffer.screen_flag = 1;
          }
          break;
       case 3:
          if (register[1] > 0) {
             register[1] = trim(Math.sqrt(Number(register[1])).toString());
             setScreenFlag(2);
-            // buffer.screen_flag = 2;
          } else {
             register[0] = 'ERROR';
             register[1] = '';
@@ -474,14 +442,12 @@ let Calculator = function() {
             operator[0] = '';
             operator[1] = '';
             setScreenFlag(1);
-            // buffer.screen_flag = 1;
          }
          break;
       case 4:
          if (register[1] > 0) {
             register[2] = trim(Math.sqrt(Number(register[1])).toString());
             setScreenFlag(3);
-            // buffer.screen_flag = 3;
          } else {
             register[0] = 'ERROR';
             register[1] = '';
@@ -489,14 +455,12 @@ let Calculator = function() {
             operator[0] = '';
             operator[1] = '';
             setScreenFlag(1);
-            // buffer.screen_flag = 1;
          }
          break;
       case 5:
          if (register[2] > 0) {
             register[2] = trim(Math.sqrt(Number(register[2])).toString());
             setScreenFlag(3);
-            // buffer.screen_flag = 3;
          } else {
             register[0] = 'ERROR';
             register[1] = '';
@@ -504,7 +468,6 @@ let Calculator = function() {
             operator[0] = '';
             operator[1] = '';
             setScreenFlag(1);
-            // buffer.screen_flag = 1;
          }
          break;
       case 6:
