@@ -5,74 +5,69 @@
 }
 
 .primary {
-   background-color: #107691;
+  background-color: #107691;
 }
 
 .gray-dark {
-   background-color: #354044;
+  background-color: #354044;
 }
 
 .gray-light {
-   background-color: #f8fafa;
+  background-color: #f8fafa;
 }
 
 .white {
-   background-color: #ffffff;
+  background-color: #ffffff;
 }
 
 .black {
-   background-color: #000000;
+  background-color: #000000;
 }
 
 .accent {
-   background-color: #E97F13;
+  background-color: #E97F13;
 }
 
 .calc-body {
-   width: 280px;
-   height: 410px;
-   padding: 5px 5px 5px 5px;
-   margin: auto;
+  width: 280px;
+  height: 410px;
+  margin: auto;
 }
 
 .calc-button {
-   font-family: "Helvetica", sans-serif;
-   font-size: 24px;
-   border: 1px solid black;
-   width: 70px;
-   height: 70px;
-   float: left;
-   color: #000000;
+  font-family: "Helvetica", sans-serif;
+  font-size: 24px;
+  border: 1px solid black;
+  width: 70px;
+  height: 70px;
+  float: left;
+  color: #000000;
 }
 
 .calc-button:hover {
-   background-color: #d9b310;
+  background-color: #d9b310;
 }
 
 .calc-screen {
-   font-family: "Inconsolata", monospace;
-   background-color: #000000;
-   color: #E97F13;
-   text-align: right;
-   vertical-align: middle;
-   font-size: 45px;
-   font-weight: bold;
-   border: 1px solid black;
-   width: auto;
-   height: 50px;
-   margin: auto;
-   padding: 0px 14px 0px 0px;
-}
-
-#blurb {
-  display: inline;
-  width: 255px; 
+  font-family: "Inconsolata", monospace;
+  background-color: #000000;
+  color: #E97F13;
+  text-align: right;
+  vertical-align: middle;
+  font-size: 45px;
+  font-weight: normal;
+  border: 1px solid black;
+  width: auto;
+  height: 50px;
+  margin: auto;
+  padding: 0px 14px 0px 0px;
 }
 
 #cowport {
   display: inline;
   color: #000000;
   width: 255px;
+  text-align: center;
 }
 
 #cowport ul {
@@ -80,22 +75,24 @@
   padding: 0px;
 }
 
-#cowport li {
-}
-
 #cowport span {
- font-family: "Inconsolata", monospace;
+  font-family: "Inconsolata", monospace;
   display: inline-block;
   background: #c0c0c0;
   border: 1px solid white;
   padding: 5px;
+  min-width: 120px;
 }
 
-#cowport .title {
-  min-width: 150px;
+@media (min-width: 1000px) {
+  .calc-body {
+    float: left;
+    margin-left: 100px;
+    margin-right: 100px;
+  }
+
+  #cowport {
+    text-align: left;
+  }
+
 }
-  
-#cowport .value {
-  min-width: 80px;
-}
-  

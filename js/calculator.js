@@ -108,14 +108,29 @@ let Calculator = function() {
 
   function logInternals() {
     let output = '';
-    output += register[0] + ', ';
-    output += register[1] + ', ';
-    output += register[2] + ', ';
-    output += operator[0] + ', ';
-    output += operator[1] + ', ';
-    output += getScreenFlag() + ', ';
-    output += document.getElementById('screen').innerHTML + ', ';
-    output += getState();
+    output += '   <ul>'
+    output += '     <li>'
+    output += '       <span>Register 1</span><span>' + register[0] + '</span>'
+    output += '     </li>'
+    output += '     <li>'
+    output += '       <span>Register 2</span><span>' + register[1] + '</span>'
+    output += '     </li>'
+    output += '     <li>'
+    output += '       <span>Register 3</span><span>' + register[2] + '</span>'
+    output += '     </li>'
+    output += '     <li>'
+    output += '       <span>Operator 1</span><span>' + operator[0] + '</span>'
+    output += '     </li>'
+    output += '     <li>'
+    output += '       <span>Operator 2</span><span>' + operator[1] + '</span>'
+    output += '     </li>'
+    output += '     <li>'
+    output += '       <span>State</span><span>' + state + '</span>'
+    output += '     </li>'
+    output += '     <li>'
+    output += '       <span>On Screen</span><span>' + screen + '</span>'
+    output += '     </li>'
+    output += '   </ul>'
     return output;
   }
 
