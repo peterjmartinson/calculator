@@ -1,108 +1,142 @@
 /**
- * replace `operate` with the reckon functions in setOperator
- * you hit the "whoops" when you should not!!!
+ * 
+ * 
 */
-var Calculator = function() {
+let Calculator = function() {
   'use strict';
 
-  let previous_keypress = '';
-  let buffer = {
-    register_a  : '',
-    register_b  : '',
-    register_c  : '',
-    operator_a  : '',
-    operator_b  : '',
-    screen      : '0',
-    screen_flag : 1, // 1 -> show register_a, 2 -> show register_b, 3 -> show register_c
-    state       : 1
-  };
+  let key_press = '',
+      previous_keypress = '';
 
-  let cowport = document.getElementById("cowport");
-  let screen = document.getElementById("screen");
-  document.addEventListener('keydown', keyHandler, 0);
+  let register = ['','',''];
+  let operator = ['',''];
+  let screen_flag = 1;
+  let state = 1;
 
-  const key_map = {
-      187: '=',
-      80: '+',
-      77: '-',
-      84: '*',
-      68: '/',
-      48: '0',
-      49: '1',
-      50: '2',
-      51: '3',
-      52: '4',
-      53: '5',
-      54: '6',
-      55: '7',
-      56: '8',
-      57: '9',
-      67: 'clear'
+// ========================================== STATE
+  function setState(new_state) {
+    state = new_state;
   }
 
-  let KeyPress = '';
+  function getState() {
+    return state;
+  }
 
+  /*
+   * DETERMINE CALCULATOR STATE
+   *
+   *          A | B | C |opA|opB|
+   *         ---|---|---|---|---|
+   * Case 1) 0,A|   |   |   |   |
+   * Case 2)  A |   |   | + |   |
+   * Case 3)  A | B |   |+,*|   |
+   * Case 4)  A | B |   | + | * |
+   * Case 5)  A | B | C | + | * |
+   */
+  function setCalculatorState() {
+      if (operator[0] === '') {
+        setState(1);
+      } else if (operator[0] !== '' && register[1] === '') {
+        setState(2);
+      } else if (operator[0] !== '' && register[0] !== '' && operator[1] === '') {
+        setState(3);
+      } else if (operator[1] !== '' && register[2] === '') {
+        setState(4);
+      } else if (operator[1] !== '' && register[2] !== '') {
+        setState(5);
+      }
+  }
+
+// ========================================== KEY ROUTING
   function sendKeyPress(key) {
     setKeyPress(key);
     routeKeyPress();
-    setState();
+    setCalculatorState();
     updateScreen();
-    cowport.innerHTML = logBuffer();
-  }
-
-  function getKeyPress() {
-    return KeyPress;
+    document.getElementById("cowport").innerHTML = logInternals();
   }
 
   function setKeyPress(new_keypress) {
-    KeyPress = new_keypress.toString();
+    key_press = new_keypress.toString();
   }
 
-
-  function logBuffer() {
-    let output = '';
-    for (let property in buffer) {
-      if ( buffer.hasOwnProperty(property) ) {
-        output += buffer[property] + ', ';
-      }
-    }
-    return output;
-  }
-
-  function keyHandler(key) {
-    sendKeyPress(key_map[key.keyCode]);
+  function getKeyPress() {
+    return key_press;
   }
 
   function routeKeyPress() {
     let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         operator = ['+', '-', '*', '/'];
-    if ( number.indexOf(KeyPress) > -1 ) {
+    if ( key_press === 'clear' ) {
+      clear();
+    }
+    else if ( getError() ) {
+      return;
+    }
+    else if ( number.indexOf(key_press) > -1 ) {
       setNumber();
     }
-    else if ( operator.indexOf(KeyPress) > -1 ) {
+    else if ( operator.indexOf(key_press) > -1 ) {
       if (previous_keypress == '=') {
-        buffer.operator_a = '';
+        operator[0] = '';
       }
       setOperator();
     }
-    else if ( KeyPress === '=' ) { 
+    else if ( key_press === '=' ) { 
       reckonAll();
     }
-    else if ( KeyPress === 'pm' ) {
+    else if ( key_press === 'pm' ) {
       flipSign();
     }
-    else if ( KeyPress === '.' ) {
+    else if ( key_press === '.' ) {
       appendDecimal();
     }
-    else if ( KeyPress === 'root' ) {
+    else if ( key_press === 'root' ) {
       calculateSquareRoot();
-    }
-    else if ( KeyPress === 'clear' ) {
-      clear();
     }
     previous_keypress = getKeyPress();
   }
 
+// =========================================== SCREEN
+  function setScreenFlag(flag) {
+    screen_flag = flag;
+  }
+
+  function getScreenFlag(flag) {
+    return screen_flag;
+  }
+
+  function logInternals() {
+    let output = '';
+    output += register[0] + ', ';
+    output += register[1] + ', ';
+    output += register[2] + ', ';
+    output += operator[0] + ', ';
+    output += operator[1] + ', ';
+    output += getScreenFlag() + ', ';
+    output += document.getElementById('screen').innerHTML + ', ';
+    output += getState();
+    return output;
+  }
+
+  function updateScreen() {
+    let screen = document.getElementById("screen");
+    if (getScreenFlag() === 1) {
+       if (register[0] === '') {
+          screen.innerHTML = '0';
+       } else {
+          screen.innerHTML = register[0];
+       }
+    }
+    if (getScreenFlag() === 2) {
+       screen.innerHTML = register[1];
+    }
+    if (getScreenFlag() === 3) {
+       screen.innerHTML = register[2];
+    }
+  }
+
+// ============================================ UTILITY
   function trim(num) {
      var numLen, truncLen, tempVal;
      numLen = num.toString().length;
@@ -116,6 +150,7 @@ var Calculator = function() {
      return num.toString();
   }
 
+// ========================================== OPERATIONS
   function operate(l, o, r) {
      l = Number(l);
      r = Number(r);
@@ -140,38 +175,38 @@ var Calculator = function() {
   }
 
   function reckonInside() {
-    if (buffer.register_a == 'ERROR' || buffer.register_a == 'NaN') {
+    if (register[0] == 'ERROR' || register[0] == 'NaN') {
       return;
     }
-    if (buffer.register_c == '0' && buffer.operator_b == '/') {
+    if (register[2] == '0' && operator[1] == '/') {
       divisionByZero();
       return;
     }
-    if (buffer.register_c === '') {
-      buffer.register_c = buffer.register_b
+    if (register[2] === '') {
+      register[2] = register[1]
     }
-    let result = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
-    buffer.register_b = result.toString();
-    buffer.screen_flag = 2;
+    let result = operate(register[1], operator[1], register[2]);
+    register[1] = result.toString();
+    setScreenFlag(2);
   }
 
   function reckonOutside() {
-    if (buffer.register_a == 'ERROR' || buffer.register_a == 'NaN') return;
-    if (buffer.register_b == '0' && buffer.operator_a == '/') {
+    if (register[0] == 'ERROR' || register[0] == 'NaN') return;
+    if (register[1] == '0' && operator[0] == '/') {
       divisionByZero();
       return;
     }
-    if (buffer.register_b === '') {
-      buffer.register_b = buffer.register_a
+    if (register[1] === '') {
+      register[1] = register[0]
     }
-    let result = operate(buffer.register_a, buffer.operator_a, buffer.register_b);
-    buffer.register_a = result.toString();
-    buffer.screen_flag = 1;
+    let result = operate(register[0], operator[0], register[1]);
+    register[0] = result.toString();
+    setScreenFlag(1);
   }
 
   function reckonAll() {
-    if (buffer.register_a == 'ERROR' || buffer.register_a == 'NaN') return;
-    if (buffer.register_b != '' && buffer.register_c != '' && buffer.operator_b != '') {
+    if (register[0] == 'ERROR' || register[0] == 'NaN') return;
+    if (register[1] != '' && register[2] != '' && operator[1] != '') {
       reckonInside();
       reckonOutside();
     } else {
@@ -179,106 +214,76 @@ var Calculator = function() {
     }
   }
 
+// ============================================= ERROR HANDLING
   function divisionByZero() {
-    buffer.register_a = 'DIV BY 0';
-    buffer.register_b = 'DIV BY 0';
-    buffer.register_c = 'DIV BY 0';
+    register[0] = 'DIV BY 0';
+    register[1] = 'DIV BY 0';
+    register[2] = 'DIV BY 0';
+    operator[0] = '';
+    operator[1] = '';
+    setScreenFlag(1);
   }
 
-
-  /*
-   * DETERMINE CALCULATOR STATE
-   *
-   *          A | B | C |opA|opB|
-   *         ---|---|---|---|---|
-   * Case 1) 0,A|   |   |   |   |
-   * Case 2)  A |   |   | + |   |
-   * Case 3)  A | B |   |+,*|   |
-   * Case 4)  A | B |   | + | * |
-   * Case 5)  A | B | C | + | * |
-   */
-  function setState() {
-      if (buffer.register_a === 'DIV BY 0' || buffer.register_b === 'DIV BY 0') {
-        buffer.state = 6;
-      } else if (buffer.register_a === 'ERROR' || buffer.register_b === 'ERROR') {
-        buffer.state = 6;
-      } else if (buffer.operator_a === '') {
-        buffer.state = 1;
-      } else if (buffer.operator_a !== '' && buffer.register_b === '') {
-        buffer.state = 2;
-      } else if (buffer.operator_a !== '' && buffer.register_a !== '' && buffer.operator_b === '') {
-        buffer.state = 3;
-      } else if (buffer.operator_b !== '' && buffer.register_c === '') {
-        buffer.state = 4;
-      } else if (buffer.operator_b !== '' && buffer.register_c !== '') {
-        buffer.state = 5;
-      }
+  function setError() {
+    register[0] = 'ERROR';
+    register[1] = 'ERROR';
+    register[2] = 'ERROR';
+    operator[0] = '';
+    operator[1] = '';
+    setScreenFlag(1);
   }
 
-  function updateScreen() {
-    if (buffer.screen_flag === 1) {
-       if (buffer.register_a === '') {
-          screen.innerHTML = '0';
-       } else {
-          screen.innerHTML = buffer.register_a;
-       }
-    }
-    if (buffer.screen_flag === 2) {
-       screen.innerHTML = buffer.register_b;
-    }
-    if (buffer.screen_flag === 3) {
-       screen.innerHTML = buffer.register_c;
-    }
+  function getError() {
+    return register[0] === 'ERROR' || register[0] === 'DIV BY 0' ? 1 : 0;
   }
 
+// =========================================== ULTIMATE ACTIONS
   function clear() {
-     buffer.register_a = '';
-     buffer.register_b = '';
-     buffer.register_c = '';
-     buffer.operator_a = '';
-     buffer.operator_b = '';
-     buffer.screen     = '0';
-     buffer.screen_flag = 1;
-     setState();
+     register[0] = '';
+     register[1] = '';
+     register[2] = '';
+     operator[0] = '';
+     operator[1] = '';
+     document.getElementById('screen').innerHTML = '0';
+     setScreenFlag(1);
+     setCalculatorState();
   }
 
   function setNumber() {
-    switch(buffer.state) {
+    switch(getState()) {
       case 1:
-        buffer.screen_flag = 1;
-        if (buffer.register_a === '' || buffer.register_a === '0') {
-          buffer.register_a = getKeyPress();
-        } else if (buffer.register_a.length < 10) {
-          buffer.register_a = buffer.register_a + getKeyPress();
+        setScreenFlag(1);
+        if (register[0] === '' || register[0] === '0') {
+          register[0] = getKeyPress();
+        } else if (register[0].length < 10) {
+          register[0] = register[0] + getKeyPress();
         }
         break;
       case 2:
-        buffer.screen_flag = 2;
-        if (buffer.register_b === '' || buffer.register_b === '0') {
-          buffer.register_b = getKeyPress();
-        } else if (buffer.register_b.length < 10) {
-          buffer.register_b = buffer.register_b + getKeyPress();
+        setScreenFlag(2);
+        if (register[1] === '' || register[1] === '0') {
+          register[1] = getKeyPress();
+        } else if (register[1].length < 10) {
+          register[1] = register[1] + getKeyPress();
         }
         break;
       case 3:
-        if (buffer.register_b === '' || buffer.register_b === '0') {
-          buffer.register_b = getKeyPress();
-        } else if (buffer.register_b.length < 10) {
-          buffer.register_b = buffer.register_b + getKeyPress();
+        if (register[1] === '' || register[1] === '0') {
+          register[1] = getKeyPress();
+        } else if (register[1].length < 10) {
+          register[1] = register[1] + getKeyPress();
         }
-        buffer.screen_flag = 2;
+        setScreenFlag(2);
         break;
       case 4:
-         buffer.register_c = getKeyPress();
-         buffer.screen_flag = 3;
+         register[2] = getKeyPress();
+         setScreenFlag(3);
          break;
       case 5:
-         if (buffer.register_c.length < 10) {
-            buffer.register_c = buffer.register_c + getKeyPress();
-            buffer.screen_flag = 3;
+         if (register[2].length < 10) {
+            register[2] = register[2] + getKeyPress();
+            setScreenFlag(3);
          }
-         break;
-      case 6:
          break;
       default:
          console.log("something other than NUMBER happened!");
@@ -288,55 +293,53 @@ var Calculator = function() {
 
   function setOperator() {
     let key_press = getKeyPress();
-    switch (buffer.state) {
+    switch (getState()) {
       case 1:
-         buffer.operator_a = key_press;
-         buffer.screen_flag = 1;
+         operator[0] = key_press;
+         setScreenFlag(1);
          break;
       case 2:
-         buffer.operator_a = key_press;
-         buffer.screen_flag = 1;
+         operator[0] = key_press;
+         setScreenFlag(1);
          break;
       case 3:
-         if ((buffer.operator_a === '+' || buffer.operator_a === '-') && (key_press === '*' || key_press === '/')) {
-            buffer.operator_b = key_press;
-            buffer.screen_flag = 2;
+         if ((operator[0] === '+' || operator[0] === '-') && (key_press === '*' || key_press === '/')) {
+            operator[1] = key_press;
+            setScreenFlag(2);
          } else {
             reckonOutside();
-            buffer.register_b = '';
-            buffer.operator_a = key_press;
-            buffer.screen_flag = 1;
+            register[1] = '';
+            operator[0] = key_press;
+            setScreenFlag(1);
          }
          break;
       case 4:
          if (key_press === '+' || key_press === '-') {
             reckonAll();
-            buffer.register_b = '';
-            buffer.register_c = '';
-            buffer.operator_a = key_press;
-            buffer.operator_b = '';
-            buffer.screen_flag = 1;
+            register[1] = '';
+            register[2] = '';
+            operator[0] = key_press;
+            operator[1] = '';
+            setScreenFlag(1);
          } else {
-            buffer.operator_b = key_press;
-            buffer.screen_flag = 2;
+            operator[1] = key_press;
+            setScreenFlag(2);
          }
          break;
       case 5:
          if (key_press === '+' || key_press === '-') {
             reckonAll();
-            buffer.register_b = '';
-            buffer.register_c = '';
-            buffer.operator_a = key_press;
-            buffer.operator_b = '';
-            buffer.screen_flag = 1;
+            register[1] = '';
+            register[2] = '';
+            operator[0] = key_press;
+            operator[1] = '';
+            setScreenFlag(1);
          } else {
-            buffer.register_b = operate(buffer.register_b, buffer.operator_b, buffer.register_c);
-            buffer.register_c = '';
-            buffer.operator_b = key_press;
-            buffer.screen_flag = 2;
+            register[1] = operate(register[1], operator[1], register[2]);
+            register[2] = '';
+            operator[1] = key_press;
+            setScreenFlag(2);
          }
-         break;
-      case 6:
          break;
       default:
          console.log("something other than OPERATOR happened!");
@@ -345,30 +348,28 @@ var Calculator = function() {
   }
 
   function flipSign() {
-    switch (buffer.state) {
+    switch (getState()) {
       case 1:
-        if (buffer.register_a !== 'empty' && buffer.register_a !== '0') {
-          buffer.register_a = Number(buffer.register_a * -1).toString();
-          buffer.screen_flag = 1;
+        if (register[0] !== 'empty' && register[0] !== '0') {
+          register[0] = Number(register[0] * -1).toString();
+          setScreenFlag(1);
         }
         break;
       case 2:
-        buffer.register_b = Number(buffer.register_a * -1).toString();
-        buffer.screen_flag = 2;
+        register[1] = Number(register[0] * -1).toString();
+        setScreenFlag(2);
         break;
       case 3:
-        buffer.register_b = Number(buffer.register_b * -1).toString();
-        buffer.screen_flag = 2;
+        register[1] = Number(register[1] * -1).toString();
+        setScreenFlag(2);
         break;
       case 4:
-        buffer.register_c = Number(buffer.register_b * -1).toString();
-        buffer.screen_flag = 3;
+        register[2] = Number(register[1] * -1).toString();
+        setScreenFlag(3);
         break;
       case 5:
-        buffer.register_c = Number(buffer.register_c * -1).toString();
-        buffer.screen_flag = 3;
-        break;
-      case 6:
+        register[2] = Number(register[2] * -1).toString();
+        setScreenFlag(3);
         break;
       default:
         console.log("something other than PLUS-MINUS happened!");
@@ -377,35 +378,33 @@ var Calculator = function() {
   }
 
   function appendDecimal() {
-    switch (buffer.state) {
+    switch (getState()) {
       case 1:
-         if (buffer.register_a.indexOf('.') === -1 && buffer.register_a.length < 10) {
-            if (buffer.register_a === '' || buffer.register_a === '0') {
-               buffer.register_a = '0.';
+         if (register[0].indexOf('.') === -1 && register[0].length < 10) {
+            if (register[0] === '' || register[0] === '0') {
+               register[0] = '0.';
             } else {
-               buffer.register_a = buffer.register_a + '.';
+               register[0] = register[0] + '.';
             }
          }
          break;
       case 2:
-         buffer.register_b = '0.';
-         buffer.screen_flag = 2;
+         register[1] = '0.';
+         setScreenFlag(2);
          break;
       case 3:
-         if (buffer.register_b.indexOf('.') === -1 && buffer.register_b.length < 10) {
-            buffer.register_b = buffer.register_b + '.';
+         if (register[1].indexOf('.') === -1 && register[1].length < 10) {
+            register[1] = register[1] + '.';
          }
          break;
       case 4:
-         buffer.register_c = '0.';
-         buffer.screen_flag = 3;
+         register[2] = '0.';
+         setScreenFlag(3);
          break;
       case 5:
-         if (buffer.register_c.indexOf('.') === -1 && buffer.register_c.length < 10) {
-            buffer.register_c = buffer.register_c + '.';
+         if (register[2].indexOf('.') === -1 && register[2].length < 10) {
+            register[2] = register[2] + '.';
          }
-         break;
-      case 6:
          break;
       default:
          console.log("something other than . happened!");
@@ -414,76 +413,49 @@ var Calculator = function() {
   }
 
   function calculateSquareRoot() {
-    switch (buffer.state) {
+    switch (getState()) {
       case 1:
-         if (buffer.register_a > 0) {
-            buffer.register_a = trim(Math.sqrt(Number(buffer.register_a)).toString());
-            buffer.screen_flag = 1;
-         } else if (buffer.register_a === '' || buffer.register_a === '0') {
-            buffer.register_a = '0';
-            buffer.screen_flag = 1;
+         if (register[0] > 0) {
+            register[0] = trim(Math.sqrt(Number(register[0])).toString());
+            setScreenFlag(1);
+         } else if (register[0] === '' || register[0] === '0') {
+            register[0] = '0';
+            setScreenFlag(1);
          } else {
-            buffer.register_a = 'ERROR';
-            buffer.register_b = '';
-            buffer.register_c = '';
-            buffer.opA = '';
-            buffer.opB = '';
-            buffer.screen_flag = 1;
+            setError();
          }
          break;
       case 2:
-         if (buffer.register_a > 0) {
-            buffer.register_b = trim(Math.sqrt(Number(buffer.register_a)).toString());
-            buffer.screen_flag = 2;
+         if (register[0] > 0) {
+            register[1] = trim(Math.sqrt(Number(register[0])).toString());
+            setScreenFlag(2);
          } else {
-            buffer.register_a = 'ERROR';
-            buffer.register_b = '';
-            buffer.register_c = '';
-            buffer.opA = '';
-            buffer.opB = '';
-            buffer.screen_flag = 1;
+            setError();
          }
          break;
       case 3:
-         if (buffer.register_b > 0) {
-            buffer.register_b = trim(Math.sqrt(Number(buffer.register_b)).toString());
-            buffer.screen_flag = 2;
+         if (register[1] > 0) {
+            register[1] = trim(Math.sqrt(Number(register[1])).toString());
+            setScreenFlag(2);
          } else {
-            buffer.register_a = 'ERROR';
-            buffer.register_b = '';
-            buffer.register_c = '';
-            buffer.opA = '';
-            buffer.opB = '';
-            buffer.screen_flag = 1;
+            setError();
          }
          break;
       case 4:
-         if (buffer.register_b > 0) {
-            buffer.register_c = trim(Math.sqrt(Number(buffer.register_b)).toString());
-            buffer.screen_flag = 3;
+         if (register[1] > 0) {
+            register[2] = trim(Math.sqrt(Number(register[1])).toString());
+            setScreenFlag(3);
          } else {
-            buffer.register_a = 'ERROR';
-            buffer.register_b = '';
-            buffer.register_c = '';
-            buffer.opA = '';
-            buffer.opB = '';
-            buffer.screen_flag = 1;
+            setError();
          }
          break;
       case 5:
-         if (buffer.register_c > 0) {
-            buffer.register_c = trim(Math.sqrt(Number(buffer.register_c)).toString());
-            buffer.screen_flag = 3;
+         if (register[2] > 0) {
+            register[2] = trim(Math.sqrt(Number(register[2])).toString());
+            setScreenFlag(3);
          } else {
-            buffer.register_a = 'ERROR';
-            buffer.register_b = '';
-            buffer.register_c = '';
-            buffer.opA = '';
-            buffer.opB = '';
-            buffer.screen_flag = 1;
+            setError();
          }
-         break;
-      case 6:
          break;
       default:
          console.log("something other than root happened!");
@@ -494,12 +466,11 @@ var Calculator = function() {
   return {
     trim          : trim,
     operate       : operate,
-    setState      : setState,
+    setCalculatorState : setCalculatorState,
     clear         : clear,
     updateScreen  : updateScreen,
     setNumber     : setNumber,
     setOperator   : setOperator,
-    buffer        : buffer,
     reckonInside  : reckonInside,
     reckonOutside : reckonOutside,
     reckonAll     : reckonAll,
@@ -509,7 +480,16 @@ var Calculator = function() {
     flipSign      : flipSign,
     appendDecimal : appendDecimal,
     calculateSquareRoot : calculateSquareRoot,
-    sendKeyPress  : sendKeyPress
+    sendKeyPress  : sendKeyPress,
+    register      : register,
+    operator      : operator,
+    getScreenFlag : getScreenFlag,
+    setScreenFlag : setScreenFlag,
+    setState      : setState,
+    getState      : getState,
+    divisionByZero : divisionByZero,
+    setError : setError,
+    getError : getError
   };
 
 

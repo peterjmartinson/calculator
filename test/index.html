@@ -11,10 +11,11 @@
   <div id="screen">the screen</div>
   <div id="cowport">cowport</div>
   <script src="./qunit/qunit-2.3.2.js"></script>
+  <script src="./blanket.min.js"></script>
   <script src="./qunit/jquery-3.2.1.js"></script>
 
   <!-- Sources -->
-  <script src="../js/calculator.js"></script>
+  <script src="../js/calculator.js" data-cover></script>
   <!-- <script src="../js/events.js"></script> -->
   <script>
     var calculator = new Calculator;
@@ -22,6 +23,6 @@
 
 
   <!-- Tests -->
-  <script src="./calculator.test.js"></script>
+  <script src="./calculator.test.js" data-cover></script>
 </body>
 </html>
