@@ -22,6 +22,7 @@ window.onload = (function() {
       57: '9',
       67: 'clear'
   }
+
   function keyHandler(key) {
     if (key_map.hasOwnProperty(key.keyCode)) {
       calculator.sendKeyPress(key_map[key.keyCode]);

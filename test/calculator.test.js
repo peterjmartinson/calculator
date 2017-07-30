@@ -157,18 +157,6 @@ q.test('returns the correct states', function(assert) {
 
   setCalculator(['1', '1', '1', '1', '1']);
   assert.equal(calculator.getState(), 5, 'state 5');
-
-  setCalculator(['DIV BY 0', '', '', '', '']);
-  assert.equal(calculator.getState(), 6, 'state 6');
-
-  setCalculator(['', 'DIV BY 0', '', '', '']);
-  assert.equal(calculator.getState(), 6, 'state 6');
-
-  setCalculator(['ERROR', '', '', '', '']);
-  assert.equal(calculator.getState(), 6, 'state 6');
-
-  setCalculator(['', 'ERROR', '', '', '']);
-  assert.equal(calculator.getState(), 6, 'state 6');
 });
 
 q.module('clear');
@@ -311,6 +299,14 @@ q.test('fills the correct registers', function(assert) {
 q.module('routeKeyPress');
 q.test('exists', function(assert) {
   assert.equal(typeof calculator.routeKeyPress, 'function', 'routeKeyPress is a function on Calculator');
+});
+
+q.test('aborts if there is an error', function(assert) {
+  calculator.sendKeyPress('clear');
+  calculator.setError();
+  calculator.setKeyPress('1');
+  calculator.routeKeyPress();
+  assert.ok(calculator.getError());
 });
 
 q.test('sends a number into a register', function(assert) {
@@ -668,6 +664,16 @@ q.test('complex operations', function(assert) {
 
 });
 
+
+q.module('Error Handlers');
+q.test('Div by 0', function(assert) {
+  calculator.divisionByZero();
+  assert.equal(calculator.getError(), 1, 'gets set correctly');
+});
+q.test('Error', function(assert) {
+  calculator.setError();
+  assert.equal(calculator.getError(), 1, 'gets set correctly');
+});
 
 // ========= UTILITY FUNCTIONS
 

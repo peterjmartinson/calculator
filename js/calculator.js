@@ -5,7 +5,6 @@
 let Calculator = function() {
   'use strict';
 
-
   let key_press = '',
       previous_keypress = '';
 
@@ -14,6 +13,7 @@ let Calculator = function() {
   let screen_flag = 1;
   let state = 1;
 
+// ========================================== STATE
   function setState(new_state) {
     state = new_state;
   }
@@ -22,6 +22,32 @@ let Calculator = function() {
     return state;
   }
 
+  /*
+   * DETERMINE CALCULATOR STATE
+   *
+   *          A | B | C |opA|opB|
+   *         ---|---|---|---|---|
+   * Case 1) 0,A|   |   |   |   |
+   * Case 2)  A |   |   | + |   |
+   * Case 3)  A | B |   |+,*|   |
+   * Case 4)  A | B |   | + | * |
+   * Case 5)  A | B | C | + | * |
+   */
+  function setCalculatorState() {
+      if (operator[0] === '') {
+        setState(1);
+      } else if (operator[0] !== '' && register[1] === '') {
+        setState(2);
+      } else if (operator[0] !== '' && register[0] !== '' && operator[1] === '') {
+        setState(3);
+      } else if (operator[1] !== '' && register[2] === '') {
+        setState(4);
+      } else if (operator[1] !== '' && register[2] !== '') {
+        setState(5);
+      }
+  }
+
+// ========================================== KEY ROUTING
   function sendKeyPress(key) {
     setKeyPress(key);
     routeKeyPress();
@@ -38,6 +64,40 @@ let Calculator = function() {
     return key_press;
   }
 
+  function routeKeyPress() {
+    let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        operator = ['+', '-', '*', '/'];
+    if ( key_press === 'clear' ) {
+      clear();
+    }
+    else if ( getError() ) {
+      return;
+    }
+    else if ( number.indexOf(key_press) > -1 ) {
+      setNumber();
+    }
+    else if ( operator.indexOf(key_press) > -1 ) {
+      if (previous_keypress == '=') {
+        operator[0] = '';
+      }
+      setOperator();
+    }
+    else if ( key_press === '=' ) { 
+      reckonAll();
+    }
+    else if ( key_press === 'pm' ) {
+      flipSign();
+    }
+    else if ( key_press === '.' ) {
+      appendDecimal();
+    }
+    else if ( key_press === 'root' ) {
+      calculateSquareRoot();
+    }
+    previous_keypress = getKeyPress();
+  }
+
+// =========================================== SCREEN
   function setScreenFlag(flag) {
     screen_flag = flag;
   }
@@ -59,36 +119,24 @@ let Calculator = function() {
     return output;
   }
 
-  function routeKeyPress() {
-    let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
-        operator = ['+', '-', '*', '/'];
-    if ( number.indexOf(key_press) > -1 ) {
-      setNumber();
+  function updateScreen() {
+    let screen = document.getElementById("screen");
+    if (getScreenFlag() === 1) {
+       if (register[0] === '') {
+          screen.innerHTML = '0';
+       } else {
+          screen.innerHTML = register[0];
+       }
     }
-    else if ( operator.indexOf(key_press) > -1 ) {
-      if (previous_keypress == '=') {
-        operator[0] = '';
-      }
-      setOperator();
+    if (getScreenFlag() === 2) {
+       screen.innerHTML = register[1];
     }
-    else if ( key_press === '=' ) { 
-      reckonAll();
+    if (getScreenFlag() === 3) {
+       screen.innerHTML = register[2];
     }
-    else if ( key_press === 'pm' ) {
-      flipSign();
-    }
-    else if ( key_press === '.' ) {
-      appendDecimal();
-    }
-    else if ( key_press === 'root' ) {
-      calculateSquareRoot();
-    }
-    else if ( key_press === 'clear' ) {
-      clear();
-    }
-    previous_keypress = getKeyPress();
   }
 
+// ============================================ UTILITY
   function trim(num) {
      var numLen, truncLen, tempVal;
      numLen = num.toString().length;
@@ -102,6 +150,7 @@ let Calculator = function() {
      return num.toString();
   }
 
+// ========================================== OPERATIONS
   function operate(l, o, r) {
      l = Number(l);
      r = Number(r);
@@ -165,59 +214,30 @@ let Calculator = function() {
     }
   }
 
+// ============================================= ERROR HANDLING
   function divisionByZero() {
     register[0] = 'DIV BY 0';
     register[1] = 'DIV BY 0';
     register[2] = 'DIV BY 0';
+    operator[0] = '';
+    operator[1] = '';
+    setScreenFlag(1);
   }
 
-
-  /*
-   * DETERMINE CALCULATOR STATE
-   *
-   *          A | B | C |opA|opB|
-   *         ---|---|---|---|---|
-   * Case 1) 0,A|   |   |   |   |
-   * Case 2)  A |   |   | + |   |
-   * Case 3)  A | B |   |+,*|   |
-   * Case 4)  A | B |   | + | * |
-   * Case 5)  A | B | C | + | * |
-   */
-  function setCalculatorState() {
-      if (register[0] === 'DIV BY 0' || register[1] === 'DIV BY 0') {
-        setState(6);
-      } else if (register[0] === 'ERROR' || register[1] === 'ERROR') {
-        setState(6);
-      } else if (operator[0] === '') {
-        setState(1);
-      } else if (operator[0] !== '' && register[1] === '') {
-        setState(2);
-      } else if (operator[0] !== '' && register[0] !== '' && operator[1] === '') {
-        setState(3);
-      } else if (operator[1] !== '' && register[2] === '') {
-        setState(4);
-      } else if (operator[1] !== '' && register[2] !== '') {
-        setState(5);
-      }
+  function setError() {
+    register[0] = 'ERROR';
+    register[1] = 'ERROR';
+    register[2] = 'ERROR';
+    operator[0] = '';
+    operator[1] = '';
+    setScreenFlag(1);
   }
 
-  function updateScreen() {
-    let screen = document.getElementById("screen");
-    if (getScreenFlag() === 1) {
-       if (register[0] === '') {
-          screen.innerHTML = '0';
-       } else {
-          screen.innerHTML = register[0];
-       }
-    }
-    if (getScreenFlag() === 2) {
-       screen.innerHTML = register[1];
-    }
-    if (getScreenFlag() === 3) {
-       screen.innerHTML = register[2];
-    }
+  function getError() {
+    return register[0] === 'ERROR' || register[0] === 'DIV BY 0' ? 1 : 0;
   }
 
+// =========================================== ULTIMATE ACTIONS
   function clear() {
      register[0] = '';
      register[1] = '';
@@ -264,8 +284,6 @@ let Calculator = function() {
             register[2] = register[2] + getKeyPress();
             setScreenFlag(3);
          }
-         break;
-      case 6:
          break;
       default:
          console.log("something other than NUMBER happened!");
@@ -323,8 +341,6 @@ let Calculator = function() {
             setScreenFlag(2);
          }
          break;
-      case 6:
-         break;
       default:
          console.log("something other than OPERATOR happened!");
          break;
@@ -354,8 +370,6 @@ let Calculator = function() {
       case 5:
         register[2] = Number(register[2] * -1).toString();
         setScreenFlag(3);
-        break;
-      case 6:
         break;
       default:
         console.log("something other than PLUS-MINUS happened!");
@@ -392,8 +406,6 @@ let Calculator = function() {
             register[2] = register[2] + '.';
          }
          break;
-      case 6:
-         break;
       default:
          console.log("something other than . happened!");
          break;
@@ -410,12 +422,7 @@ let Calculator = function() {
             register[0] = '0';
             setScreenFlag(1);
          } else {
-            register[0] = 'ERROR';
-            register[1] = '';
-            register[2] = '';
-            operator[0] = '';
-            operator[1] = '';
-            setScreenFlag(1);
+            setError();
          }
          break;
       case 2:
@@ -423,12 +430,7 @@ let Calculator = function() {
             register[1] = trim(Math.sqrt(Number(register[0])).toString());
             setScreenFlag(2);
          } else {
-            register[0] = 'ERROR';
-            register[1] = '';
-            register[2] = '';
-            operator[0] = '';
-            operator[1] = '';
-            setScreenFlag(1);
+            setError();
          }
          break;
       case 3:
@@ -436,12 +438,7 @@ let Calculator = function() {
             register[1] = trim(Math.sqrt(Number(register[1])).toString());
             setScreenFlag(2);
          } else {
-            register[0] = 'ERROR';
-            register[1] = '';
-            register[2] = '';
-            operator[0] = '';
-            operator[1] = '';
-            setScreenFlag(1);
+            setError();
          }
          break;
       case 4:
@@ -449,12 +446,7 @@ let Calculator = function() {
             register[2] = trim(Math.sqrt(Number(register[1])).toString());
             setScreenFlag(3);
          } else {
-            register[0] = 'ERROR';
-            register[1] = '';
-            register[2] = '';
-            operator[0] = '';
-            operator[1] = '';
-            setScreenFlag(1);
+            setError();
          }
          break;
       case 5:
@@ -462,15 +454,8 @@ let Calculator = function() {
             register[2] = trim(Math.sqrt(Number(register[2])).toString());
             setScreenFlag(3);
          } else {
-            register[0] = 'ERROR';
-            register[1] = '';
-            register[2] = '';
-            operator[0] = '';
-            operator[1] = '';
-            setScreenFlag(1);
+            setError();
          }
-         break;
-      case 6:
          break;
       default:
          console.log("something other than root happened!");
@@ -501,7 +486,10 @@ let Calculator = function() {
     getScreenFlag : getScreenFlag,
     setScreenFlag : setScreenFlag,
     setState      : setState,
-    getState      : getState
+    getState      : getState,
+    divisionByZero : divisionByZero,
+    setError : setError,
+    getError : getError
   };
 
 
