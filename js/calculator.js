@@ -6,12 +6,12 @@ let Calculator = function() {
   'use strict';
 
   let key_press = '',
-      previous_keypress = '';
-
-  let register = ['','',''];
-  let operator = ['',''];
-  let screen_flag = 1;
-  let state = 1;
+      previous_keypress = '',
+      register = ['','',''],
+      screen_flag = 1,
+      state = 1;
+  var operator = ['',''];
+  console.log('operator: ' + operator[0]);
 
 // ========================================== STATE
   function setState(new_state) {
@@ -65,6 +65,7 @@ let Calculator = function() {
   }
 
   function routeKeyPress() {
+        console.log('operator 0: "'+operator[0]+'"');
     let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         operator = ['+', '-', '*', '/'];
     if ( key_press === 'clear' ) {
@@ -77,8 +78,11 @@ let Calculator = function() {
       setNumber();
     }
     else if ( operator.indexOf(key_press) > -1 ) {
+      console.log(previous_keypress);
       if (previous_keypress == '=') {
+        console.log('operator 0: "'+operator[0]+'"');
         operator[0] = '';
+        console.log('operator 0: "'+operator[0]+'"');
       }
       setOperator();
     }
@@ -125,10 +129,13 @@ let Calculator = function() {
     output += '       <span>Operator 2</span><span>' + operator[1] + '</span>'
     output += '     </li>'
     output += '     <li>'
+    output += '       <span>Previous Key</span><span>' + previous_keypress + '</span>'
+    output += '     </li>'
+    output += '     <li>'
     output += '       <span>State</span><span>' + state + '</span>'
     output += '     </li>'
     output += '     <li>'
-    output += '       <span>On Screen</span><span>' + screen + '</span>'
+    output += '       <span>On Screen</span><span>' + document.getElementById("screen").innerHTML + '</span>'
     output += '     </li>'
     output += '   </ul>'
     return output;

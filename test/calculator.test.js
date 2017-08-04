@@ -662,6 +662,12 @@ q.test('complex operations', function(assert) {
   runCalculationSequence('1+3/0=');
   assert.equal(calculator.register[1], 'DIV BY 0', 'Division by zero');
 
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('9/3=');
+  assert.equal(calculator.register[0], '3', '9 / 3 = 3');
+  calculator.sendKeyPress('/');
+  assert.equal(calculator.register[0], '3', 'Begin a new calculation');
+
 });
 
 
