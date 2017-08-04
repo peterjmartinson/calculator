@@ -75,7 +75,6 @@ let Calculator = function() {
       setNumber();
     }
     else if ( operator.indexOf(key_press) > -1 ) {
-      console.log(previous_keypress);
       if (previous_keypress == '=') {
         register[3] = '';
       }
@@ -106,25 +105,26 @@ let Calculator = function() {
   }
 
   function logInternals() {
+    let cow_organ = [];
+    for (let i = 0; i < register.length; i++) {
+      cow_organ.push( register[i] == '' ? '&nbsp;' : register[i] );
+    }
     let output = '';
     output += '   <ul>'
     output += '     <li>'
-    output += '       <span>Register 1</span><span>' + register[0] + '</span>'
+    output += '       <span>Register 1</span><span>' + cow_organ[0] + '</span>'
     output += '     </li>'
     output += '     <li>'
-    output += '       <span>Register 2</span><span>' + register[1] + '</span>'
+    output += '       <span>Register 2</span><span>' + cow_organ[1] + '</span>'
     output += '     </li>'
     output += '     <li>'
-    output += '       <span>Register 3</span><span>' + register[2] + '</span>'
+    output += '       <span>Register 3</span><span>' + cow_organ[2] + '</span>'
     output += '     </li>'
     output += '     <li>'
-    output += '       <span>Operator 1</span><span>' + register[3] + '</span>'
+    output += '       <span>Operator 1</span><span>' + cow_organ[3] + '</span>'
     output += '     </li>'
     output += '     <li>'
-    output += '       <span>Operator 2</span><span>' + register[4] + '</span>'
-    output += '     </li>'
-    output += '     <li>'
-    output += '       <span>Previous Key</span><span>' + previous_keypress + '</span>'
+    output += '       <span>Operator 2</span><span>' + cow_organ[4] + '</span>'
     output += '     </li>'
     output += '     <li>'
     output += '       <span>State</span><span>' + state + '</span>'
@@ -505,7 +505,8 @@ let Calculator = function() {
     getState      : getState,
     divisionByZero : divisionByZero,
     setError : setError,
-    getError : getError
+    getError : getError,
+    logInternals : logInternals
   };
 
 
