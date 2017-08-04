@@ -665,7 +665,19 @@ q.test('complex operations', function(assert) {
   runCalculationSequence('9/3=');
   assert.equal(calculator.register[0], '3', '9 / 3 = 3');
   calculator.sendKeyPress('/');
-  assert.equal(calculator.register[0], '3', 'Begin a new calculation');
+  assert.equal(calculator.register[0], '3', 'Extend the calculation');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('9/3=');
+  assert.equal(calculator.register[0], '3', '9 / 3 = 3');
+  calculator.sendKeyPress('7');
+  assert.equal(calculator.register[0], '7', 'Start over after a calculation');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('9/3=');
+  assert.equal(calculator.register[0], '3', '9 / 3 = 3');
+  calculator.sendKeyPress('.');
+  assert.equal(calculator.register[0], '0.', 'Start over with a decimal');
 
 });
 

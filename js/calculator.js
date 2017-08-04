@@ -72,6 +72,9 @@ let Calculator = function() {
       return;
     }
     else if ( number.indexOf(key_press) > -1 ) {
+      if (previous_keypress == '=') {
+        clear();
+      }
       setNumber();
     }
     else if ( operator.indexOf(key_press) > -1 ) {
@@ -87,6 +90,9 @@ let Calculator = function() {
       flipSign();
     }
     else if ( key_press === '.' ) {
+      if (previous_keypress == '=') {
+        clear();
+      }
       appendDecimal();
     }
     else if ( key_press === 'root' ) {
