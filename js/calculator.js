@@ -7,11 +7,9 @@ let Calculator = function() {
 
   let key_press = '',
       previous_keypress = '',
-      register = ['','',''],
+      register = ['','','','',''],
       screen_flag = 1,
       state = 1;
-  var operator = ['',''];
-  console.log('operator: ' + operator[0]);
 
 // ========================================== STATE
   function setState(new_state) {
@@ -34,15 +32,15 @@ let Calculator = function() {
    * Case 5)  A | B | C | + | * |
    */
   function setCalculatorState() {
-      if (operator[0] === '') {
+      if (register[3] === '') {
         setState(1);
-      } else if (operator[0] !== '' && register[1] === '') {
+      } else if (register[3] !== '' && register[1] === '') {
         setState(2);
-      } else if (operator[0] !== '' && register[0] !== '' && operator[1] === '') {
+      } else if (register[3] !== '' && register[0] !== '' && register[4] === '') {
         setState(3);
-      } else if (operator[1] !== '' && register[2] === '') {
+      } else if (register[4] !== '' && register[2] === '') {
         setState(4);
-      } else if (operator[1] !== '' && register[2] !== '') {
+      } else if (register[4] !== '' && register[2] !== '') {
         setState(5);
       }
   }
@@ -65,7 +63,6 @@ let Calculator = function() {
   }
 
   function routeKeyPress() {
-        console.log('operator 0: "'+operator[0]+'"');
     let number = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         operator = ['+', '-', '*', '/'];
     if ( key_press === 'clear' ) {
@@ -80,9 +77,7 @@ let Calculator = function() {
     else if ( operator.indexOf(key_press) > -1 ) {
       console.log(previous_keypress);
       if (previous_keypress == '=') {
-        console.log('operator 0: "'+operator[0]+'"');
-        operator[0] = '';
-        console.log('operator 0: "'+operator[0]+'"');
+        register[3] = '';
       }
       setOperator();
     }
@@ -123,10 +118,10 @@ let Calculator = function() {
     output += '       <span>Register 3</span><span>' + register[2] + '</span>'
     output += '     </li>'
     output += '     <li>'
-    output += '       <span>Operator 1</span><span>' + operator[0] + '</span>'
+    output += '       <span>Operator 1</span><span>' + register[3] + '</span>'
     output += '     </li>'
     output += '     <li>'
-    output += '       <span>Operator 2</span><span>' + operator[1] + '</span>'
+    output += '       <span>Operator 2</span><span>' + register[4] + '</span>'
     output += '     </li>'
     output += '     <li>'
     output += '       <span>Previous Key</span><span>' + previous_keypress + '</span>'
@@ -200,35 +195,35 @@ let Calculator = function() {
     if (register[0] == 'ERROR' || register[0] == 'NaN') {
       return;
     }
-    if (register[2] == '0' && operator[1] == '/') {
+    if (register[2] == '0' && register[4] == '/') {
       divisionByZero();
       return;
     }
     if (register[2] === '') {
       register[2] = register[1]
     }
-    let result = operate(register[1], operator[1], register[2]);
+    let result = operate(register[1], register[4], register[2]);
     register[1] = result.toString();
     setScreenFlag(2);
   }
 
   function reckonOutside() {
     if (register[0] == 'ERROR' || register[0] == 'NaN') return;
-    if (register[1] == '0' && operator[0] == '/') {
+    if (register[1] == '0' && register[3] == '/') {
       divisionByZero();
       return;
     }
     if (register[1] === '') {
       register[1] = register[0]
     }
-    let result = operate(register[0], operator[0], register[1]);
+    let result = operate(register[0], register[3], register[1]);
     register[0] = result.toString();
     setScreenFlag(1);
   }
 
   function reckonAll() {
     if (register[0] == 'ERROR' || register[0] == 'NaN') return;
-    if (register[1] != '' && register[2] != '' && operator[1] != '') {
+    if (register[1] != '' && register[2] != '' && register[4] != '') {
       reckonInside();
       reckonOutside();
     } else {
@@ -241,8 +236,8 @@ let Calculator = function() {
     register[0] = 'DIV BY 0';
     register[1] = 'DIV BY 0';
     register[2] = 'DIV BY 0';
-    operator[0] = '';
-    operator[1] = '';
+    register[3] = '';
+    register[4] = '';
     setScreenFlag(1);
   }
 
@@ -250,8 +245,8 @@ let Calculator = function() {
     register[0] = 'ERROR';
     register[1] = 'ERROR';
     register[2] = 'ERROR';
-    operator[0] = '';
-    operator[1] = '';
+    register[3] = '';
+    register[4] = '';
     setScreenFlag(1);
   }
 
@@ -264,8 +259,8 @@ let Calculator = function() {
      register[0] = '';
      register[1] = '';
      register[2] = '';
-     operator[0] = '';
-     operator[1] = '';
+     register[3] = '';
+     register[4] = '';
      document.getElementById('screen').innerHTML = '0';
      setScreenFlag(1);
      setCalculatorState();
@@ -317,21 +312,21 @@ let Calculator = function() {
     let key_press = getKeyPress();
     switch (getState()) {
       case 1:
-         operator[0] = key_press;
+         register[3] = key_press;
          setScreenFlag(1);
          break;
       case 2:
-         operator[0] = key_press;
+         register[3] = key_press;
          setScreenFlag(1);
          break;
       case 3:
-         if ((operator[0] === '+' || operator[0] === '-') && (key_press === '*' || key_press === '/')) {
-            operator[1] = key_press;
+         if ((register[3] === '+' || register[3] === '-') && (key_press === '*' || key_press === '/')) {
+            register[4] = key_press;
             setScreenFlag(2);
          } else {
             reckonOutside();
             register[1] = '';
-            operator[0] = key_press;
+            register[3] = key_press;
             setScreenFlag(1);
          }
          break;
@@ -340,11 +335,11 @@ let Calculator = function() {
             reckonAll();
             register[1] = '';
             register[2] = '';
-            operator[0] = key_press;
-            operator[1] = '';
+            register[3] = key_press;
+            register[4] = '';
             setScreenFlag(1);
          } else {
-            operator[1] = key_press;
+            register[4] = key_press;
             setScreenFlag(2);
          }
          break;
@@ -353,13 +348,13 @@ let Calculator = function() {
             reckonAll();
             register[1] = '';
             register[2] = '';
-            operator[0] = key_press;
-            operator[1] = '';
+            register[3] = key_press;
+            register[4] = '';
             setScreenFlag(1);
          } else {
-            register[1] = operate(register[1], operator[1], register[2]);
+            register[1] = operate(register[1], register[4], register[2]);
             register[2] = '';
-            operator[1] = key_press;
+            register[4] = key_press;
             setScreenFlag(2);
          }
          break;
@@ -504,7 +499,6 @@ let Calculator = function() {
     calculateSquareRoot : calculateSquareRoot,
     sendKeyPress  : sendKeyPress,
     register      : register,
-    operator      : operator,
     getScreenFlag : getScreenFlag,
     setScreenFlag : setScreenFlag,
     setState      : setState,
