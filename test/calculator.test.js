@@ -167,7 +167,6 @@ q.test('resets the calculator', function(assert) {
   setCalculator(['1','1','1','+','*',2,'0',1]);
   calculator.clear();
   assert.deepEqual(calculator.register, default_register, 'clear resets the registers');
-  assert.deepEqual(calculator.operator, default_operator, 'clear resets the operators');
   assert.deepEqual(calculator.getScreenFlag(), 1, 'clear resets the screen flag');
   assert.deepEqual(calculator.getState(), 1, 'clear resets the state');
   assert.deepEqual(document.getElementById('screen').innerHTML, '0', 'clear resets the screen');
@@ -243,55 +242,55 @@ q.test('fills the correct registers', function(assert) {
   calculator.setKeyPress(plus);
   setCalculator(['','','','','']);
   calculator.setOperator();
-  assert.ok(calculator.operator[0] == '+' && calculator.getScreenFlag() == 1, 'state 1: a');
+  assert.ok(calculator.register[3] == '+' && calculator.getScreenFlag() == 1, 'state 1: a');
 
   calculator.setKeyPress(plus);
   setCalculator(['27','','','','']);
   calculator.setOperator();
-  assert.ok(calculator.operator[0] == '+' && calculator.getScreenFlag() == 1, 'state 1: b');
+  assert.ok(calculator.register[3] == '+' && calculator.getScreenFlag() == 1, 'state 1: b');
 
   // state 2
   calculator.setKeyPress(plus);
   setCalculator(['27','','','+','']);
   calculator.setOperator();
-  assert.ok(calculator.operator[0] == '+' && calculator.getScreenFlag() == 1, 'state 2: a');
+  assert.ok(calculator.register[3] == '+' && calculator.getScreenFlag() == 1, 'state 2: a');
 
   calculator.setKeyPress(plus);
   setCalculator(['27','','','*','']);
   calculator.setOperator();
-  assert.ok(calculator.operator[0] == '+' && calculator.getScreenFlag() == 1, 'state 2: b');
+  assert.ok(calculator.register[3] == '+' && calculator.getScreenFlag() == 1, 'state 2: b');
 
   // state 3
   calculator.setKeyPress(plus);
   setCalculator(['27','2','','+','']);
   calculator.setOperator();
-  assert.ok(calculator.operator[0] == '+' && calculator.getScreenFlag() == 1, 'state 3: a');
+  assert.ok(calculator.register[3] == '+' && calculator.getScreenFlag() == 1, 'state 3: a');
 
   calculator.setKeyPress(times);
   setCalculator(['27','2','','+','']);
   calculator.setOperator();
-  assert.ok(calculator.operator[1] == '*' && calculator.getScreenFlag() == 2, 'state 3: b');
+  assert.ok(calculator.register[4] == '*' && calculator.getScreenFlag() == 2, 'state 3: b');
 
   // state 4
   calculator.setKeyPress(plus);
   setCalculator(['27','2','','+','+']);
   calculator.setOperator();
-  assert.ok(calculator.operator[0] == '+' && calculator.getScreenFlag() == 1, 'state 4: a');
+  assert.ok(calculator.register[3] == '+' && calculator.getScreenFlag() == 1, 'state 4: a');
 
   calculator.setKeyPress(plus);
   setCalculator(['27','2','','+','*']);
   calculator.setOperator();
-  assert.ok(calculator.operator[0] == '+' && calculator.getScreenFlag() == 1, 'state 4: b');
+  assert.ok(calculator.register[3] == '+' && calculator.getScreenFlag() == 1, 'state 4: b');
 
   calculator.setKeyPress(times);
   setCalculator(['27','2','','+','+']);
   calculator.setOperator();
-  assert.ok(calculator.operator[1] == '*' && calculator.getScreenFlag() == 2, 'state 4: a');
+  assert.ok(calculator.register[4] == '*' && calculator.getScreenFlag() == 2, 'state 4: a');
 
   calculator.setKeyPress(times);
   setCalculator(['27','2','','+','*']);
   calculator.setOperator();
-  assert.ok(calculator.operator[1] == '*' && calculator.getScreenFlag() == 2, 'state 4: b');
+  assert.ok(calculator.register[4] == '*' && calculator.getScreenFlag() == 2, 'state 4: b');
 
   // resetCalculator();
 });
@@ -320,14 +319,14 @@ q.test('sends an operator into a register', function(assert) {
   setCalculator(['1', '', '', '', '']);
   calculator.setKeyPress('+');
   calculator.routeKeyPress();
-  assert.equal(calculator.operator[0], '+', 'routeKeyPress sends + to operator a');
+  assert.equal(calculator.register[3], '+', 'routeKeyPress sends + to operator a');
 });
 
 q.test('sends an operator into a register', function(assert) {
   setCalculator(['1', '2', '', '+', '']);
   calculator.setKeyPress('*');
   calculator.routeKeyPress();
-  assert.equal(calculator.operator[1], '*', 'routeKeyPress sends * to operator b');
+  assert.equal(calculator.register[4], '*', 'routeKeyPress sends * to operator b');
 });
 
 q.test('`pm` changes the sign of the displayed register', function(assert) {
@@ -386,7 +385,7 @@ q.test('sends a number into a register', function(assert) {
 q.test('sends an operator into a register', function(assert) {
   setCalculator(['1', '2', '', '+', '']);
   calculator.sendKeyPress('*');
-  assert.equal(calculator.operator[1], '*', 'sendKeyPress sends * to operator b');
+  assert.equal(calculator.register[4], '*', 'sendKeyPress sends * to operator b');
 });
 
 q.test('`pm` changes the sign of the displayed register', function(assert) {
@@ -662,6 +661,24 @@ q.test('complex operations', function(assert) {
   runCalculationSequence('1+3/0=');
   assert.equal(calculator.register[1], 'DIV BY 0', 'Division by zero');
 
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('9/3=');
+  assert.equal(calculator.register[0], '3', '9 / 3 = 3');
+  calculator.sendKeyPress('/');
+  assert.equal(calculator.register[0], '3', 'Extend the calculation');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('9/3=');
+  assert.equal(calculator.register[0], '3', '9 / 3 = 3');
+  calculator.sendKeyPress('7');
+  assert.equal(calculator.register[0], '7', 'Start over after a calculation');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('9/3=');
+  assert.equal(calculator.register[0], '3', '9 / 3 = 3');
+  calculator.sendKeyPress('.');
+  assert.equal(calculator.register[0], '0.', 'Start over with a decimal');
+
 });
 
 
@@ -681,8 +698,8 @@ function setCalculator(arr) {
   calculator.register[0]   = arr[0]; 
   calculator.register[1]   = arr[1]; 
   calculator.register[2]   = arr[2]; 
-  calculator.operator[0]   = arr[3]; 
-  calculator.operator[1]   = arr[4]; 
+  calculator.register[3]   = arr[3]; 
+  calculator.register[4]   = arr[4]; 
   calculator.setScreenFlag(arr[5]); 
   calculator.setState(arr[7]); 
   calculator.setCalculatorState();
@@ -692,8 +709,8 @@ function setBuffer(buffer) {
   calculator.register[0]  = buffer[0]; 
   calculator.register[1]  = buffer[1]; 
   calculator.register[2]  = buffer[2]; 
-  calculator.operator[0]  = buffer[3]; 
-  calculator.operator[1]  = buffer[4]; 
+  calculator.register[3]  = buffer[3]; 
+  calculator.register[4]  = buffer[4]; 
   calculator.buffer.screen_flag = buffer[5]; 
   calculator.buffer.state       = buffer[7]; 
   calculator.setCalculatorState();
@@ -704,15 +721,15 @@ function resetBuffer() {
 }
 
 function getResult() {
-  return [calculator.register[0], calculator.register[1], calculator.register[2], calculator.operator[0], calculator.operator[1]];
+  return [calculator.register[0], calculator.register[1], calculator.register[2], calculator.register[3], calculator.register[4]];
 }
 
 function stringifyBuffer() {
   return calculator.register[0] + ', '
        + calculator.register[1] + ', '
        + calculator.register[2] + ', '
-       + calculator.operator[0] + ', '
-       + calculator.operator[1] + ', '
+       + calculator.register[3] + ', '
+       + calculator.register[4] + ', '
        + calculator.getState();
 }
   
@@ -727,8 +744,7 @@ let default_buffer = {
   state       : 1
 };
 
-let default_register = ['','',''];
-let default_operator = ['',''];
+let default_register = ['','','','',''];
 
 function runCalculationSequence(string) {
   let sequence = string.split('');
