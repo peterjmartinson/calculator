@@ -1,14 +1,9 @@
-# Build a JavaScript Calculator
+# JavaScript Calculator
 
-## Objective
-Build an app that is functionally similar to this: https://codepen.io/FreeCodeCamp/full/rLJZrA/.
+This is a basic calculator that adds, subtracts, multiplies, divides, and takes square roots.  The logic is written entirely in JavaScript.
 
-## Requirements
+## Description
 
-* User Story: I can add, subtract, multiply and divide two numbers.
+I wanted to write a calculator that does what the user thinks it should, without the user thinking too hard.  It allows operations to be chained, and decides how to correctly handle order of operations.  The user can abort and change the current operation and iterate by repeatedly hitting `=`.  In other words, it acts like a normal calculator.
 
-* User Story: I can clear the input field with a clear button.
-
-* User Story: I can keep chaining mathematical operations together until I hit the equal button, and the calculator will tell me the correct output.
-
-## Notes
+## Execution
