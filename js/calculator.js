@@ -1,7 +1,3 @@
-/**
- * 
- * 
-*/
 let Calculator = function() {
   'use strict';
 
@@ -214,7 +210,7 @@ let Calculator = function() {
   }
 
   function reckonOutside() {
-    if (register[0] == 'ERROR' || register[0] == 'NaN') return;
+    if (register[0] == 'ERROR' || register[0] == 'NaN' || register[0] == 'DIV BY 0') return;
     if (register[1] == '0' && register[3] == '/') {
       divisionByZero();
       return;
@@ -487,32 +483,32 @@ let Calculator = function() {
   }
 
   return {
-    trim          : trim,
-    operate       : operate,
-    setCalculatorState : setCalculatorState,
-    clear         : clear,
-    updateScreen  : updateScreen,
-    setNumber     : setNumber,
-    setOperator   : setOperator,
-    reckonInside  : reckonInside,
-    reckonOutside : reckonOutside,
-    reckonAll     : reckonAll,
-    getKeyPress   : getKeyPress,
-    setKeyPress   : setKeyPress,
-    routeKeyPress : routeKeyPress,
-    flipSign      : flipSign,
-    appendDecimal : appendDecimal,
+    trim                : trim,
+    operate             : operate,
+    setCalculatorState  : setCalculatorState,
+    clear               : clear,
+    updateScreen        : updateScreen,
+    setNumber           : setNumber,
+    setOperator         : setOperator,
+    reckonInside        : reckonInside,
+    reckonOutside       : reckonOutside,
+    reckonAll           : reckonAll,
+    getKeyPress         : getKeyPress,
+    setKeyPress         : setKeyPress,
+    routeKeyPress       : routeKeyPress,
+    flipSign            : flipSign,
+    appendDecimal       : appendDecimal,
     calculateSquareRoot : calculateSquareRoot,
-    sendKeyPress  : sendKeyPress,
-    register      : register,
-    getScreenFlag : getScreenFlag,
-    setScreenFlag : setScreenFlag,
-    setState      : setState,
-    getState      : getState,
-    divisionByZero : divisionByZero,
-    setError : setError,
-    getError : getError,
-    logInternals : logInternals
+    sendKeyPress        : sendKeyPress,
+    register            : register,
+    getScreenFlag       : getScreenFlag,
+    setScreenFlag       : setScreenFlag,
+    setState            : setState,
+    getState            : getState,
+    divisionByZero      : divisionByZero,
+    setError            : setError,
+    getError            : getError,
+    logInternals        : logInternals
   };
 
 
