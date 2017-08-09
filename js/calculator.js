@@ -43,14 +43,14 @@ let Calculator = function() {
 
 // ========================================== KEY ROUTING
   function sendKeyPress(key) {
-    setKeyPress(key);
+    identifyKeyPress(key);
     routeKeyPress();
     setCalculatorState();
     updateScreen();
     document.getElementById("cowport").innerHTML = logInternals();
   }
 
-  function setKeyPress(new_keypress) {
+  function identifyKeyPress(new_keypress) {
     key_press = new_keypress.toString();
   }
 
@@ -494,7 +494,7 @@ let Calculator = function() {
     reckonOutside       : reckonOutside,
     reckonAll           : reckonAll,
     getKeyPress         : getKeyPress,
-    setKeyPress         : setKeyPress,
+    identifyKeyPress    : identifyKeyPress,
     routeKeyPress       : routeKeyPress,
     flipSign            : flipSign,
     appendDecimal       : appendDecimal,
