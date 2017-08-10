@@ -272,27 +272,30 @@ let Calculator = function() {
     switch(getState()) {
       case 1:
         setScreenFlag(1);
-        if (register[0] === '' || register[0] === '0') {
-          register[0] = getKeyPress();
-        } else if (register[0].length < 10) {
-          register[0] = register[0] + getKeyPress();
-        }
+        updateRegister(0);
+        // if (register[0] === '' || register[0] === '0') {
+        //   register[0] = getKeyPress();
+        // } else if (register[0].length < 10) {
+        //   register[0] = register[0] + getKeyPress();
+        // }
         break;
       case 2:
         setScreenFlag(2);
-        if (register[1] === '' || register[1] === '0') {
-          register[1] = getKeyPress();
-        } else if (register[1].length < 10) {
-          register[1] = register[1] + getKeyPress();
-        }
+        updateRegister(1);
+        // if (register[1] === '' || register[1] === '0') {
+        //   register[1] = getKeyPress();
+        // } else if (register[1].length < 10) {
+        //   register[1] = register[1] + getKeyPress();
+        // }
         break;
       case 3:
-        if (register[1] === '' || register[1] === '0') {
-          register[1] = getKeyPress();
-        } else if (register[1].length < 10) {
-          register[1] = register[1] + getKeyPress();
-        }
+        // if (register[1] === '' || register[1] === '0') {
+        //   register[1] = getKeyPress();
+        // } else if (register[1].length < 10) {
+        //   register[1] = register[1] + getKeyPress();
+        // }
         setScreenFlag(2);
+        updateRegister(1);
         break;
       case 4:
          register[2] = getKeyPress();
@@ -308,6 +311,23 @@ let Calculator = function() {
          console.log("something other than NUMBER happened!");
          break;
     }
+  }
+
+  function updateRegister(index) {
+    if (overwriteRegister(index)) {
+      register[index] = getKeyPress();
+    }
+    else if (appendToRegister(index)) {
+      register[index] = register[index] + getKeyPress();
+    }
+  }
+
+  function overwriteRegister(index) {
+    return register[index] === '' || register[index] === '0';
+  }
+
+  function appendToRegister(index) {
+    return register[index].length < 10;
   }
 
   function setOperator() {
