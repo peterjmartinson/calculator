@@ -273,40 +273,23 @@ let Calculator = function() {
       case 1:
         setScreenFlag(1);
         updateRegister(0);
-        // if (register[0] === '' || register[0] === '0') {
-        //   register[0] = getKeyPress();
-        // } else if (register[0].length < 10) {
-        //   register[0] = register[0] + getKeyPress();
-        // }
         break;
       case 2:
         setScreenFlag(2);
         updateRegister(1);
-        // if (register[1] === '' || register[1] === '0') {
-        //   register[1] = getKeyPress();
-        // } else if (register[1].length < 10) {
-        //   register[1] = register[1] + getKeyPress();
-        // }
         break;
       case 3:
-        // if (register[1] === '' || register[1] === '0') {
-        //   register[1] = getKeyPress();
-        // } else if (register[1].length < 10) {
-        //   register[1] = register[1] + getKeyPress();
-        // }
         setScreenFlag(2);
         updateRegister(1);
         break;
       case 4:
-         register[2] = getKeyPress();
-         setScreenFlag(3);
-         break;
+        setScreenFlag(3);
+        updateRegister(2);
+        break;
       case 5:
-         if (register[2].length < 10) {
-            register[2] = register[2] + getKeyPress();
-            setScreenFlag(3);
-         }
-         break;
+        setScreenFlag(3);
+        updateRegister(2);
+        break;
       default:
          console.log("something other than NUMBER happened!");
          break;
@@ -314,19 +297,23 @@ let Calculator = function() {
   }
 
   function updateRegister(index) {
-    if (overwriteRegister(index)) {
-      register[index] = getKeyPress();
+    if (targetRegisterIsEmpty(index)) {
+      register[index] = '';
     }
-    else if (appendToRegister(index)) {
-      register[index] = register[index] + getKeyPress();
-    }
+    appendToRegister(index);
   }
 
-  function overwriteRegister(index) {
-    return register[index] === '' || register[index] === '0';
+  function targetRegisterIsEmpty(index) {
+    return !register[index];
   }
 
   function appendToRegister(index) {
+    if ( targetRegisterIsAppendable(index) ) {
+      register[index] += getKeyPress();
+    }
+  }
+
+  function targetRegisterIsAppendable(index) {
     return register[index].length < 10;
   }
 
