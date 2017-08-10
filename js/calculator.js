@@ -16,17 +16,6 @@ let Calculator = function() {
     return state;
   }
 
-  /*
-   * DETERMINE CALCULATOR STATE
-   *
-   *          A | B | C |opA|opB|
-   *         ---|---|---|---|---|
-   * Case 1) 0,A|   |   |   |   |
-   * Case 2)  A |   |   | + |   |
-   * Case 3)  A | B |   |+,*|   |
-   * Case 4)  A | B |   | + | * |
-   * Case 5)  A | B | C | + | * |
-   */
   function setCalculatorState() {
       if (register[3] === '') {
         setState(1);
@@ -206,6 +195,7 @@ let Calculator = function() {
     }
     let result = operate(register[1], register[4], register[2]);
     register[1] = result.toString();
+    register[2] = '';
     setScreenFlag(2);
   }
 
@@ -327,24 +317,20 @@ let Calculator = function() {
     switch (getState()) {
       case 1:
         updateRegister(3);
-         // register[3] = key_press;
          setScreenFlag(1);
          break;
       case 2:
         updateRegister(3);
-         // register[3] = key_press;
          setScreenFlag(1);
          break;
       case 3:
          if ((register[3] === '+' || register[3] === '-') && (key_press === '*' || key_press === '/')) {
             updateRegister(4);
-            // register[4] = key_press;
             setScreenFlag(2);
          } else {
             reckonOutside();
             register[1] = '';
             updateRegister(3);
-            // register[3] = key_press;
             setScreenFlag(1);
          }
          break;
@@ -370,8 +356,7 @@ let Calculator = function() {
             register[4] = '';
             setScreenFlag(1);
          } else {
-            register[1] = operate(register[1], register[4], register[2]);
-            register[2] = '';
+            reckonInside();
             register[4] = key_press;
             setScreenFlag(2);
          }

@@ -46,16 +46,53 @@ q.test('full sequences', function(assert) {
 
 });
 
+  /*
+   *          A | B | C |opA|opB|
+   *         ---|---|---|---|---|
+   * Case 1) 0,A|   |   |   |   |
+   * Case 2)  A |   |   | + |   |
+   * Case 3)  A | B |   |+,*|   |
+   * Case 4)  A | B |   | + | * |
+   * Case 5)  A | B | C | + | * |
+   */
 q.test('partial sequences', function(assert) {
   calculator.sendKeyPress('clear');
+  runCalculationSequence('2+*3=');
+  assert.equal(getScreenValue(), '6', '2*3=6 -> replace operator case 2');
+
+  calculator.sendKeyPress('clear');
   runCalculationSequence('1+2*');
-  assert.equal(calculator.register[4], '*', '1+2*');
+  assert.equal(getScreenValue(), '2', '1+2* -> setOperator case 3');
+  runCalculationSequence('3=');
+  assert.equal(getScreenValue(), '7', '1+2*3=7');
   
   calculator.sendKeyPress('clear');
-  runCalculationSequence('1+2+');
-  assert.equal(calculator.register[0], '3', '1+2+ -> 3');
-  assert.equal(calculator.register[3], '+', '1+2+ -> 3');
+  runCalculationSequence('1+2+3+');
+  assert.equal(getScreenValue(), '6', '1+2+3=6 -> setOperator case 3');
 
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('2*3+');
+  assert.equal(getScreenValue(), '6', '2*3=6 -> setOperator case 3');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('2+*3=');
+  assert.equal(getScreenValue(), '6', '2*3=6 -> replace operator case 2');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('2+3*+');
+  assert.equal(getScreenValue(), '5', '2+3=5 -> setOperator case 4');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('2+3*/');
+  assert.equal(getScreenValue(), '3', 'simply replace operator case 4');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('2+3*5+');
+  assert.equal(getScreenValue(), '17', '2+3*5=17 -> case 5: run all operations');
+  
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('2+3*5*');
+  assert.equal(getScreenValue(), '15', '2+3*5* -> 2+15* case 5: inner operate');
   
 });
 
@@ -112,6 +149,41 @@ q.test('aborted sequences', function(assert) {
 
 });
 
+q.test('repeated calculations', function(assert) {
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('2+3==');
+  assert.equal(getScreenValue(), '8', '2+3=5+3=8');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('2*3==');
+  assert.equal(getScreenValue(), '18', '2*3=6*3=18');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('18/3==');
+  assert.equal(getScreenValue(), '2', '18/3=6/3=2');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('18-3==');
+  assert.equal(getScreenValue(), '12', '18-3=15-3=12');
+
+  // Start here - 5 goes to register[1], not 15
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('2+3*5==');
+  assert.equal(getScreenValue(), '85', '2+3*5=17*5=85');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('18-3==');
+  assert.equal(getScreenValue(), '12', '18-3=15-3=12');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('18-3==');
+  assert.equal(getScreenValue(), '12', '18-3=15-3=12');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('18-3==');
+  assert.equal(getScreenValue(), '12', '18-3=15-3=12');
+
+});
 q.test('complex operations', function(assert) {
   calculator.sendKeyPress('clear');
   calculator.sendKeyPress('4');
