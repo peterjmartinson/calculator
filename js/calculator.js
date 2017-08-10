@@ -297,7 +297,7 @@ let Calculator = function() {
   }
 
   function updateRegister(index) {
-    if (targetRegisterIsEmpty(index)) {
+    if (targetRegisterIsEmpty(index) || isOperator(index)) {
       register[index] = '';
     }
     appendToRegister(index);
@@ -305,6 +305,11 @@ let Calculator = function() {
 
   function targetRegisterIsEmpty(index) {
     return !register[index];
+  }
+
+  function isOperator(index) {
+    let operators = ['+','-','*','/']
+    return operators.indexOf(register[index]) !== -1;
   }
 
   function appendToRegister(index) {
@@ -321,21 +326,25 @@ let Calculator = function() {
     let key_press = getKeyPress();
     switch (getState()) {
       case 1:
-         register[3] = key_press;
+        updateRegister(3);
+         // register[3] = key_press;
          setScreenFlag(1);
          break;
       case 2:
-         register[3] = key_press;
+        updateRegister(3);
+         // register[3] = key_press;
          setScreenFlag(1);
          break;
       case 3:
          if ((register[3] === '+' || register[3] === '-') && (key_press === '*' || key_press === '/')) {
-            register[4] = key_press;
+            updateRegister(4);
+            // register[4] = key_press;
             setScreenFlag(2);
          } else {
             reckonOutside();
             register[1] = '';
-            register[3] = key_press;
+            updateRegister(3);
+            // register[3] = key_press;
             setScreenFlag(1);
          }
          break;
