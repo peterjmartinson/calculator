@@ -166,24 +166,20 @@ q.test('repeated calculations', function(assert) {
   runCalculationSequence('18-3==');
   assert.equal(getScreenValue(), '12', '18-3=15-3=12');
 
-  // Start here - 5 goes to register[1], not 15
   calculator.sendKeyPress('clear');
   runCalculationSequence('2+3*5==');
   assert.equal(getScreenValue(), '85', '2+3*5=17*5=85');
 
   calculator.sendKeyPress('clear');
-  runCalculationSequence('18-3==');
-  assert.equal(getScreenValue(), '12', '18-3=15-3=12');
+  runCalculationSequence('2+3*5===');
+  assert.equal(getScreenValue(), '425', '2+3*5=17*5=85*5=425');
 
   calculator.sendKeyPress('clear');
-  runCalculationSequence('18-3==');
-  assert.equal(getScreenValue(), '12', '18-3=15-3=12');
-
-  calculator.sendKeyPress('clear');
-  runCalculationSequence('18-3==');
-  assert.equal(getScreenValue(), '12', '18-3=15-3=12');
+  runCalculationSequence('4+15/3==');
+  assert.equal(getScreenValue(), '3', '4+15/3=9/3=3');
 
 });
+
 q.test('complex operations', function(assert) {
   calculator.sendKeyPress('clear');
   calculator.sendKeyPress('4');

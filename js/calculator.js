@@ -216,8 +216,12 @@ let Calculator = function() {
   function reckonAll() {
     if (register[0] == 'ERROR' || register[0] == 'NaN') return;
     if (register[1] != '' && register[2] != '' && register[4] != '') {
+      let temp_register = register[2];
       reckonInside();
       reckonOutside();
+      register[1] = temp_register;
+      register[3] = register[4];
+      register[4] = '';
     } else {
       reckonOutside();
     }
@@ -337,27 +341,25 @@ let Calculator = function() {
       case 4:
          if (key_press === '+' || key_press === '-') {
             reckonAll();
-            register[1] = '';
-            register[2] = '';
-            register[3] = key_press;
-            register[4] = '';
+            updateRegister(3);
             setScreenFlag(1);
          } else {
-            register[4] = key_press;
+            updateRegister(4);
             setScreenFlag(2);
          }
          break;
       case 5:
          if (key_press === '+' || key_press === '-') {
             reckonAll();
-            register[1] = '';
-            register[2] = '';
-            register[3] = key_press;
-            register[4] = '';
+            updateRegister(3);
+            // register[1] = '';
+            // register[2] = '';
+            // register[3] = key_press;
+            // register[4] = '';
             setScreenFlag(1);
          } else {
             reckonInside();
-            register[4] = key_press;
+            updateRegister(4);
             setScreenFlag(2);
          }
          break;
