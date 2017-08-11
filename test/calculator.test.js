@@ -4,6 +4,16 @@
 
 const q = QUnit;
 
+/*
+ *          A | B | C |opA|opB|
+ *         ---|---|---|---|---|
+ * Case 1) 0,A|   |   |   |   |
+ * Case 2)  A |   |   | + |   |
+ * Case 3)  A | B |   |+,*|   |
+ * Case 4)  A | B |   | + | * |
+ * Case 5)  A | B | C | + | * |
+**/
+
 q.module('Run some full calculations!');
 
 q.test('short sequences', function(assert) {
@@ -46,15 +56,6 @@ q.test('full sequences', function(assert) {
 
 });
 
-  /*
-   *          A | B | C |opA|opB|
-   *         ---|---|---|---|---|
-   * Case 1) 0,A|   |   |   |   |
-   * Case 2)  A |   |   | + |   |
-   * Case 3)  A | B |   |+,*|   |
-   * Case 4)  A | B |   | + | * |
-   * Case 5)  A | B | C | + | * |
-   */
 q.test('partial sequences', function(assert) {
   calculator.sendKeyPress('clear');
   runCalculationSequence('2+*3=');
@@ -244,6 +245,20 @@ q.test('complex operations', function(assert) {
 
 });
 
+q.test('Error Handling', function(assert) {
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1/0=');
+  assert.equal(getScreenValue(), 'DIV BY 0', 'Division by zero');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1+1/0=');
+  assert.equal(getScreenValue(), 'DIV BY 0', 'Division by zero');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('9999999999+10=');
+  assert.equal(getScreenValue(), 'ERROR', 'Out of bounds error');
+
+});
 
 // ========= UTILITY FUNCTIONS
 

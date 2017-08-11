@@ -53,7 +53,7 @@ let Calculator = function() {
     if ( key_press === 'clear' ) {
       clear();
     }
-    else if ( getError() ) {
+    else if ( isError() ) {
       return;
     }
     else if ( number.indexOf(key_press) > -1 ) {
@@ -200,7 +200,7 @@ let Calculator = function() {
   }
 
   function reckonOutside() {
-    if (register[0] == 'ERROR' || register[0] == 'NaN' || register[0] == 'DIV BY 0') return;
+    if (isError()) return;
     if (register[1] == '0' && register[3] == '/') {
       divisionByZero();
       return;
@@ -213,8 +213,11 @@ let Calculator = function() {
     setScreenFlag(1);
   }
 
+  // @@@@@@@@@@@@@@@
+  // make this just reckon both
+  // add a new function that handles the logic, which gets called as EQUALS
   function reckonAll() {
-    if (register[0] == 'ERROR' || register[0] == 'NaN') return;
+    if (isError()) return;
     if (register[1] != '' && register[2] != '' && register[4] != '') {
       let temp_register = register[2];
       reckonInside();
@@ -246,8 +249,8 @@ let Calculator = function() {
     setScreenFlag(1);
   }
 
-  function getError() {
-    return register[0] === 'ERROR' || register[0] === 'DIV BY 0' ? 1 : 0;
+  function isError() {
+    return register[0] === 'ERROR' || register[0] === 'DIV BY 0' || register[0] === 'NaN' ? 1 : 0;
   }
 
 // =========================================== ULTIMATE ACTIONS
@@ -351,11 +354,11 @@ let Calculator = function() {
       case 5:
          if (key_press === '+' || key_press === '-') {
             reckonAll();
-            updateRegister(3);
+            // updateRegister(3);
             // register[1] = '';
-            // register[2] = '';
-            // register[3] = key_press;
-            // register[4] = '';
+            register[2] = '';
+            register[3] = key_press;
+            register[4] = '';
             setScreenFlag(1);
          } else {
             reckonInside();
@@ -510,7 +513,7 @@ let Calculator = function() {
     getState            : getState,
     divisionByZero      : divisionByZero,
     setError            : setError,
-    getError            : getError,
+    isError            : isError,
     logInternals        : logInternals
   };
 
