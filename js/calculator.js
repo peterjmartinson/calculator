@@ -69,7 +69,7 @@ let Calculator = function() {
       setOperator();
     }
     else if ( key_press === '=' ) { 
-      reckonAll();
+      runEquals();
     }
     else if ( key_press === 'pm' ) {
       flipSign();
@@ -182,10 +182,14 @@ let Calculator = function() {
      }
   }
 
+  function reckonAll() {
+    if (isError()) return;
+    reckonInside();
+    reckonOutside();
+  }
+    
   function reckonInside() {
-    if (register[0] == 'ERROR' || register[0] == 'NaN') {
-      return;
-    }
+    if (isError()) return;
     if (register[2] == '0' && register[4] == '/') {
       divisionByZero();
       return;
@@ -205,30 +209,47 @@ let Calculator = function() {
       divisionByZero();
       return;
     }
-    if (register[1] === '') {
-      register[1] = register[0]
+    if (getState() === 2) {
+      register[1] = register[0];
+    }
+    // @@@@@@@@@@@@@@@@
+    // NOPE
+    if (getState() === 5) {
+      register[1] = '';
     }
     let result = operate(register[0], register[3], register[1]);
     register[0] = result.toString();
     setScreenFlag(1);
   }
 
-  // @@@@@@@@@@@@@@@
-  // make this just reckon both
-  // add a new function that handles the logic, which gets called as EQUALS
-  function reckonAll() {
+  function runEquals() {
     if (isError()) return;
-    if (register[1] != '' && register[2] != '' && register[4] != '') {
-      let temp_register = register[2];
-      reckonInside();
-      reckonOutside();
-      register[1] = temp_register;
-      register[3] = register[4];
-      register[4] = '';
-    } else {
-      reckonOutside();
+    switch(getState()) {
+      case 1:
+        reckonOutside();
+        break;
+      case 2:
+        reckonOutside();
+        break;
+      case 3:
+        reckonOutside();
+        break;
+      case 4:
+        reckonOutside();
+        break;
+      case 5:
+        let temp_register = register[2];
+        reckonAll();
+        register[1] = temp_register;
+        register[3] = register[4];
+        register[4] = '';
+        break;
+      default:
+        console.log("Something other than Equals happened!");
+        break;
     }
   }
+
 
 // ============================================= ERROR HANDLING
   function divisionByZero() {
@@ -343,7 +364,7 @@ let Calculator = function() {
          break;
       case 4:
          if (key_press === '+' || key_press === '-') {
-            reckonAll();
+            runEquals();
             updateRegister(3);
             setScreenFlag(1);
          } else {
@@ -353,7 +374,7 @@ let Calculator = function() {
          break;
       case 5:
          if (key_press === '+' || key_press === '-') {
-            reckonAll();
+            runEquals();
             // updateRegister(3);
             // register[1] = '';
             register[2] = '';
@@ -498,7 +519,7 @@ let Calculator = function() {
     setOperator         : setOperator,
     reckonInside        : reckonInside,
     reckonOutside       : reckonOutside,
-    reckonAll           : reckonAll,
+    runEquals           : runEquals,
     getKeyPress         : getKeyPress,
     setKeyPress         : setKeyPress,
     routeKeyPress       : routeKeyPress,
