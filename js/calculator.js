@@ -1,3 +1,8 @@
+/**
+ *  Two parts to each operation:
+ *    1. Calculation result
+ *    2. Followup calculation
+*/
 let Calculator = function() {
   'use strict';
 
@@ -8,6 +13,16 @@ let Calculator = function() {
       state = 1;
 
 // ========================================== STATE
+/*
+ *           A | B | C |opA|opB|
+ *          ---|---|---|---|---|
+ * State 1) 0,A|   |   |   |   |
+ * State 2)  A |   |   | + |   |
+ * State 3)  A | B |   |+,*|   |
+ * State 4)  A | B |   | + | * |
+ * State 5)  A | B | C | + | * |
+**/
+
   function setState(new_state) {
     state = new_state;
   }
@@ -187,13 +202,15 @@ let Calculator = function() {
     reckonInside();
     reckonOutside();
   }
-    
+
+  // 1+2*3= -> 1+6=
   function reckonInside() {
     if (isError()) return;
     if (register[2] == '0' && register[4] == '/') {
       divisionByZero();
       return;
     }
+    // handle the "7+=" case
     if (register[2] === '') {
       register[2] = register[1]
     }
@@ -203,6 +220,7 @@ let Calculator = function() {
     setScreenFlag(2);
   }
 
+  // 1+6= -> 7
   function reckonOutside() {
     if (isError()) return;
     if (register[1] == '0' && register[3] == '/') {
@@ -211,11 +229,6 @@ let Calculator = function() {
     }
     if (getState() === 2) {
       register[1] = register[0];
-    }
-    // @@@@@@@@@@@@@@@@
-    // NOPE
-    if (getState() === 5) {
-      register[1] = '';
     }
     let result = operate(register[0], register[3], register[1]);
     register[0] = result.toString();
@@ -314,9 +327,11 @@ let Calculator = function() {
     }
   }
 
+// =================================== UPDATE THE REGISTER
+
   function updateRegister(index) {
     if (targetRegisterIsEmpty(index) || isOperator(index)) {
-      register[index] = '';
+      clearRegister(index);
     }
     appendToRegister(index);
   }
@@ -328,6 +343,10 @@ let Calculator = function() {
   function isOperator(index) {
     let operators = ['+','-','*','/']
     return operators.indexOf(register[index]) !== -1;
+  }
+
+  function clearRegister(index) {
+    register[index] = '';
   }
 
   function appendToRegister(index) {
@@ -345,23 +364,23 @@ let Calculator = function() {
     switch (getState()) {
       case 1:
         updateRegister(3);
-         setScreenFlag(1);
-         break;
+        setScreenFlag(1);
+        break;
       case 2:
         updateRegister(3);
-         setScreenFlag(1);
-         break;
+        setScreenFlag(1);
+        break;
       case 3:
-         if ((register[3] === '+' || register[3] === '-') && (key_press === '*' || key_press === '/')) {
-            updateRegister(4);
-            setScreenFlag(2);
-         } else {
-            reckonOutside();
-            register[1] = '';
-            updateRegister(3);
-            setScreenFlag(1);
-         }
-         break;
+        if ((register[3] === '+' || register[3] === '-') && (key_press === '*' || key_press === '/')) {
+          updateRegister(4);
+          setScreenFlag(2);
+        } else {
+          reckonOutside();
+          register[1] = '';
+          updateRegister(3);
+          setScreenFlag(1);
+        }
+        break;
       case 4:
          if (key_press === '+' || key_press === '-') {
             runEquals();
@@ -375,11 +394,10 @@ let Calculator = function() {
       case 5:
          if (key_press === '+' || key_press === '-') {
             runEquals();
-            // updateRegister(3);
-            // register[1] = '';
             register[2] = '';
             register[3] = key_press;
             register[4] = '';
+            register[1] = '';
             setScreenFlag(1);
          } else {
             reckonInside();
