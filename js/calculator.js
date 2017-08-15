@@ -360,11 +360,8 @@ let Calculator = function() {
   }
 
   function setOperator() {
-    let key_press = getKeyPress();
     switch (getState()) {
       case 1:
-        beginOuterCalculation();
-        break;
       case 2:
         changeOuterCalculation();
         break;
@@ -383,20 +380,13 @@ let Calculator = function() {
     }
   }
 
-  function beginOuterCalculation() {
-    updateRegister(3);
-    setScreenFlag(1);
-  }
-
   function changeOuterCalculation() {
     updateRegister(3);
     setScreenFlag(1);
   }
 
-
-
   function beginInnerCalculation() {
-    if ((key_press === '*' || key_press === '/') && (register[3] === '+' || register[3] === '-')) {
+    if ((getKeyPress() === '*' || getKeyPress() === '/') && (register[3] === '+' || register[3] === '-')) {
       updateRegister(4);
       setScreenFlag(2);
     } else {
@@ -408,7 +398,7 @@ let Calculator = function() {
   }
 
   function completeInnerCalculation() {
-    if (key_press === '+' || key_press === '-') {
+    if (getKeyPress() === '+' || getKeyPress() === '-') {
       runEquals();
       updateRegister(3);
       setScreenFlag(1);
@@ -419,10 +409,10 @@ let Calculator = function() {
   }
 
   function continueInnerCalculation() {
-    if (key_press === '+' || key_press === '-') {
+    if (getKeyPress() === '+' || getKeyPress() === '-') {
       runEquals();
       register[2] = '';
-      register[3] = key_press;
+      register[3] = getKeyPress();
       register[4] = '';
       register[1] = '';
       setScreenFlag(1);
@@ -433,8 +423,6 @@ let Calculator = function() {
     }
   }
     
-
-
   function flipSign() {
     switch (getState()) {
       case 1:
