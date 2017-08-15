@@ -363,53 +363,77 @@ let Calculator = function() {
     let key_press = getKeyPress();
     switch (getState()) {
       case 1:
-        updateRegister(3);
-        setScreenFlag(1);
+        beginOuterCalculation();
         break;
       case 2:
-        updateRegister(3);
-        setScreenFlag(1);
+        changeOuterCalculation();
         break;
       case 3:
-        if ((register[3] === '+' || register[3] === '-') && (key_press === '*' || key_press === '/')) {
-          updateRegister(4);
-          setScreenFlag(2);
-        } else {
-          reckonOutside();
-          register[1] = '';
-          updateRegister(3);
-          setScreenFlag(1);
-        }
+        beginInnerCalculation();
         break;
       case 4:
-         if (key_press === '+' || key_press === '-') {
-            runEquals();
-            updateRegister(3);
-            setScreenFlag(1);
-         } else {
-            updateRegister(4);
-            setScreenFlag(2);
-         }
-         break;
+        completeInnerCalculation();
+        break;
       case 5:
-         if (key_press === '+' || key_press === '-') {
-            runEquals();
-            register[2] = '';
-            register[3] = key_press;
-            register[4] = '';
-            register[1] = '';
-            setScreenFlag(1);
-         } else {
-            reckonInside();
-            updateRegister(4);
-            setScreenFlag(2);
-         }
-         break;
+        continueInnerCalculation();
+        break;
       default:
-         console.log("something other than OPERATOR happened!");
-         break;
+        console.log("something other than OPERATOR happened!");
+        break;
     }
   }
+
+  function beginOuterCalculation() {
+    updateRegister(3);
+    setScreenFlag(1);
+  }
+
+  function changeOuterCalculation() {
+    updateRegister(3);
+    setScreenFlag(1);
+  }
+
+
+
+  function beginInnerCalculation() {
+    if ((key_press === '*' || key_press === '/') && (register[3] === '+' || register[3] === '-')) {
+      updateRegister(4);
+      setScreenFlag(2);
+    } else {
+      reckonOutside();
+      register[1] = '';
+      updateRegister(3);
+      setScreenFlag(1);
+    }
+  }
+
+  function completeInnerCalculation() {
+    if (key_press === '+' || key_press === '-') {
+      runEquals();
+      updateRegister(3);
+      setScreenFlag(1);
+    } else {
+      updateRegister(4);
+      setScreenFlag(2);
+    }
+  }
+
+  function continueInnerCalculation() {
+    if (key_press === '+' || key_press === '-') {
+      runEquals();
+      register[2] = '';
+      register[3] = key_press;
+      register[4] = '';
+      register[1] = '';
+      setScreenFlag(1);
+    } else {
+      reckonInside();
+      updateRegister(4);
+      setScreenFlag(2);
+    }
+  }
+    
+
 
   function flipSign() {
     switch (getState()) {
