@@ -302,32 +302,24 @@ let Calculator = function() {
   function setNumber() {
     switch(getState()) {
       case 1:
-        setScreenFlag(1);
         updateRegister(0);
+        setScreenFlag(1);
         break;
       case 2:
-        setScreenFlag(2);
-        updateRegister(1);
-        break;
       case 3:
-        setScreenFlag(2);
         updateRegister(1);
+        setScreenFlag(2);
         break;
       case 4:
-        setScreenFlag(3);
-        updateRegister(2);
-        break;
       case 5:
-        setScreenFlag(3);
         updateRegister(2);
+        setScreenFlag(3);
         break;
       default:
          console.log("something other than NUMBER happened!");
          break;
     }
   }
-
-// =================================== UPDATE THE REGISTER
 
   function updateRegister(index) {
     if (targetRegisterIsEmpty(index) || isOperator(index)) {
@@ -540,32 +532,8 @@ let Calculator = function() {
   }
 
   return {
-    trim                : trim,
-    operate             : operate,
-    setCalculatorState  : setCalculatorState,
-    clear               : clear,
-    updateScreen        : updateScreen,
-    setNumber           : setNumber,
-    setOperator         : setOperator,
-    reckonInside        : reckonInside,
-    reckonOutside       : reckonOutside,
-    runEquals           : runEquals,
-    getKeyPress         : getKeyPress,
-    setKeyPress         : setKeyPress,
-    routeKeyPress       : routeKeyPress,
-    flipSign            : flipSign,
-    appendDecimal       : appendDecimal,
-    calculateSquareRoot : calculateSquareRoot,
     sendKeyPress        : sendKeyPress,
-    register            : register,
-    getScreenFlag       : getScreenFlag,
-    setScreenFlag       : setScreenFlag,
-    setState            : setState,
-    getState            : getState,
-    divisionByZero      : divisionByZero,
-    setError            : setError,
-    isError            : isError,
-    logInternals        : logInternals
+    register            : register
   };
 
 
