@@ -87,13 +87,13 @@ let Calculator = function() {
       runEquals();
     }
     else if ( key_press === 'pm' ) {
-      flipSign();
+      setSign();
     }
     else if ( key_press === '.' ) {
       if (previous_keypress == '=') {
         clear();
       }
-      appendDecimal();
+      setDecimal();
     }
     else if ( key_press === 'root' ) {
       calculateSquareRoot();
@@ -407,29 +407,24 @@ let Calculator = function() {
     }
   }
     
-  function flipSign() {
+  function setSign() {
     switch (getState()) {
       case 1:
         if (register[0] !== 'empty' && register[0] !== '0') {
-          register[0] = Number(register[0] * -1).toString();
-          setScreenFlag(1);
+          flipSign(0);
         }
         break;
       case 2:
-        register[1] = Number(register[0] * -1).toString();
-        setScreenFlag(2);
+        flipSignAndTransfer(0);
         break;
       case 3:
-        register[1] = Number(register[1] * -1).toString();
-        setScreenFlag(2);
+        flipSign(1);
         break;
       case 4:
-        register[2] = Number(register[1] * -1).toString();
-        setScreenFlag(3);
+        flipSignAndTransfer(1);
         break;
       case 5:
-        register[2] = Number(register[2] * -1).toString();
-        setScreenFlag(3);
+        flipSign(2);
         break;
       default:
         console.log("something other than PLUS-MINUS happened!");
@@ -437,7 +432,17 @@ let Calculator = function() {
     }
   }
 
-  function appendDecimal() {
+  function flipSign(index) {
+    register[index] = Number(register[index] * -1).toString();
+    setScreenFlag(index+1);
+  }
+
+  function flipSignAndTransfer(index) {
+    register[index+1] = Number(register[index] * -1).toString();
+    setScreenFlag(index+2);
+  }
+
+  function setDecimal() {
     switch (getState()) {
       case 1:
          if (register[0].indexOf('.') === -1 && register[0].length < 10) {
