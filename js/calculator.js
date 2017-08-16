@@ -199,11 +199,14 @@ let Calculator = function() {
 
   function reckonAll() {
     if (isError()) return;
+    let temp_register = register[2];
     reckonInside();
     reckonOutside();
+    register[1] = temp_register;
+    register[3] = register[4];
+    register[4] = '';
   }
 
-  // 1+2*3= -> 1+6=
   function reckonInside() {
     if (isError()) return;
     if (register[2] == '0' && register[4] == '/') {
@@ -220,7 +223,6 @@ let Calculator = function() {
     setScreenFlag(2);
   }
 
-  // 1+6= -> 7
   function reckonOutside() {
     if (isError()) return;
     if (register[1] == '0' && register[3] == '/') {
@@ -239,23 +241,13 @@ let Calculator = function() {
     if (isError()) return;
     switch(getState()) {
       case 1:
-        reckonOutside();
-        break;
       case 2:
-        reckonOutside();
-        break;
       case 3:
-        reckonOutside();
-        break;
       case 4:
         reckonOutside();
         break;
       case 5:
-        let temp_register = register[2];
         reckonAll();
-        register[1] = temp_register;
-        register[3] = register[4];
-        register[4] = '';
         break;
       default:
         console.log("Something other than Equals happened!");
