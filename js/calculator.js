@@ -368,20 +368,20 @@ let Calculator = function() {
 
   function setDecimal() {
     switch (getState()) {
-      case 1:
+      case 1: // 0,A|   |   |   |   |
          setFirstDecimal();
          break;
-      case 2:
-         startNewDecimal(1);
+      case 2: //  A |   |   | + |   |
+         transferFirstDecimal();
          break;
-      case 3:
-         appendDecimal(1);
+      case 3: //  A | B |   |+,*|   |
+         setSecondDecimal();
          break;
-      case 4:
-         startNewDecimal(2);
+      case 4: //  A | B |   | + | * |
+         transferSecondDecimal();
          break;
-      case 5:
-         appendDecimal(2);
+      case 5: //  A | B | C | + | * |
+         setThirdDecimal();
          break;
       default:
          console.log("something other than . happened!");
@@ -438,10 +438,6 @@ let Calculator = function() {
     }
   }
 
-  function appendNumber(index) {
-    appendToRegister(index);
-  }
-
   function changeOuterCalculation() {
     first_operator = getKeyPress();
   }
@@ -483,36 +479,6 @@ let Calculator = function() {
     }
   }
     
-  function updateRegister(index) {
-    if (isOperator(index)) {
-      clearRegister(index);
-    }
-    appendToRegister(index);
-  }
-
-  function targetRegisterIsEmpty(index) {
-    return !register[index];
-  }
-
-  function isOperator(index) {
-    let operators = ['+','-','*','/']
-    return operators.indexOf(register[index]) !== -1;
-  }
-
-  function clearRegister(index) {
-    register[index] = '';
-  }
-
-  function appendToRegister(index) {
-    if ( targetRegisterIsAppendable(index) ) {
-      register[index] += getKeyPress();
-    }
-  }
-
-  function targetRegisterIsAppendable(index) {
-    return register[index].length < 10;
-  }
-
   function flipFirstSign() {
     first_number = Number(first_number * -1).toString();
     setScreenFlag(0);
@@ -541,16 +507,25 @@ let Calculator = function() {
     }
   }
 
-  function appendDecimal(index) {
-    if (register[index].indexOf('.') === -1 && register[index].length < 10) {
-      register[index] = register[index] + '.';
+  function transferFirstDecimal() {
+    register[1] = '0.';
+    setScreenFlag(1);
+  }
+
+  function setSecondDecimal() {
+    if (register[1].indexOf('.') === -1 && register[1].length < 10) {
+      register[1] = register[1] + '.';
     }
   }
 
-  function startNewDecimal(index) {
-    register[index] = '0.';
-    if ( getState > 1 ) {
-      setScreenFlag(index);
+  function transferSecondDecimal() {
+    register[2] = '0.';
+    setScreenFlag(2);
+  }
+
+  function setThirdDecimal() {
+    if (register[2].indexOf('.') === -1 && register[2].length < 10) {
+      register[2] = register[2] + '.';
     }
   }
 
