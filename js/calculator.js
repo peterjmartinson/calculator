@@ -9,7 +9,7 @@ let Calculator = function() {
   let key_press = '',
       previous_keypress = '',
       register = ['','','','',''],
-      screen_flag = 1,
+      screen_flag = 0,
       state = 1;
 
 // ========================================== STATE
@@ -144,17 +144,17 @@ let Calculator = function() {
 
   function updateScreen() {
     let screen = document.getElementById("screen");
-    if (getScreenFlag() === 1) {
+    if (getScreenFlag() === 0) {
        if (register[0] === '') {
           screen.innerHTML = '0';
        } else {
           screen.innerHTML = register[0];
        }
     }
-    if (getScreenFlag() === 2) {
+    if (getScreenFlag() === 1) {
        screen.innerHTML = register[1];
     }
-    if (getScreenFlag() === 3) {
+    if (getScreenFlag() === 2) {
        screen.innerHTML = register[2];
     }
   }
@@ -220,7 +220,7 @@ let Calculator = function() {
     let result = operate(register[1], register[4], register[2]);
     register[1] = result.toString();
     register[2] = '';
-    setScreenFlag(2);
+    setScreenFlag(1);
   }
 
   function reckonOutside() {
@@ -234,7 +234,7 @@ let Calculator = function() {
     }
     let result = operate(register[0], register[3], register[1]);
     register[0] = result.toString();
-    setScreenFlag(1);
+    setScreenFlag(0);
   }
 
   function runEquals() {
@@ -263,7 +263,7 @@ let Calculator = function() {
     register[2] = 'DIV BY 0';
     register[3] = '';
     register[4] = '';
-    setScreenFlag(1);
+    setScreenFlag(0);
   }
 
   function setError() {
@@ -272,7 +272,7 @@ let Calculator = function() {
     register[2] = 'ERROR';
     register[3] = '';
     register[4] = '';
-    setScreenFlag(1);
+    setScreenFlag(0);
   }
 
   function isError() {
@@ -287,7 +287,7 @@ let Calculator = function() {
      register[3] = '';
      register[4] = '';
      document.getElementById('screen').innerHTML = '0';
-     setScreenFlag(1);
+     setScreenFlag(0);
      setCalculatorState();
   }
 
@@ -406,23 +406,23 @@ let Calculator = function() {
 
   function appendNumber(index) {
     appendToRegister(index);
-    setScreenFlag(index + 1);
+    setScreenFlag(index);
   }
 
   function changeOuterCalculation() {
     updateRegister(3);
-    setScreenFlag(1);
+    setScreenFlag(0);
   }
 
   function beginInnerCalculation() {
     if ((getKeyPress() === '*' || getKeyPress() === '/') && (register[3] === '+' || register[3] === '-')) {
       updateRegister(4);
-      setScreenFlag(2);
+      setScreenFlag(1);
     } else {
       reckonOutside();
       register[1] = '';
       updateRegister(3);
-      setScreenFlag(1);
+      setScreenFlag(0);
     }
   }
 
@@ -430,10 +430,10 @@ let Calculator = function() {
     if (getKeyPress() === '+' || getKeyPress() === '-') {
       runEquals();
       updateRegister(3);
-      setScreenFlag(1);
+      setScreenFlag(0);
     } else {
       updateRegister(4);
-      setScreenFlag(2);
+      setScreenFlag(1);
     }
   }
 
@@ -444,11 +444,11 @@ let Calculator = function() {
       register[2] = '';
       register[3] = getKeyPress();
       register[4] = '';
-      setScreenFlag(1);
+      setScreenFlag(0);
     } else {
       reckonInside();
       updateRegister(4);
-      setScreenFlag(2);
+      setScreenFlag(1);
     }
   }
     
@@ -484,12 +484,12 @@ let Calculator = function() {
 
   function flipSign(index) {
     register[index] = Number(register[index] * -1).toString();
-    setScreenFlag(index+1);
+    setScreenFlag(index);
   }
 
   function flipSignAndTransfer(index) {
     register[index+1] = Number(register[index] * -1).toString();
-    setScreenFlag(index+2);
+    setScreenFlag(index);
   }
 
   function setFirstDecimal() {
@@ -509,17 +509,17 @@ let Calculator = function() {
   function startNewDecimal(index) {
     register[index] = '0.';
     if ( getState > 1 ) {
-      setScreenFlag(index + 1);
+      setScreenFlag(index);
     }
   }
 
   function takeSquareRoot(index) {
     if (register[index] > 0) {
       register[index] = trim(Math.sqrt(Number(register[index])).toString());
-      setScreenFlag(index + 1);
+      setScreenFlag(index);
     } else if (register[index] === '' || register[index] === '0') {
       register[index] = '0';
-      setScreenFlag(index + 1);
+      setScreenFlag(index);
     } else {
       setError();
     }
@@ -528,7 +528,7 @@ let Calculator = function() {
   function transferSquareRoot(index) {
     if (register[index] > 0) {
       register[index + 1] = trim(Math.sqrt(Number(register[index])).toString());
-      setScreenFlag(index + 2);
+      setScreenFlag(index + 1);
     } else {
       setError();
     }
