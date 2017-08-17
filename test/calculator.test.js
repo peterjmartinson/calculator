@@ -88,16 +88,17 @@ q.test('partial sequences', function(assert) {
   calculator.sendKeyPress('clear');
   runCalculationSequence('1+2*');
   assert.equal(getScreenValue(), '2', '1+2* -> setOperator case 3');
+
   runCalculationSequence('3=');
   assert.equal(getScreenValue(), '7', '1+2*3=7');
-  
+
   calculator.sendKeyPress('clear');
   runCalculationSequence('1+2+3+');
-  assert.equal(getScreenValue(), '6', '1+2+3=6 -> setOperator case 3');
+  assert.equal(getScreenValue(), '6', '1+2+3+ -> 6 setOperator case 3');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('2*3+');
-  assert.equal(getScreenValue(), '6', '2*3=6 -> setOperator case 3');
+  assert.equal(getScreenValue(), '6', '2*3+ -> 6 setOperator case 3');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('2+*3=');
@@ -105,7 +106,7 @@ q.test('partial sequences', function(assert) {
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('2+3*+');
-  assert.equal(getScreenValue(), '5', '2+3=5 -> setOperator case 4');
+  assert.equal(getScreenValue(), '5', '2+3*+ -> 5 setOperator case 4');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('2+3*/');
@@ -208,8 +209,10 @@ q.test('repeated calculations', function(assert) {
 q.test('complex operations', function(assert) {
   calculator.sendKeyPress('clear');
   assert.equal(getScreenValue(), '0', 'Start with 0');
+
   calculator.sendKeyPress('1');
   assert.equal(getScreenValue(), '1', 'Replace the initial 0 with 1');
+
   calculator.sendKeyPress('2');
   assert.equal(getScreenValue(), '12', 'Append 2 to 1 -> 12');
 
@@ -330,8 +333,61 @@ q.test('Error Handling', function(assert) {
 
 });
 
-// q.test('Screen Test', function(assert) {
-// });
+q.test('Screen Test', function(assert) {
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('1');
+  assert.equal(getScreenValue(), '1', 'screen_flag = 0');
+
+  calculator.sendKeyPress('+');
+  assert.equal(getScreenValue(), '1', 'screen_flag = 0');
+
+  calculator.sendKeyPress('2');
+  assert.equal(getScreenValue(), '2', 'screen_flag = 1');
+
+  calculator.sendKeyPress('*');
+  assert.equal(getScreenValue(), '2', 'screen_flag = 1');
+
+  calculator.sendKeyPress('3');
+  assert.equal(getScreenValue(), '3', 'screen_flag = 2');
+
+  calculator.sendKeyPress('=');
+  assert.equal(getScreenValue(), '7', 'screen_flag = 0');
+
+  calculator.sendKeyPress('clear');
+  calculator.sendKeyPress('1');
+  assert.equal(getScreenValue(), '1', 'screen_flag = 0');
+
+  calculator.sendKeyPress('.');
+  assert.equal(getScreenValue(), '1.', 'screen_flag = 0');
+
+  calculator.sendKeyPress('1');
+  assert.equal(getScreenValue(), '1.1', 'screen_flag = 0');
+
+  calculator.sendKeyPress('+');
+  assert.equal(getScreenValue(), '1.1', 'screen_flag = 0');
+//
+  calculator.sendKeyPress('4');
+  assert.equal(getScreenValue(), '4', 'screen_flag = 1');
+
+  calculator.sendKeyPress('root');
+  assert.equal(getScreenValue(), '2', 'screen_flag = 1');
+
+  calculator.sendKeyPress('*');
+  assert.equal(getScreenValue(), '2', 'screen_flag = 1');
+//
+  calculator.sendKeyPress('3');
+  assert.equal(getScreenValue(), '3', 'screen_flag = 2');
+//
+  calculator.sendKeyPress('.');
+  assert.equal(getScreenValue(), '3.', 'screen_flag = 2');
+//
+  calculator.sendKeyPress('7');
+  assert.equal(getScreenValue(), '3.7', 'screen_flag = 2');
+
+  calculator.sendKeyPress('=');
+  assert.equal(getScreenValue(), '8.5', 'screen_flag = 0');
+
+});
 
 // ========= UTILITY FUNCTIONS
 
@@ -347,19 +403,4 @@ function runCalculationSequence(string) {
     calculator.sendKeyPress(sequence[i]);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

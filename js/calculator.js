@@ -1,7 +1,10 @@
 /**
- *  Two parts to each operation:
- *    1. Calculation result
- *    2. Followup calculation
+ * screen_flags:
+ * State 1) 0
+ * State 2) 0
+ * State 3) 1
+ * State 4) 1
+ * State 5) 2
 */
 let Calculator = function() {
   'use strict';
@@ -54,6 +57,7 @@ let Calculator = function() {
     setKeyPress(key);
     routeKeyPress();
     setCalculatorState();
+    setScreenFlag();
     updateScreen();
     document.getElementById("cowport").innerHTML = logInternals();
   }
@@ -106,8 +110,23 @@ let Calculator = function() {
   }
 
 // =========================================== SCREEN
-  function setScreenFlag(flag) {
-    screen_flag = flag;
+  function setScreenFlag() {
+    switch(getState()) {
+      case 1:
+      case 2:
+        screen_flag = 0;
+        break;
+      case 3:
+      case 4:
+        screen_flag = 1;
+        break;
+      case 5:
+        screen_flag = 2;
+        break;
+    }
+    if ( getKeyPress() === '=' ) {
+      screen_flag = 0;
+    }
   }
 
   function getScreenFlag(flag) {
@@ -229,7 +248,6 @@ let Calculator = function() {
     let result = operate(second_number, second_operator, third_number);
     second_number = result.toString();
     third_number = '';
-    setScreenFlag(1);
   }
 
   function reckonOutside() {
@@ -243,7 +261,6 @@ let Calculator = function() {
     }
     let result = operate(first_number, first_operator, second_number);
     first_number = result.toString();
-    setScreenFlag(0);
   }
 
   function runEquals() {
@@ -272,7 +289,6 @@ let Calculator = function() {
     third_number = 'DIV BY 0';
     first_operator = '';
     second_operator = '';
-    setScreenFlag(0);
   }
 
   function setError() {
@@ -281,7 +297,6 @@ let Calculator = function() {
     third_number = 'ERROR';
     first_operator = '';
     second_operator = '';
-    setScreenFlag(0);
   }
 
   function isError() {
@@ -295,8 +310,8 @@ let Calculator = function() {
      first_operator = '';
      second_operator = '';
      document.getElementById('screen').innerHTML = '0';
-     setScreenFlag(0);
      setCalculatorState();
+     setScreenFlag();
   }
 
 // =========================================== CASE STATEMENTS
@@ -315,8 +330,8 @@ let Calculator = function() {
         appendThirdNumber();
         break;
       default:
-         console.log("something other than NUMBER happened!");
-         break;
+        console.log("something other than NUMBER happened!");
+        break;
     }
   }
 
@@ -419,18 +434,12 @@ let Calculator = function() {
   }
 
   function appendSecondNumber() {
-    // if (first_number.length < 10) {
-    //   first_number += getKeyPress();
-    // }
     if (second_number.length < 10) {
       second_number += getKeyPress();
     }
   }
 
   function appendThirdNumber() {
-    // if (first_number.length < 10) {
-    //   first_number += getKeyPress();
-    // }
     if (third_number.length < 10) {
       third_number += getKeyPress();
     }
@@ -443,23 +452,24 @@ let Calculator = function() {
   function beginInnerCalculation() {
     if ((getKeyPress() === '*' || getKeyPress() === '/') && (first_operator === '+' || first_operator === '-')) {
       second_operator = getKeyPress();
-      setScreenFlag(1);
+      setScreenFlag();
     } else {
       reckonOutside();
       second_number = '';
       first_operator = getKeyPress();
-      setScreenFlag(0);
     }
   }
 
   function completeInnerCalculation() {
     if (getKeyPress() === '+' || getKeyPress() === '-') {
+      console.log('hit!');
       runEquals();
+      second_number = '';
+      third_number = '';
       first_operator = getKeyPress();
-      setScreenFlag(0);
+      second_operator = '';
     } else {
       second_operator = getKeyPress();
-      setScreenFlag(1);
     }
   }
 
@@ -473,33 +483,27 @@ let Calculator = function() {
     } else {
       reckonInside();
       second_operator = getKeyPress();
-      setScreenFlag(1);
     }
   }
     
   function flipFirstSign() {
     first_number = Number(first_number * -1).toString();
-    setScreenFlag(0);
   }
 
   function transferAndFlipFirstSign() {
     second_number = Number(first_number * -1).toString();
-    setScreenFlag(1);
   }
 
   function flipSecondSign() {
     second_number = Number(second_number * -1).toString();
-    setScreenFlag(1);
   }
 
   function transferAndFlipSecondSign() {
     third_number = Number(second_number * -1).toString();
-    setScreenFlag(1);
   }
 
   function flipThirdSign() {
     third_number = Number(third_number * -1).toString();
-    setScreenFlag(2);
   }
 
   function setFirstDecimal() {
@@ -512,7 +516,6 @@ let Calculator = function() {
 
   function transferFirstDecimal() {
     second_number = '0.';
-    setScreenFlag(1);
   }
 
   function setSecondDecimal() {
@@ -523,7 +526,6 @@ let Calculator = function() {
 
   function transferSecondDecimal() {
     third_number = '0.';
-    setScreenFlag(2);
   }
 
   function setThirdDecimal() {
@@ -535,10 +537,8 @@ let Calculator = function() {
   function calculateFirstRoot() {
     if (first_number > 0) {
       first_number = trim(Math.sqrt(Number(first_number)).toString());
-      setScreenFlag(0);
     } else if (first_number === '' || first_number === '0') {
       first_number = '0';
-      setScreenFlag(0);
     } else {
       setError();
     }
@@ -547,7 +547,6 @@ let Calculator = function() {
   function transferFirstRoot() {
     if (first_number > 0) {
       second_number = trim(Math.sqrt(Number(first_number)).toString());
-      setScreenFlag(1);
     } else {
       setError();
     }
@@ -556,10 +555,8 @@ let Calculator = function() {
   function calculateSecondRoot() {
     if (second_number > 0) {
       second_number = trim(Math.sqrt(Number(second_number)).toString());
-      setScreenFlag(1);
     } else if (second_number === '' || second_number === '0') {
       second_number = '0';
-      setScreenFlag(1);
     } else {
       setError();
     }
@@ -568,7 +565,6 @@ let Calculator = function() {
   function transferSecondRoot() {
     if (second_number > 0) {
       third_number = trim(Math.sqrt(Number(second_number)).toString());
-      setScreenFlag(2);
     } else {
       setError();
     }
@@ -577,10 +573,8 @@ let Calculator = function() {
   function calculateThirdRoot() {
     if (third_number > 0) {
       third_number = trim(Math.sqrt(Number(third_number)).toString());
-      setScreenFlag(2);
     } else if (third_number === '' || third_number === '0') {
       third_number = '0';
-      setScreenFlag(2);
     } else {
       setError();
     }
