@@ -1,13 +1,28 @@
+/**
+ *  Two parts to each operation:
+ *    1. Calculation result
+ *    2. Followup calculation
+*/
 let Calculator = function() {
   'use strict';
 
   let key_press = '',
       previous_keypress = '',
       register = ['','','','',''],
-      screen_flag = 1,
+      screen_flag = 0,
       state = 1;
 
 // ========================================== STATE
+/*
+ *           A | B | C |opA|opB|
+ *          ---|---|---|---|---|
+ * State 1) 0,A|   |   |   |   |
+ * State 2)  A |   |   | + |   |
+ * State 3)  A | B |   |+,*|   |
+ * State 4)  A | B |   | + | * |
+ * State 5)  A | B | C | + | * |
+**/
+
   function setState(new_state) {
     state = new_state;
   }
@@ -16,17 +31,6 @@ let Calculator = function() {
     return state;
   }
 
-  /*
-   * DETERMINE CALCULATOR STATE
-   *
-   *          A | B | C |opA|opB|
-   *         ---|---|---|---|---|
-   * Case 1) 0,A|   |   |   |   |
-   * Case 2)  A |   |   | + |   |
-   * Case 3)  A | B |   |+,*|   |
-   * Case 4)  A | B |   | + | * |
-   * Case 5)  A | B | C | + | * |
-   */
   function setCalculatorState() {
       if (register[3] === '') {
         setState(1);
@@ -64,7 +68,7 @@ let Calculator = function() {
     if ( key_press === 'clear' ) {
       clear();
     }
-    else if ( getError() ) {
+    else if ( isError() ) {
       return;
     }
     else if ( number.indexOf(key_press) > -1 ) {
@@ -80,16 +84,16 @@ let Calculator = function() {
       setOperator();
     }
     else if ( key_press === '=' ) { 
-      reckonAll();
+      runEquals();
     }
     else if ( key_press === 'pm' ) {
-      flipSign();
+      setSign();
     }
     else if ( key_press === '.' ) {
       if (previous_keypress == '=') {
         clear();
       }
-      appendDecimal();
+      setDecimal();
     }
     else if ( key_press === 'root' ) {
       calculateSquareRoot();
@@ -140,17 +144,17 @@ let Calculator = function() {
 
   function updateScreen() {
     let screen = document.getElementById("screen");
-    if (getScreenFlag() === 1) {
+    if (getScreenFlag() === 0) {
        if (register[0] === '') {
           screen.innerHTML = '0';
        } else {
           screen.innerHTML = register[0];
        }
     }
-    if (getScreenFlag() === 2) {
+    if (getScreenFlag() === 1) {
        screen.innerHTML = register[1];
     }
-    if (getScreenFlag() === 3) {
+    if (getScreenFlag() === 2) {
        screen.innerHTML = register[2];
     }
   }
@@ -193,45 +197,64 @@ let Calculator = function() {
      }
   }
 
+  function reckonAll() {
+    if (isError()) return;
+    let temp_register = register[2];
+    reckonInside();
+    reckonOutside();
+    register[1] = temp_register;
+    register[3] = register[4];
+    register[4] = '';
+  }
+
   function reckonInside() {
-    if (register[0] == 'ERROR' || register[0] == 'NaN') {
-      return;
-    }
+    if (isError()) return;
     if (register[2] == '0' && register[4] == '/') {
       divisionByZero();
       return;
     }
+    // handle the "7+=" case
     if (register[2] === '') {
       register[2] = register[1]
     }
     let result = operate(register[1], register[4], register[2]);
     register[1] = result.toString();
-    setScreenFlag(2);
+    register[2] = '';
+    setScreenFlag(1);
   }
 
   function reckonOutside() {
-    if (register[0] == 'ERROR' || register[0] == 'NaN' || register[0] == 'DIV BY 0') return;
+    if (isError()) return;
     if (register[1] == '0' && register[3] == '/') {
       divisionByZero();
       return;
     }
-    if (register[1] === '') {
-      register[1] = register[0]
+    if (getState() === 2) {
+      register[1] = register[0];
     }
     let result = operate(register[0], register[3], register[1]);
     register[0] = result.toString();
-    setScreenFlag(1);
+    setScreenFlag(0);
   }
 
-  function reckonAll() {
-    if (register[0] == 'ERROR' || register[0] == 'NaN') return;
-    if (register[1] != '' && register[2] != '' && register[4] != '') {
-      reckonInside();
-      reckonOutside();
-    } else {
-      reckonOutside();
+  function runEquals() {
+    if (isError()) return;
+    switch(getState()) {
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+        reckonOutside();
+        break;
+      case 5:
+        reckonAll();
+        break;
+      default:
+        console.log("Something other than Equals happened!");
+        break;
     }
   }
+
 
 // ============================================= ERROR HANDLING
   function divisionByZero() {
@@ -240,7 +263,7 @@ let Calculator = function() {
     register[2] = 'DIV BY 0';
     register[3] = '';
     register[4] = '';
-    setScreenFlag(1);
+    setScreenFlag(0);
   }
 
   function setError() {
@@ -249,11 +272,11 @@ let Calculator = function() {
     register[2] = 'ERROR';
     register[3] = '';
     register[4] = '';
-    setScreenFlag(1);
+    setScreenFlag(0);
   }
 
-  function getError() {
-    return register[0] === 'ERROR' || register[0] === 'DIV BY 0' ? 1 : 0;
+  function isError() {
+    return register[0] === 'ERROR' || register[0] === 'DIV BY 0' || register[0] === 'NaN' ? 1 : 0;
   }
 
 // =========================================== ULTIMATE ACTIONS
@@ -264,46 +287,25 @@ let Calculator = function() {
      register[3] = '';
      register[4] = '';
      document.getElementById('screen').innerHTML = '0';
-     setScreenFlag(1);
+     setScreenFlag(0);
      setCalculatorState();
   }
+
+// =========================================== CASE STATEMENTS
 
   function setNumber() {
     switch(getState()) {
       case 1:
-        setScreenFlag(1);
-        if (register[0] === '' || register[0] === '0') {
-          register[0] = getKeyPress();
-        } else if (register[0].length < 10) {
-          register[0] = register[0] + getKeyPress();
-        }
+        appendNumber(0);
         break;
       case 2:
-        setScreenFlag(2);
-        if (register[1] === '' || register[1] === '0') {
-          register[1] = getKeyPress();
-        } else if (register[1].length < 10) {
-          register[1] = register[1] + getKeyPress();
-        }
-        break;
       case 3:
-        if (register[1] === '' || register[1] === '0') {
-          register[1] = getKeyPress();
-        } else if (register[1].length < 10) {
-          register[1] = register[1] + getKeyPress();
-        }
-        setScreenFlag(2);
+        appendNumber(1);
         break;
       case 4:
-         register[2] = getKeyPress();
-         setScreenFlag(3);
-         break;
       case 5:
-         if (register[2].length < 10) {
-            register[2] = register[2] + getKeyPress();
-            setScreenFlag(3);
-         }
-         break;
+        appendNumber(2);
+        break;
       default:
          console.log("something other than NUMBER happened!");
          break;
@@ -311,84 +313,42 @@ let Calculator = function() {
   }
 
   function setOperator() {
-    let key_press = getKeyPress();
     switch (getState()) {
       case 1:
-         register[3] = key_press;
-         setScreenFlag(1);
-         break;
       case 2:
-         register[3] = key_press;
-         setScreenFlag(1);
-         break;
+        changeOuterCalculation();
+        break;
       case 3:
-         if ((register[3] === '+' || register[3] === '-') && (key_press === '*' || key_press === '/')) {
-            register[4] = key_press;
-            setScreenFlag(2);
-         } else {
-            reckonOutside();
-            register[1] = '';
-            register[3] = key_press;
-            setScreenFlag(1);
-         }
-         break;
+        beginInnerCalculation();
+        break;
       case 4:
-         if (key_press === '+' || key_press === '-') {
-            reckonAll();
-            register[1] = '';
-            register[2] = '';
-            register[3] = key_press;
-            register[4] = '';
-            setScreenFlag(1);
-         } else {
-            register[4] = key_press;
-            setScreenFlag(2);
-         }
-         break;
+        completeInnerCalculation();
+        break;
       case 5:
-         if (key_press === '+' || key_press === '-') {
-            reckonAll();
-            register[1] = '';
-            register[2] = '';
-            register[3] = key_press;
-            register[4] = '';
-            setScreenFlag(1);
-         } else {
-            register[1] = operate(register[1], register[4], register[2]);
-            register[2] = '';
-            register[4] = key_press;
-            setScreenFlag(2);
-         }
-         break;
+        continueInnerCalculation();
+        break;
       default:
-         console.log("something other than OPERATOR happened!");
-         break;
+        console.log("something other than OPERATOR happened!");
+        break;
     }
   }
 
-  function flipSign() {
+  function setSign() {
     switch (getState()) {
       case 1:
-        if (register[0] !== 'empty' && register[0] !== '0') {
-          register[0] = Number(register[0] * -1).toString();
-          setScreenFlag(1);
-        }
+        flipSign(0);
         break;
       case 2:
-        register[1] = Number(register[0] * -1).toString();
-        setScreenFlag(2);
+        flipSignAndTransfer(0);
         break;
       case 3:
-        register[1] = Number(register[1] * -1).toString();
-        setScreenFlag(2);
+        flipSign(1);
         break;
       case 4:
-        register[2] = Number(register[1] * -1).toString();
-        setScreenFlag(3);
+        flipSignAndTransfer(1);
         break;
       case 5:
-        register[2] = Number(register[2] * -1).toString();
-        setScreenFlag(3);
+        flipSign(2);
         break;
       default:
         console.log("something other than PLUS-MINUS happened!");
@@ -396,34 +356,22 @@ let Calculator = function() {
     }
   }
 
-  function appendDecimal() {
+  function setDecimal() {
     switch (getState()) {
       case 1:
-         if (register[0].indexOf('.') === -1 && register[0].length < 10) {
-            if (register[0] === '' || register[0] === '0') {
-               register[0] = '0.';
-            } else {
-               register[0] = register[0] + '.';
-            }
-         }
+         setFirstDecimal();
          break;
       case 2:
-         register[1] = '0.';
-         setScreenFlag(2);
+         startNewDecimal(1);
          break;
       case 3:
-         if (register[1].indexOf('.') === -1 && register[1].length < 10) {
-            register[1] = register[1] + '.';
-         }
+         appendDecimal(1);
          break;
       case 4:
-         register[2] = '0.';
-         setScreenFlag(3);
+         startNewDecimal(2);
          break;
       case 5:
-         if (register[2].indexOf('.') === -1 && register[2].length < 10) {
-            register[2] = register[2] + '.';
-         }
+         appendDecimal(2);
          break;
       default:
          console.log("something other than . happened!");
@@ -434,47 +382,19 @@ let Calculator = function() {
   function calculateSquareRoot() {
     switch (getState()) {
       case 1:
-         if (register[0] > 0) {
-            register[0] = trim(Math.sqrt(Number(register[0])).toString());
-            setScreenFlag(1);
-         } else if (register[0] === '' || register[0] === '0') {
-            register[0] = '0';
-            setScreenFlag(1);
-         } else {
-            setError();
-         }
+         takeSquareRoot(0);
          break;
       case 2:
-         if (register[0] > 0) {
-            register[1] = trim(Math.sqrt(Number(register[0])).toString());
-            setScreenFlag(2);
-         } else {
-            setError();
-         }
+         transferSquareRoot(0);
          break;
       case 3:
-         if (register[1] > 0) {
-            register[1] = trim(Math.sqrt(Number(register[1])).toString());
-            setScreenFlag(2);
-         } else {
-            setError();
-         }
+         takeSquareRoot(1);
          break;
       case 4:
-         if (register[1] > 0) {
-            register[2] = trim(Math.sqrt(Number(register[1])).toString());
-            setScreenFlag(3);
-         } else {
-            setError();
-         }
+         transferSquareRoot(1);
          break;
       case 5:
-         if (register[2] > 0) {
-            register[2] = trim(Math.sqrt(Number(register[2])).toString());
-            setScreenFlag(3);
-         } else {
-            setError();
-         }
+         takeSquareRoot(2);
          break;
       default:
          console.log("something other than root happened!");
@@ -482,33 +402,138 @@ let Calculator = function() {
     }
   }
 
+// ============================================ REGISTER MANIPULATION
+
+  function appendNumber(index) {
+    appendToRegister(index);
+  }
+
+  function changeOuterCalculation() {
+    updateRegister(3);
+  }
+
+  function beginInnerCalculation() {
+    if ((getKeyPress() === '*' || getKeyPress() === '/') && (register[3] === '+' || register[3] === '-')) {
+      updateRegister(4);
+      setScreenFlag(1);
+    } else {
+      reckonOutside();
+      register[1] = '';
+      updateRegister(3);
+      setScreenFlag(0);
+    }
+  }
+
+  function completeInnerCalculation() {
+    if (getKeyPress() === '+' || getKeyPress() === '-') {
+      runEquals();
+      updateRegister(3);
+      setScreenFlag(0);
+    } else {
+      updateRegister(4);
+      setScreenFlag(1);
+    }
+  }
+
+  function continueInnerCalculation() { // case 5
+    if (getKeyPress() === '+' || getKeyPress() === '-') {
+      reckonAll();
+      register[1] = '';
+      register[2] = '';
+      register[3] = getKeyPress();
+      register[4] = '';
+    } else {
+      reckonInside();
+      updateRegister(4);
+      setScreenFlag(1);
+    }
+  }
+    
+  function updateRegister(index) {
+    if (isOperator(index)) {
+      clearRegister(index);
+    }
+    appendToRegister(index);
+  }
+
+  function targetRegisterIsEmpty(index) {
+    return !register[index];
+  }
+
+  function isOperator(index) {
+    let operators = ['+','-','*','/']
+    return operators.indexOf(register[index]) !== -1;
+  }
+
+  function clearRegister(index) {
+    register[index] = '';
+  }
+
+  function appendToRegister(index) {
+    if ( targetRegisterIsAppendable(index) ) {
+      register[index] += getKeyPress();
+    }
+  }
+
+  function targetRegisterIsAppendable(index) {
+    return register[index].length < 10;
+  }
+
+  function flipSign(index) {
+    register[index] = Number(register[index] * -1).toString();
+    setScreenFlag(index);
+  }
+
+  function flipSignAndTransfer(index) {
+    register[index+1] = Number(register[index] * -1).toString();
+    setScreenFlag(index);
+  }
+
+  function setFirstDecimal() {
+    if (register[0] === '' || register[0] === '0') {
+       startNewDecimal(0);
+    } else {
+       appendDecimal(0);
+    }
+  }
+
+  function appendDecimal(index) {
+    if (register[index].indexOf('.') === -1 && register[index].length < 10) {
+      register[index] = register[index] + '.';
+    }
+  }
+
+  function startNewDecimal(index) {
+    register[index] = '0.';
+    if ( getState > 1 ) {
+      setScreenFlag(index);
+    }
+  }
+
+  function takeSquareRoot(index) {
+    if (register[index] > 0) {
+      register[index] = trim(Math.sqrt(Number(register[index])).toString());
+      setScreenFlag(index);
+    } else if (register[index] === '' || register[index] === '0') {
+      register[index] = '0';
+      setScreenFlag(index);
+    } else {
+      setError();
+    }
+  }
+
+  function transferSquareRoot(index) {
+    if (register[index] > 0) {
+      register[index + 1] = trim(Math.sqrt(Number(register[index])).toString());
+      setScreenFlag(index + 1);
+    } else {
+      setError();
+    }
+  }
+
   return {
-    trim                : trim,
-    operate             : operate,
-    setCalculatorState  : setCalculatorState,
-    clear               : clear,
-    updateScreen        : updateScreen,
-    setNumber           : setNumber,
-    setOperator         : setOperator,
-    reckonInside        : reckonInside,
-    reckonOutside       : reckonOutside,
-    reckonAll           : reckonAll,
-    getKeyPress         : getKeyPress,
-    setKeyPress         : setKeyPress,
-    routeKeyPress       : routeKeyPress,
-    flipSign            : flipSign,
-    appendDecimal       : appendDecimal,
-    calculateSquareRoot : calculateSquareRoot,
     sendKeyPress        : sendKeyPress,
-    register            : register,
-    getScreenFlag       : getScreenFlag,
-    setScreenFlag       : setScreenFlag,
-    setState            : setState,
-    getState            : getState,
-    divisionByZero      : divisionByZero,
-    setError            : setError,
-    getError            : getError,
-    logInternals        : logInternals
+    register            : register
   };
 
 

@@ -51,6 +51,7 @@
     <script src="js/calculator.js"></script>
     <script>
       var calculator = new Calculator;
+      calculator.sendKeyPress('');
       calculator.setCalculatorState();
       calculator.updateScreen();
       document.getElementById("cowport").innerHTML = calculator.logInternals();
