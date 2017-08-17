@@ -409,36 +409,6 @@ let Calculator = function() {
     setScreenFlag(index + 1);
   }
 
-  function updateRegister(index) {
-    if (isOperator(index)) {
-      clearRegister(index);
-    }
-    appendToRegister(index);
-  }
-
-  function targetRegisterIsEmpty(index) {
-    return !register[index];
-  }
-
-  function isOperator(index) {
-    let operators = ['+','-','*','/']
-    return operators.indexOf(register[index]) !== -1;
-  }
-
-  function clearRegister(index) {
-    register[index] = '';
-  }
-
-  function appendToRegister(index) {
-    if ( targetRegisterIsAppendable(index) ) {
-      register[index] += getKeyPress();
-    }
-  }
-
-  function targetRegisterIsAppendable(index) {
-    return register[index].length < 10;
-  }
-
   function changeOuterCalculation() {
     updateRegister(3);
     setScreenFlag(1);
@@ -482,6 +452,36 @@ let Calculator = function() {
     }
   }
     
+  function updateRegister(index) {
+    if (isOperator(index)) {
+      clearRegister(index);
+    }
+    appendToRegister(index);
+  }
+
+  function targetRegisterIsEmpty(index) {
+    return !register[index];
+  }
+
+  function isOperator(index) {
+    let operators = ['+','-','*','/']
+    return operators.indexOf(register[index]) !== -1;
+  }
+
+  function clearRegister(index) {
+    register[index] = '';
+  }
+
+  function appendToRegister(index) {
+    if ( targetRegisterIsAppendable(index) ) {
+      register[index] += getKeyPress();
+    }
+  }
+
+  function targetRegisterIsAppendable(index) {
+    return register[index].length < 10;
+  }
+
   function flipSign(index) {
     register[index] = Number(register[index] * -1).toString();
     setScreenFlag(index+1);
