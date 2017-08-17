@@ -406,12 +406,10 @@ let Calculator = function() {
 
   function appendNumber(index) {
     appendToRegister(index);
-    setScreenFlag(index);
   }
 
   function changeOuterCalculation() {
     updateRegister(3);
-    setScreenFlag(0);
   }
 
   function beginInnerCalculation() {
@@ -437,14 +435,13 @@ let Calculator = function() {
     }
   }
 
-  function continueInnerCalculation() {
+  function continueInnerCalculation() { // case 5
     if (getKeyPress() === '+' || getKeyPress() === '-') {
-      runEquals();
+      reckonAll();
       register[1] = '';
       register[2] = '';
       register[3] = getKeyPress();
       register[4] = '';
-      setScreenFlag(0);
     } else {
       reckonInside();
       updateRegister(4);
