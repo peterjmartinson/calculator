@@ -1,10 +1,6 @@
-/**
- * screen_flags:
- * State 1) 0
- * State 2) 0
- * State 3) 1
- * State 4) 1
- * State 5) 2
+/*
+ * 1. Could move all the length checks to one place.
+ *    i.e. `if ( length < 10 ) then append`
 */
 let Calculator = function() {
   'use strict';
@@ -140,9 +136,6 @@ let Calculator = function() {
     cow_organ.push( third_number == '' ? '&nbsp;' : third_number );
     cow_organ.push( first_operator == '' ? '&nbsp;' : first_operator );
     cow_organ.push( second_operator == '' ? '&nbsp;' : second_operator );
-    // for (let i = 0; i < register.length; i++) {
-    //   cow_organ.push( register[i] == '' ? '&nbsp;' : register[i] );
-    // }
     let output = '';
     output += '   <ul>'
     output += '     <li>'
@@ -173,11 +166,7 @@ let Calculator = function() {
   function updateScreen() {
     let screen = document.getElementById("screen");
     if (getScreenFlag() === 0) {
-       if (first_number === '') {
-          screen.innerHTML = '0';
-       } else {
-          screen.innerHTML = first_number;
-       }
+       screen.innerHTML = first_number === '' ? '0' : first_number;
     }
     if (getScreenFlag() === 1) {
        screen.innerHTML = second_number;
@@ -189,14 +178,14 @@ let Calculator = function() {
 
 // ============================================ UTILITY
   function trim(num) {
-     var numLen, truncLen, tempVal;
-     numLen = num.toString().length;
-     truncLen = (Math.trunc(Number(num))).toString().length;
-     if (numLen === truncLen && numLen > 10) {
+     var num_length, truncated_length, temp_value;
+     num_length = num.toString().length;
+     truncated_length = (Math.trunc(Number(num))).toString().length;
+     if (num_length === truncated_length && num_length > 10) {
         num = 'ERROR';
-     } else if (numLen > truncLen) {
-        tempVal = (Math.round(Number(num) * Math.pow(10, (9 - truncLen)))) / Math.pow(10, (9 - truncLen));
-        num = tempVal.toString();
+     } else if (num_length > truncated_length) {
+        temp_value = (Math.round(Number(num) * Math.pow(10, (9 - truncated_length)))) / Math.pow(10, (9 - truncated_length));
+        num = temp_value.toString();
      }
      return num.toString();
   }
@@ -227,10 +216,10 @@ let Calculator = function() {
 
   function reckonAll() {
     if (isError()) return;
-    let temp_register = third_number;
+    let holding_value = third_number;
     reckonInside();
     reckonOutside();
-    second_number = temp_register;
+    second_number = holding_value;
     first_operator = second_operator;
     second_operator = '';
   }
@@ -241,8 +230,7 @@ let Calculator = function() {
       divisionByZero();
       return;
     }
-    // handle the "7+=" case
-    if (third_number === '') {
+    if (third_number === '') { // handle the "7+=" case
       third_number = second_number
     }
     let result = operate(second_number, second_operator, third_number);
@@ -264,38 +252,30 @@ let Calculator = function() {
   }
 
   function runEquals() {
-    if (isError()) return;
-    switch(getState()) {
-      case 1:
-      case 2:
-      case 3:
-      case 4:
-        reckonOutside();
-        break;
-      case 5:
-        reckonAll();
-        break;
-      default:
-        console.log("Something other than Equals happened!");
-        break;
+    if ( isError() ) return;
+    if ( getState() < 5 ) {
+      reckonOutside();
+    }
+    else {
+      reckonAll();
     }
   }
 
 
 // ============================================= ERROR HANDLING
   function divisionByZero() {
-    first_number = 'DIV BY 0';
-    second_number = 'DIV BY 0';
-    third_number = 'DIV BY 0';
-    first_operator = '';
+    first_number    = 'DIV BY 0';
+    second_number   = 'DIV BY 0';
+    third_number    = 'DIV BY 0';
+    first_operator  = '';
     second_operator = '';
   }
 
   function setError() {
-    first_number = 'ERROR';
-    second_number = 'ERROR';
-    third_number = 'ERROR';
-    first_operator = '';
+    first_number    = 'ERROR';
+    second_number   = 'ERROR';
+    third_number    = 'ERROR';
+    first_operator  = '';
     second_operator = '';
   }
 
@@ -304,14 +284,13 @@ let Calculator = function() {
   }
 
   function clear() {
-     first_number = '';
-     second_number = '';
-     third_number = '';
-     first_operator = '';
+     first_number    = '';
+     second_number   = '';
+     third_number    = '';
+     first_operator  = '';
      second_operator = '';
      document.getElementById('screen').innerHTML = '0';
      setCalculatorState();
-     setScreenFlag();
   }
 
 // =========================================== CASE STATEMENTS
@@ -337,17 +316,17 @@ let Calculator = function() {
 
   function setOperator() {
     switch (getState()) {
-      case 1: // 0,A|   |   |   |   |
-      case 2: //  A |   |   | + |   |
+      case 1:
+      case 2:
         changeOuterCalculation();
         break;
-      case 3: //  A | B |   |+,*|   |
+      case 3:
         beginInnerCalculation();
         break;
-      case 4: //  A | B |   | + | * |
+      case 4:
         completeInnerCalculation();
         break;
-      case 5: //  A | B | C | + | * |
+      case 5:
         continueInnerCalculation();
         break;
       default:
@@ -358,19 +337,19 @@ let Calculator = function() {
 
   function setSign() {
     switch (getState()) {
-      case 1: // 0,A|   |   |   |   |
+      case 1:
         flipFirstSign();
         break;
-      case 2: //  A |   |   | + |   |
+      case 2:
         transferAndFlipFirstSign();
         break;
-      case 3: //  A | B |   |+,*|   |
+      case 3:
         flipSecondSign();
         break;
-      case 4: //  A | B |   | + | * |
+      case 4:
         transferAndFlipSecondSign();
         break;
-      case 5: //  A | B | C | + | * |
+      case 5:
         flipThirdSign();
         break;
       default:
@@ -381,19 +360,19 @@ let Calculator = function() {
 
   function setDecimal() {
     switch (getState()) {
-      case 1: // 0,A|   |   |   |   |
+      case 1:
          setFirstDecimal();
          break;
-      case 2: //  A |   |   | + |   |
+      case 2:
          transferFirstDecimal();
          break;
-      case 3: //  A | B |   |+,*|   |
+      case 3:
          setSecondDecimal();
          break;
-      case 4: //  A | B |   | + | * |
+      case 4:
          transferSecondDecimal();
          break;
-      case 5: //  A | B | C | + | * |
+      case 5:
          setThirdDecimal();
          break;
       default:
@@ -404,19 +383,19 @@ let Calculator = function() {
 
   function calculateSquareRoot() {
     switch (getState()) {
-      case 1: // 0,A|   |   |   |   |
+      case 1:
          calculateFirstRoot();
          break;
-      case 2: //  A |   |   | + |   |
+      case 2:
          transferFirstRoot();
          break;
-      case 3: //  A | B |   |+,*|   |
+      case 3:
          calculateSecondRoot();
          break;
-      case 4: //  A | B |   | + | * |
+      case 4:
          transferSecondRoot();
          break;
-      case 5: //  A | B | C | + | * |
+      case 5:
          calculateThirdRoot();
          break;
       default:
@@ -462,7 +441,6 @@ let Calculator = function() {
 
   function completeInnerCalculation() {
     if (getKeyPress() === '+' || getKeyPress() === '-') {
-      console.log('hit!');
       runEquals();
       second_number = '';
       third_number = '';
