@@ -38,11 +38,11 @@ let Calculator = function() {
   }
 
   function setCalculatorState() {
-      if (register[3] === '') {
+      if (first_operator === '') {
         setState(1);
-      } else if (register[3] !== '' && register[1] === '') {
+      } else if (first_operator !== '' && register[1] === '') {
         setState(2);
-      } else if (register[3] !== '' && first_number !== '' && register[4] === '') {
+      } else if (first_operator !== '' && first_number !== '' && register[4] === '') {
         setState(3);
       } else if (register[4] !== '' && register[2] === '') {
         setState(4);
@@ -85,7 +85,7 @@ let Calculator = function() {
     }
     else if ( operator.indexOf(key_press) > -1 ) {
       if (previous_keypress == '=') {
-        register[3] = '';
+        first_operator = '';
       }
       setOperator();
     }
@@ -121,7 +121,7 @@ let Calculator = function() {
     cow_organ.push( first_number == '' ? '&nbsp;' : first_number );
     cow_organ.push( register[1] == '' ? '&nbsp;' : register[1] );
     cow_organ.push( register[2] == '' ? '&nbsp;' : register[2] );
-    cow_organ.push( register[3] == '' ? '&nbsp;' : register[3] );
+    cow_organ.push( first_operator == '' ? '&nbsp;' : first_operator );
     cow_organ.push( register[4] == '' ? '&nbsp;' : register[4] );
     // for (let i = 0; i < register.length; i++) {
     //   cow_organ.push( register[i] == '' ? '&nbsp;' : register[i] );
@@ -214,7 +214,7 @@ let Calculator = function() {
     reckonInside();
     reckonOutside();
     register[1] = temp_register;
-    register[3] = register[4];
+    first_operator = register[4];
     register[4] = '';
   }
 
@@ -236,14 +236,14 @@ let Calculator = function() {
 
   function reckonOutside() {
     if (isError()) return;
-    if (register[1] == '0' && register[3] == '/') {
+    if (register[1] == '0' && first_operator == '/') {
       divisionByZero();
       return;
     }
     if (getState() === 2) {
       register[1] = first_number;
     }
-    let result = operate(first_number, register[3], register[1]);
+    let result = operate(first_number, first_operator, register[1]);
     first_number = result.toString();
     setScreenFlag(0);
   }
@@ -272,7 +272,7 @@ let Calculator = function() {
     first_number = 'DIV BY 0';
     register[1] = 'DIV BY 0';
     register[2] = 'DIV BY 0';
-    register[3] = '';
+    first_operator = '';
     register[4] = '';
     setScreenFlag(0);
   }
@@ -281,7 +281,7 @@ let Calculator = function() {
     first_number = 'ERROR';
     register[1] = 'ERROR';
     register[2] = 'ERROR';
-    register[3] = '';
+    first_operator = '';
     register[4] = '';
     setScreenFlag(0);
   }
@@ -294,7 +294,7 @@ let Calculator = function() {
      first_number = '';
      register[1] = '';
      register[2] = '';
-     register[3] = '';
+     first_operator = '';
      register[4] = '';
      document.getElementById('screen').innerHTML = '0';
      setScreenFlag(0);
@@ -324,17 +324,17 @@ let Calculator = function() {
 
   function setOperator() {
     switch (getState()) {
-      case 1:
-      case 2:
+      case 1: // 0,A|   |   |   |   |
+      case 2: //  A |   |   | + |   |
         changeOuterCalculation();
         break;
-      case 3:
+      case 3: //  A | B |   |+,*|   |
         beginInnerCalculation();
         break;
-      case 4:
+      case 4: //  A | B |   | + | * |
         completeInnerCalculation();
         break;
-      case 5:
+      case 5: //  A | B | C | + | * |
         continueInnerCalculation();
         break;
       default:
@@ -443,17 +443,17 @@ let Calculator = function() {
   }
 
   function changeOuterCalculation() {
-    updateRegister(3);
+    first_operator = getKeyPress();
   }
 
   function beginInnerCalculation() {
-    if ((getKeyPress() === '*' || getKeyPress() === '/') && (register[3] === '+' || register[3] === '-')) {
-      updateRegister(4);
+    if ((getKeyPress() === '*' || getKeyPress() === '/') && (first_operator === '+' || first_operator === '-')) {
+      register[4] = getKeyPress();
       setScreenFlag(1);
     } else {
       reckonOutside();
       register[1] = '';
-      updateRegister(3);
+      first_operator = getKeyPress();
       setScreenFlag(0);
     }
   }
@@ -461,10 +461,10 @@ let Calculator = function() {
   function completeInnerCalculation() {
     if (getKeyPress() === '+' || getKeyPress() === '-') {
       runEquals();
-      updateRegister(3);
+      first_operator = getKeyPress();
       setScreenFlag(0);
     } else {
-      updateRegister(4);
+      register[4] = getKeyPress();
       setScreenFlag(1);
     }
   }
@@ -474,11 +474,11 @@ let Calculator = function() {
       reckonAll();
       register[1] = '';
       register[2] = '';
-      register[3] = getKeyPress();
+      first_operator = getKeyPress();
       register[4] = '';
     } else {
       reckonInside();
-      updateRegister(4);
+      register[4] = getKeyPress();
       setScreenFlag(1);
     }
   }
