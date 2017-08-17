@@ -12,6 +12,12 @@ let Calculator = function() {
       screen_flag = 0,
       state = 1;
 
+  let first_number = '',
+      second_number = '',
+      third_number = '',
+      first_operator = '',
+      second_operator = '';
+
 // ========================================== STATE
 /*
  *           A | B | C |opA|opB|
@@ -36,7 +42,7 @@ let Calculator = function() {
         setState(1);
       } else if (register[3] !== '' && register[1] === '') {
         setState(2);
-      } else if (register[3] !== '' && register[0] !== '' && register[4] === '') {
+      } else if (register[3] !== '' && first_number !== '' && register[4] === '') {
         setState(3);
       } else if (register[4] !== '' && register[2] === '') {
         setState(4);
@@ -112,9 +118,14 @@ let Calculator = function() {
 
   function logInternals() {
     let cow_organ = [];
-    for (let i = 0; i < register.length; i++) {
-      cow_organ.push( register[i] == '' ? '&nbsp;' : register[i] );
-    }
+    cow_organ.push( first_number == '' ? '&nbsp;' : first_number );
+    cow_organ.push( register[1] == '' ? '&nbsp;' : register[1] );
+    cow_organ.push( register[2] == '' ? '&nbsp;' : register[2] );
+    cow_organ.push( register[3] == '' ? '&nbsp;' : register[3] );
+    cow_organ.push( register[4] == '' ? '&nbsp;' : register[4] );
+    // for (let i = 0; i < register.length; i++) {
+    //   cow_organ.push( register[i] == '' ? '&nbsp;' : register[i] );
+    // }
     let output = '';
     output += '   <ul>'
     output += '     <li>'
@@ -145,10 +156,10 @@ let Calculator = function() {
   function updateScreen() {
     let screen = document.getElementById("screen");
     if (getScreenFlag() === 0) {
-       if (register[0] === '') {
+       if (first_number === '') {
           screen.innerHTML = '0';
        } else {
-          screen.innerHTML = register[0];
+          screen.innerHTML = first_number;
        }
     }
     if (getScreenFlag() === 1) {
@@ -230,10 +241,10 @@ let Calculator = function() {
       return;
     }
     if (getState() === 2) {
-      register[1] = register[0];
+      register[1] = first_number;
     }
-    let result = operate(register[0], register[3], register[1]);
-    register[0] = result.toString();
+    let result = operate(first_number, register[3], register[1]);
+    first_number = result.toString();
     setScreenFlag(0);
   }
 
@@ -258,7 +269,7 @@ let Calculator = function() {
 
 // ============================================= ERROR HANDLING
   function divisionByZero() {
-    register[0] = 'DIV BY 0';
+    first_number = 'DIV BY 0';
     register[1] = 'DIV BY 0';
     register[2] = 'DIV BY 0';
     register[3] = '';
@@ -267,7 +278,7 @@ let Calculator = function() {
   }
 
   function setError() {
-    register[0] = 'ERROR';
+    first_number = 'ERROR';
     register[1] = 'ERROR';
     register[2] = 'ERROR';
     register[3] = '';
@@ -276,12 +287,11 @@ let Calculator = function() {
   }
 
   function isError() {
-    return register[0] === 'ERROR' || register[0] === 'DIV BY 0' || register[0] === 'NaN' ? 1 : 0;
+    return first_number === 'ERROR' || first_number === 'DIV BY 0' || first_number === 'NaN' ? 1 : 0;
   }
 
-// =========================================== ULTIMATE ACTIONS
   function clear() {
-     register[0] = '';
+     first_number = '';
      register[1] = '';
      register[2] = '';
      register[3] = '';
@@ -296,15 +306,15 @@ let Calculator = function() {
   function setNumber() {
     switch(getState()) {
       case 1:
-        appendNumber(0);
+        appendFirstNumber();
         break;
       case 2:
       case 3:
-        appendNumber(1);
+        appendSecondNumber();
         break;
       case 4:
       case 5:
-        appendNumber(2);
+        appendThirdNumber();
         break;
       default:
          console.log("something other than NUMBER happened!");
@@ -336,10 +346,10 @@ let Calculator = function() {
   function setSign() {
     switch (getState()) {
       case 1:
-        flipSign(0);
+        flipFirstSign();
         break;
       case 2:
-        flipSignAndTransfer(0);
+        transferAndFlipFirstSign();
         break;
       case 3:
         flipSign(1);
@@ -382,10 +392,10 @@ let Calculator = function() {
   function calculateSquareRoot() {
     switch (getState()) {
       case 1:
-         takeSquareRoot(0);
+         calculateFirstRoot();
          break;
       case 2:
-         transferSquareRoot(0);
+         transferFirstRoot();
          break;
       case 3:
          takeSquareRoot(1);
@@ -403,6 +413,30 @@ let Calculator = function() {
   }
 
 // ============================================ REGISTER MANIPULATION
+
+  function appendFirstNumber() {
+    if (first_number.length < 10) {
+      first_number += getKeyPress();
+    }
+  }
+
+  function appendSecondNumber() {
+    // if (first_number.length < 10) {
+    //   first_number += getKeyPress();
+    // }
+    if (register[1].length < 10) {
+      register[1] += getKeyPress();
+    }
+  }
+
+  function appendThirdNumber() {
+    // if (first_number.length < 10) {
+    //   first_number += getKeyPress();
+    // }
+    if (register[2].length < 10) {
+      register[2] += getKeyPress();
+    }
+  }
 
   function appendNumber(index) {
     appendToRegister(index);
@@ -479,6 +513,16 @@ let Calculator = function() {
     return register[index].length < 10;
   }
 
+  function flipFirstSign() {
+    first_number = Number(first_number * -1).toString();
+    setScreenFlag(0);
+  }
+
+  function transferAndFlipFirstSign() {
+    register[1] = Number(first_number * -1).toString();
+    setScreenFlag(1);
+  }
+
   function flipSign(index) {
     register[index] = Number(register[index] * -1).toString();
     setScreenFlag(index);
@@ -490,10 +534,10 @@ let Calculator = function() {
   }
 
   function setFirstDecimal() {
-    if (register[0] === '' || register[0] === '0') {
-       startNewDecimal(0);
+    if (first_number === '' || first_number === '0') {
+       first_number = '0.';
     } else {
-       appendDecimal(0);
+      first_number += first_number.length < 10 ? '.' : '';
     }
   }
 
@@ -507,6 +551,27 @@ let Calculator = function() {
     register[index] = '0.';
     if ( getState > 1 ) {
       setScreenFlag(index);
+    }
+  }
+
+  function calculateFirstRoot() {
+    if (first_number > 0) {
+      first_number = trim(Math.sqrt(Number(first_number)).toString());
+      setScreenFlag(0);
+    } else if (first_number === '' || first_number === '0') {
+      first_number = '0';
+      setScreenFlag(0);
+    } else {
+      setError();
+    }
+  }
+
+  function transferFirstRoot() {
+    if (first_number > 0) {
+      register[1] = trim(Math.sqrt(Number(first_number)).toString());
+      setScreenFlag(1);
+    } else {
+      setError();
     }
   }
 
