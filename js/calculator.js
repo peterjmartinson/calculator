@@ -345,20 +345,20 @@ let Calculator = function() {
 
   function setSign() {
     switch (getState()) {
-      case 1:
+      case 1: // 0,A|   |   |   |   |
         flipFirstSign();
         break;
-      case 2:
+      case 2: //  A |   |   | + |   |
         transferAndFlipFirstSign();
         break;
-      case 3:
-        flipSign(1);
+      case 3: //  A | B |   |+,*|   |
+        flipSecondSign();
         break;
-      case 4:
-        flipSignAndTransfer(1);
+      case 4: //  A | B |   | + | * |
+        transferAndFlipSecondSign();
         break;
-      case 5:
-        flipSign(2);
+      case 5: //  A | B | C | + | * |
+        flipThirdSign();
         break;
       default:
         console.log("something other than PLUS-MINUS happened!");
@@ -489,14 +489,19 @@ let Calculator = function() {
     setScreenFlag(1);
   }
 
-  function flipSign(index) {
-    register[index] = Number(register[index] * -1).toString();
-    setScreenFlag(index);
+  function flipSecondSign() {
+    register[1] = Number(register[1] * -1).toString();
+    setScreenFlag(1);
   }
 
-  function flipSignAndTransfer(index) {
-    register[index+1] = Number(register[index] * -1).toString();
-    setScreenFlag(index);
+  function transferAndFlipSecondSign() {
+    register[2] = Number(register[1] * -1).toString();
+    setScreenFlag(1);
+  }
+
+  function flipThirdSign() {
+    register[2] = Number(register[2] * -1).toString();
+    setScreenFlag(2);
   }
 
   function setFirstDecimal() {
