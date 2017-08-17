@@ -8,15 +8,13 @@ let Calculator = function() {
 
   let key_press = '',
       previous_keypress = '',
-      register = ['','','','',''],
-      screen_flag = 0,
-      state = 1;
-
-  let first_number = '',
+      first_number = '',
       second_number = '',
       third_number = '',
       first_operator = '',
-      second_operator = '';
+      second_operator = '',
+      screen_flag = 0,
+      state = 1;
 
 // ========================================== STATE
 /*
@@ -40,13 +38,13 @@ let Calculator = function() {
   function setCalculatorState() {
       if (first_operator === '') {
         setState(1);
-      } else if (first_operator !== '' && register[1] === '') {
+      } else if (first_operator !== '' && second_number === '') {
         setState(2);
-      } else if (first_operator !== '' && first_number !== '' && register[4] === '') {
+      } else if (first_operator !== '' && first_number !== '' && second_operator === '') {
         setState(3);
-      } else if (register[4] !== '' && register[2] === '') {
+      } else if (second_operator !== '' && third_number === '') {
         setState(4);
-      } else if (register[4] !== '' && register[2] !== '') {
+      } else if (second_operator !== '' && third_number !== '') {
         setState(5);
       }
   }
@@ -119,10 +117,10 @@ let Calculator = function() {
   function logInternals() {
     let cow_organ = [];
     cow_organ.push( first_number == '' ? '&nbsp;' : first_number );
-    cow_organ.push( register[1] == '' ? '&nbsp;' : register[1] );
-    cow_organ.push( register[2] == '' ? '&nbsp;' : register[2] );
+    cow_organ.push( second_number == '' ? '&nbsp;' : second_number );
+    cow_organ.push( third_number == '' ? '&nbsp;' : third_number );
     cow_organ.push( first_operator == '' ? '&nbsp;' : first_operator );
-    cow_organ.push( register[4] == '' ? '&nbsp;' : register[4] );
+    cow_organ.push( second_operator == '' ? '&nbsp;' : second_operator );
     // for (let i = 0; i < register.length; i++) {
     //   cow_organ.push( register[i] == '' ? '&nbsp;' : register[i] );
     // }
@@ -163,10 +161,10 @@ let Calculator = function() {
        }
     }
     if (getScreenFlag() === 1) {
-       screen.innerHTML = register[1];
+       screen.innerHTML = second_number;
     }
     if (getScreenFlag() === 2) {
-       screen.innerHTML = register[2];
+       screen.innerHTML = third_number;
     }
   }
 
@@ -210,40 +208,40 @@ let Calculator = function() {
 
   function reckonAll() {
     if (isError()) return;
-    let temp_register = register[2];
+    let temp_register = third_number;
     reckonInside();
     reckonOutside();
-    register[1] = temp_register;
-    first_operator = register[4];
-    register[4] = '';
+    second_number = temp_register;
+    first_operator = second_operator;
+    second_operator = '';
   }
 
   function reckonInside() {
     if (isError()) return;
-    if (register[2] == '0' && register[4] == '/') {
+    if (third_number == '0' && second_operator == '/') {
       divisionByZero();
       return;
     }
     // handle the "7+=" case
-    if (register[2] === '') {
-      register[2] = register[1]
+    if (third_number === '') {
+      third_number = second_number
     }
-    let result = operate(register[1], register[4], register[2]);
-    register[1] = result.toString();
-    register[2] = '';
+    let result = operate(second_number, second_operator, third_number);
+    second_number = result.toString();
+    third_number = '';
     setScreenFlag(1);
   }
 
   function reckonOutside() {
     if (isError()) return;
-    if (register[1] == '0' && first_operator == '/') {
+    if (second_number == '0' && first_operator == '/') {
       divisionByZero();
       return;
     }
     if (getState() === 2) {
-      register[1] = first_number;
+      second_number = first_number;
     }
-    let result = operate(first_number, first_operator, register[1]);
+    let result = operate(first_number, first_operator, second_number);
     first_number = result.toString();
     setScreenFlag(0);
   }
@@ -270,19 +268,19 @@ let Calculator = function() {
 // ============================================= ERROR HANDLING
   function divisionByZero() {
     first_number = 'DIV BY 0';
-    register[1] = 'DIV BY 0';
-    register[2] = 'DIV BY 0';
+    second_number = 'DIV BY 0';
+    third_number = 'DIV BY 0';
     first_operator = '';
-    register[4] = '';
+    second_operator = '';
     setScreenFlag(0);
   }
 
   function setError() {
     first_number = 'ERROR';
-    register[1] = 'ERROR';
-    register[2] = 'ERROR';
+    second_number = 'ERROR';
+    third_number = 'ERROR';
     first_operator = '';
-    register[4] = '';
+    second_operator = '';
     setScreenFlag(0);
   }
 
@@ -292,10 +290,10 @@ let Calculator = function() {
 
   function clear() {
      first_number = '';
-     register[1] = '';
-     register[2] = '';
+     second_number = '';
+     third_number = '';
      first_operator = '';
-     register[4] = '';
+     second_operator = '';
      document.getElementById('screen').innerHTML = '0';
      setScreenFlag(0);
      setCalculatorState();
@@ -424,8 +422,8 @@ let Calculator = function() {
     // if (first_number.length < 10) {
     //   first_number += getKeyPress();
     // }
-    if (register[1].length < 10) {
-      register[1] += getKeyPress();
+    if (second_number.length < 10) {
+      second_number += getKeyPress();
     }
   }
 
@@ -433,8 +431,8 @@ let Calculator = function() {
     // if (first_number.length < 10) {
     //   first_number += getKeyPress();
     // }
-    if (register[2].length < 10) {
-      register[2] += getKeyPress();
+    if (third_number.length < 10) {
+      third_number += getKeyPress();
     }
   }
 
@@ -444,11 +442,11 @@ let Calculator = function() {
 
   function beginInnerCalculation() {
     if ((getKeyPress() === '*' || getKeyPress() === '/') && (first_operator === '+' || first_operator === '-')) {
-      register[4] = getKeyPress();
+      second_operator = getKeyPress();
       setScreenFlag(1);
     } else {
       reckonOutside();
-      register[1] = '';
+      second_number = '';
       first_operator = getKeyPress();
       setScreenFlag(0);
     }
@@ -460,7 +458,7 @@ let Calculator = function() {
       first_operator = getKeyPress();
       setScreenFlag(0);
     } else {
-      register[4] = getKeyPress();
+      second_operator = getKeyPress();
       setScreenFlag(1);
     }
   }
@@ -468,13 +466,13 @@ let Calculator = function() {
   function continueInnerCalculation() { // case 5
     if (getKeyPress() === '+' || getKeyPress() === '-') {
       reckonAll();
-      register[1] = '';
-      register[2] = '';
+      second_number = '';
+      third_number = '';
       first_operator = getKeyPress();
-      register[4] = '';
+      second_operator = '';
     } else {
       reckonInside();
-      register[4] = getKeyPress();
+      second_operator = getKeyPress();
       setScreenFlag(1);
     }
   }
@@ -485,22 +483,22 @@ let Calculator = function() {
   }
 
   function transferAndFlipFirstSign() {
-    register[1] = Number(first_number * -1).toString();
+    second_number = Number(first_number * -1).toString();
     setScreenFlag(1);
   }
 
   function flipSecondSign() {
-    register[1] = Number(register[1] * -1).toString();
+    second_number = Number(second_number * -1).toString();
     setScreenFlag(1);
   }
 
   function transferAndFlipSecondSign() {
-    register[2] = Number(register[1] * -1).toString();
+    third_number = Number(second_number * -1).toString();
     setScreenFlag(1);
   }
 
   function flipThirdSign() {
-    register[2] = Number(register[2] * -1).toString();
+    third_number = Number(third_number * -1).toString();
     setScreenFlag(2);
   }
 
@@ -513,24 +511,24 @@ let Calculator = function() {
   }
 
   function transferFirstDecimal() {
-    register[1] = '0.';
+    second_number = '0.';
     setScreenFlag(1);
   }
 
   function setSecondDecimal() {
-    if (register[1].indexOf('.') === -1 && register[1].length < 10) {
-      register[1] = register[1] + '.';
+    if (second_number.indexOf('.') === -1 && second_number.length < 10) {
+      second_number = second_number + '.';
     }
   }
 
   function transferSecondDecimal() {
-    register[2] = '0.';
+    third_number = '0.';
     setScreenFlag(2);
   }
 
   function setThirdDecimal() {
-    if (register[2].indexOf('.') === -1 && register[2].length < 10) {
-      register[2] = register[2] + '.';
+    if (third_number.indexOf('.') === -1 && third_number.length < 10) {
+      third_number = third_number + '.';
     }
   }
 
@@ -548,7 +546,7 @@ let Calculator = function() {
 
   function transferFirstRoot() {
     if (first_number > 0) {
-      register[1] = trim(Math.sqrt(Number(first_number)).toString());
+      second_number = trim(Math.sqrt(Number(first_number)).toString());
       setScreenFlag(1);
     } else {
       setError();
@@ -556,11 +554,11 @@ let Calculator = function() {
   }
 
   function calculateSecondRoot() {
-    if (register[1] > 0) {
-      register[1] = trim(Math.sqrt(Number(register[1])).toString());
+    if (second_number > 0) {
+      second_number = trim(Math.sqrt(Number(second_number)).toString());
       setScreenFlag(1);
-    } else if (register[1] === '' || register[1] === '0') {
-      register[1] = '0';
+    } else if (second_number === '' || second_number === '0') {
+      second_number = '0';
       setScreenFlag(1);
     } else {
       setError();
@@ -568,8 +566,8 @@ let Calculator = function() {
   }
 
   function transferSecondRoot() {
-    if (register[1] > 0) {
-      register[2] = trim(Math.sqrt(Number(register[1])).toString());
+    if (second_number > 0) {
+      third_number = trim(Math.sqrt(Number(second_number)).toString());
       setScreenFlag(2);
     } else {
       setError();
@@ -577,11 +575,11 @@ let Calculator = function() {
   }
 
   function calculateThirdRoot() {
-    if (register[2] > 0) {
-      register[2] = trim(Math.sqrt(Number(register[2])).toString());
+    if (third_number > 0) {
+      third_number = trim(Math.sqrt(Number(third_number)).toString());
       setScreenFlag(2);
-    } else if (register[2] === '' || register[2] === '0') {
-      register[2] = '0';
+    } else if (third_number === '' || third_number === '0') {
+      third_number = '0';
       setScreenFlag(2);
     } else {
       setError();
@@ -589,8 +587,7 @@ let Calculator = function() {
   }
 
   return {
-    sendKeyPress        : sendKeyPress,
-    register            : register
+    sendKeyPress : sendKeyPress
   };
 
 

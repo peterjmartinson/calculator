@@ -330,6 +330,9 @@ q.test('Error Handling', function(assert) {
 
 });
 
+// q.test('Screen Test', function(assert) {
+// });
+
 // ========= UTILITY FUNCTIONS
 
 let screen = document.getElementById('screen');
