@@ -391,20 +391,20 @@ let Calculator = function() {
 
   function calculateSquareRoot() {
     switch (getState()) {
-      case 1:
+      case 1: // 0,A|   |   |   |   |
          calculateFirstRoot();
          break;
-      case 2:
+      case 2: //  A |   |   | + |   |
          transferFirstRoot();
          break;
-      case 3:
-         takeSquareRoot(1);
+      case 3: //  A | B |   |+,*|   |
+         calculateSecondRoot();
          break;
-      case 4:
-         transferSquareRoot(1);
+      case 4: //  A | B |   | + | * |
+         transferSecondRoot();
          break;
-      case 5:
-         takeSquareRoot(2);
+      case 5: //  A | B | C | + | * |
+         calculateThirdRoot();
          break;
       default:
          console.log("something other than root happened!");
@@ -550,22 +550,34 @@ let Calculator = function() {
     }
   }
 
-  function takeSquareRoot(index) {
-    if (register[index] > 0) {
-      register[index] = trim(Math.sqrt(Number(register[index])).toString());
-      setScreenFlag(index);
-    } else if (register[index] === '' || register[index] === '0') {
-      register[index] = '0';
-      setScreenFlag(index);
+  function calculateSecondRoot() {
+    if (register[1] > 0) {
+      register[1] = trim(Math.sqrt(Number(register[1])).toString());
+      setScreenFlag(1);
+    } else if (register[1] === '' || register[1] === '0') {
+      register[1] = '0';
+      setScreenFlag(1);
     } else {
       setError();
     }
   }
 
-  function transferSquareRoot(index) {
-    if (register[index] > 0) {
-      register[index + 1] = trim(Math.sqrt(Number(register[index])).toString());
-      setScreenFlag(index + 1);
+  function transferSecondRoot() {
+    if (register[1] > 0) {
+      register[2] = trim(Math.sqrt(Number(register[1])).toString());
+      setScreenFlag(2);
+    } else {
+      setError();
+    }
+  }
+
+  function calculateThirdRoot() {
+    if (register[2] > 0) {
+      register[2] = trim(Math.sqrt(Number(register[2])).toString());
+      setScreenFlag(2);
+    } else if (register[2] === '' || register[2] === '0') {
+      register[2] = '0';
+      setScreenFlag(2);
     } else {
       setError();
     }
