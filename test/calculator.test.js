@@ -21,38 +21,62 @@ q.test('short sequences', function(assert) {
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('1+2=');
-  assert.equal(calculator.register[0], '3', '1+2=3');
+  assert.equal(getScreenValue(), '3', '1+2=3');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('3*5=');
-  assert.equal(calculator.register[0], '15', '3*5=15');
+  assert.equal(getScreenValue(), '15', '3*5=15');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('7-22=');
-  assert.equal(calculator.register[0], '-15', '7-22=-15');
+  assert.equal(getScreenValue(), '-15', '7-22=-15');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('56/7=');
-  assert.equal(calculator.register[0], '8', '56/7=8');
+  assert.equal(getScreenValue(), '8', '56/7=8');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('.12+1=');
+  assert.equal(getScreenValue(), '1.12', '.12+1=1.12');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1.1-0.1=');
+  assert.equal(getScreenValue(), '1', '1.1-0.1=1');
 
 });
 
 q.test('full sequences', function(assert) {
   calculator.sendKeyPress('clear');
   runCalculationSequence('1+2*3=');
-  assert.equal(calculator.register[0], '7', '1+2*3=7');
+  assert.equal(getScreenValue(), '7', '1+2*3=7');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('7+15/3=');
-  assert.equal(calculator.register[0], '12', '7+15/3=12');
+  assert.equal(getScreenValue(), '12', '7+15/3=12');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('1-2*3=');
-  assert.equal(calculator.register[0], '-5', '1-2*3=-5');
+  assert.equal(getScreenValue(), '-5', '1-2*3=-5');
 
   calculator.sendKeyPress('clear');
-  runCalculationSequence('7+15/3=');
-  assert.equal(calculator.register[0], '12', '7+15/3=12');
+  runCalculationSequence('7-15/3=');
+  assert.equal(getScreenValue(), '2', '7-15/3=2');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1+4*0.25=');
+  assert.equal(getScreenValue(), '2', '1+4*0.25=2');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1+4*.25=');
+  assert.equal(getScreenValue(), '2', '1+4*.25=2');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1+0.25*4=');
+  assert.equal(getScreenValue(), '2', '1+0.25*4=2');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1+.25*4=');
+  assert.equal(getScreenValue(), '2', '1+.25*4=2');
 
 });
 
@@ -198,6 +222,20 @@ q.test('complex operations', function(assert) {
   calculator.sendKeyPress('pm');
   runCalculationSequence('*3=');
   assert.equal(getScreenValue(), '-5', '1+(-2)*3=-5');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('4+');
+  calculator.sendKeyPress('root');
+  assert.equal(getScreenValue(), '2', '4+ root -> 4*2');
+  calculator.sendKeyPress('=');
+  assert.equal(getScreenValue(), '6', '4+2=6');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1+4*');
+  calculator.sendKeyPress('root');
+  assert.equal(getScreenValue(), '2', '1+4* root -> 1+4*2');
+  calculator.sendKeyPress('=');
+  assert.equal(getScreenValue(), '9', '1+4*2=9');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('1+4');

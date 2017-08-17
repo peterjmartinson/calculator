@@ -445,31 +445,19 @@ let Calculator = function() {
   function setDecimal() {
     switch (getState()) {
       case 1:
-         if (register[0].indexOf('.') === -1 && register[0].length < 10) {
-            if (register[0] === '' || register[0] === '0') {
-               register[0] = '0.';
-            } else {
-               register[0] = register[0] + '.';
-            }
-         }
+         setFirstDecimal();
          break;
       case 2:
-         register[1] = '0.';
-         setScreenFlag(2);
+         startNewDecimal(1);
          break;
       case 3:
-         if (register[1].indexOf('.') === -1 && register[1].length < 10) {
-            register[1] = register[1] + '.';
-         }
+         appendDecimal(1);
          break;
       case 4:
-         register[2] = '0.';
-         setScreenFlag(3);
+         startNewDecimal(2);
          break;
       case 5:
-         if (register[2].indexOf('.') === -1 && register[2].length < 10) {
-            register[2] = register[2] + '.';
-         }
+         appendDecimal(2);
          break;
       default:
          console.log("something other than . happened!");
@@ -477,54 +465,68 @@ let Calculator = function() {
     }
   }
 
+  function setFirstDecimal() {
+    if (register[0] === '' || register[0] === '0') {
+       startNewDecimal(0);
+    } else {
+       appendDecimal(0);
+    }
+  }
+
+  function appendDecimal(index) {
+    if (register[index].indexOf('.') === -1 && register[index].length < 10) {
+      register[index] = register[index] + '.';
+    }
+  }
+
+  function startNewDecimal(index) {
+    register[index] = '0.';
+    if ( getState > 1 ) {
+      setScreenFlag(index + 1);
+    }
+  }
+
   function calculateSquareRoot() {
     switch (getState()) {
       case 1:
-         if (register[0] > 0) {
-            register[0] = trim(Math.sqrt(Number(register[0])).toString());
-            setScreenFlag(1);
-         } else if (register[0] === '' || register[0] === '0') {
-            register[0] = '0';
-            setScreenFlag(1);
-         } else {
-            setError();
-         }
+         takeSquareRoot(0);
          break;
       case 2:
-         if (register[0] > 0) {
-            register[1] = trim(Math.sqrt(Number(register[0])).toString());
-            setScreenFlag(2);
-         } else {
-            setError();
-         }
+         transferSquareRoot(0);
          break;
       case 3:
-         if (register[1] > 0) {
-            register[1] = trim(Math.sqrt(Number(register[1])).toString());
-            setScreenFlag(2);
-         } else {
-            setError();
-         }
+         takeSquareRoot(1);
          break;
       case 4:
-         if (register[1] > 0) {
-            register[2] = trim(Math.sqrt(Number(register[1])).toString());
-            setScreenFlag(3);
-         } else {
-            setError();
-         }
+         transferSquareRoot(1);
          break;
       case 5:
-         if (register[2] > 0) {
-            register[2] = trim(Math.sqrt(Number(register[2])).toString());
-            setScreenFlag(3);
-         } else {
-            setError();
-         }
+         takeSquareRoot(2);
          break;
       default:
          console.log("something other than root happened!");
          break;
+    }
+  }
+
+  function takeSquareRoot(index) {
+    if (register[index] > 0) {
+      register[index] = trim(Math.sqrt(Number(register[index])).toString());
+      setScreenFlag(index + 1);
+    } else if (register[index] === '' || register[index] === '0') {
+      register[index] = '0';
+      setScreenFlag(index + 1);
+    } else {
+      setError();
+    }
+  }
+
+  function transferSquareRoot(index) {
+    if (register[index] > 0) {
+      register[index + 1] = trim(Math.sqrt(Number(register[index])).toString());
+      setScreenFlag(index + 2);
+    } else {
+      setError();
     }
   }
 
