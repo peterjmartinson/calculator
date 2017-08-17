@@ -207,9 +207,43 @@ q.test('repeated calculations', function(assert) {
 
 q.test('complex operations', function(assert) {
   calculator.sendKeyPress('clear');
+  assert.equal(getScreenValue(), '0', 'Start with 0');
+  calculator.sendKeyPress('1');
+  assert.equal(getScreenValue(), '1', 'Replace the initial 0 with 1');
+  calculator.sendKeyPress('2');
+  assert.equal(getScreenValue(), '12', 'Append 2 to 1 -> 12');
+
+  calculator.sendKeyPress('clear');
   calculator.sendKeyPress('4');
   calculator.sendKeyPress('root');
   assert.equal(getScreenValue(), '2', '2*2=4');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1');
+  calculator.sendKeyPress('pm');
+  assert.equal(getScreenValue(), '-1', 'flip first register\'s sign');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1+');
+  calculator.sendKeyPress('pm');
+  calculator.sendKeyPress('=');
+  assert.equal(getScreenValue(), '0', 'flip first register\'s sign and transfer');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1+2');
+  calculator.sendKeyPress('pm');
+  assert.equal(getScreenValue(), '-2', 'flip second register\'s sign');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1+2*');
+  calculator.sendKeyPress('pm');
+  calculator.sendKeyPress('=');
+  assert.equal(getScreenValue(), '-3', 'flip second register\'s sign and transfer');
+
+  calculator.sendKeyPress('clear');
+  runCalculationSequence('1+2*3');
+  calculator.sendKeyPress('pm');
+  assert.equal(getScreenValue(), '-3', 'flip third register\'s sign');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('1+2*3');

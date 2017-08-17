@@ -291,21 +291,20 @@ let Calculator = function() {
      setCalculatorState();
   }
 
+// =========================================== CASE STATEMENTS
+
   function setNumber() {
     switch(getState()) {
       case 1:
-        updateRegister(0);
-        setScreenFlag(1);
+        appendNumber(0);
         break;
       case 2:
       case 3:
-        updateRegister(1);
-        setScreenFlag(2);
+        appendNumber(1);
         break;
       case 4:
       case 5:
-        updateRegister(2);
-        setScreenFlag(3);
+        appendNumber(2);
         break;
       default:
          console.log("something other than NUMBER happened!");
@@ -313,8 +312,105 @@ let Calculator = function() {
     }
   }
 
+  function setOperator() {
+    switch (getState()) {
+      case 1:
+      case 2:
+        changeOuterCalculation();
+        break;
+      case 3:
+        beginInnerCalculation();
+        break;
+      case 4:
+        completeInnerCalculation();
+        break;
+      case 5:
+        continueInnerCalculation();
+        break;
+      default:
+        console.log("something other than OPERATOR happened!");
+        break;
+    }
+  }
+
+  function setSign() {
+    switch (getState()) {
+      case 1:
+        flipSign(0);
+        break;
+      case 2:
+        flipSignAndTransfer(0);
+        break;
+      case 3:
+        flipSign(1);
+        break;
+      case 4:
+        flipSignAndTransfer(1);
+        break;
+      case 5:
+        flipSign(2);
+        break;
+      default:
+        console.log("something other than PLUS-MINUS happened!");
+        break;
+    }
+  }
+
+  function setDecimal() {
+    switch (getState()) {
+      case 1:
+         setFirstDecimal();
+         break;
+      case 2:
+         startNewDecimal(1);
+         break;
+      case 3:
+         appendDecimal(1);
+         break;
+      case 4:
+         startNewDecimal(2);
+         break;
+      case 5:
+         appendDecimal(2);
+         break;
+      default:
+         console.log("something other than . happened!");
+         break;
+    }
+  }
+
+  function calculateSquareRoot() {
+    switch (getState()) {
+      case 1:
+         takeSquareRoot(0);
+         break;
+      case 2:
+         transferSquareRoot(0);
+         break;
+      case 3:
+         takeSquareRoot(1);
+         break;
+      case 4:
+         transferSquareRoot(1);
+         break;
+      case 5:
+         takeSquareRoot(2);
+         break;
+      default:
+         console.log("something other than root happened!");
+         break;
+    }
+  }
+
+// ============================================ REGISTER MANIPULATION
+
+  function appendNumber(index) {
+    appendToRegister(index);
+    setScreenFlag(index + 1);
+  }
+
   function updateRegister(index) {
-    if (targetRegisterIsEmpty(index) || isOperator(index)) {
+    if (isOperator(index)) {
       clearRegister(index);
     }
     appendToRegister(index);
@@ -341,27 +437,6 @@ let Calculator = function() {
 
   function targetRegisterIsAppendable(index) {
     return register[index].length < 10;
-  }
-
-  function setOperator() {
-    switch (getState()) {
-      case 1:
-      case 2:
-        changeOuterCalculation();
-        break;
-      case 3:
-        beginInnerCalculation();
-        break;
-      case 4:
-        completeInnerCalculation();
-        break;
-      case 5:
-        continueInnerCalculation();
-        break;
-      default:
-        console.log("something other than OPERATOR happened!");
-        break;
-    }
   }
 
   function changeOuterCalculation() {
@@ -395,10 +470,10 @@ let Calculator = function() {
   function continueInnerCalculation() {
     if (getKeyPress() === '+' || getKeyPress() === '-') {
       runEquals();
+      register[1] = '';
       register[2] = '';
       register[3] = getKeyPress();
       register[4] = '';
-      register[1] = '';
       setScreenFlag(1);
     } else {
       reckonInside();
@@ -407,31 +482,6 @@ let Calculator = function() {
     }
   }
     
-  function setSign() {
-    switch (getState()) {
-      case 1:
-        if (register[0] !== 'empty' && register[0] !== '0') {
-          flipSign(0);
-        }
-        break;
-      case 2:
-        flipSignAndTransfer(0);
-        break;
-      case 3:
-        flipSign(1);
-        break;
-      case 4:
-        flipSignAndTransfer(1);
-        break;
-      case 5:
-        flipSign(2);
-        break;
-      default:
-        console.log("something other than PLUS-MINUS happened!");
-        break;
-    }
-  }
-
   function flipSign(index) {
     register[index] = Number(register[index] * -1).toString();
     setScreenFlag(index+1);
@@ -440,29 +490,6 @@ let Calculator = function() {
   function flipSignAndTransfer(index) {
     register[index+1] = Number(register[index] * -1).toString();
     setScreenFlag(index+2);
-  }
-
-  function setDecimal() {
-    switch (getState()) {
-      case 1:
-         setFirstDecimal();
-         break;
-      case 2:
-         startNewDecimal(1);
-         break;
-      case 3:
-         appendDecimal(1);
-         break;
-      case 4:
-         startNewDecimal(2);
-         break;
-      case 5:
-         appendDecimal(2);
-         break;
-      default:
-         console.log("something other than . happened!");
-         break;
-    }
   }
 
   function setFirstDecimal() {
@@ -483,29 +510,6 @@ let Calculator = function() {
     register[index] = '0.';
     if ( getState > 1 ) {
       setScreenFlag(index + 1);
-    }
-  }
-
-  function calculateSquareRoot() {
-    switch (getState()) {
-      case 1:
-         takeSquareRoot(0);
-         break;
-      case 2:
-         transferSquareRoot(0);
-         break;
-      case 3:
-         takeSquareRoot(1);
-         break;
-      case 4:
-         transferSquareRoot(1);
-         break;
-      case 5:
-         takeSquareRoot(2);
-         break;
-      default:
-         console.log("something other than root happened!");
-         break;
     }
   }
 
