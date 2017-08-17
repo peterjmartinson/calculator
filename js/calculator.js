@@ -8,7 +8,11 @@ let Calculator = function() {
 
   let key_press = '',
       previous_keypress = '',
-      register = ['','','','',''],
+      first_number = '',
+      second_number = '',
+      third_number = '',
+      first_operator = '',
+      second_operator = '',
       screen_flag = 0,
       state = 1;
 
@@ -32,15 +36,15 @@ let Calculator = function() {
   }
 
   function setCalculatorState() {
-      if (register[3] === '') {
+      if (first_operator === '') {
         setState(1);
-      } else if (register[3] !== '' && register[1] === '') {
+      } else if (first_operator !== '' && second_number === '') {
         setState(2);
-      } else if (register[3] !== '' && register[0] !== '' && register[4] === '') {
+      } else if (first_operator !== '' && first_number !== '' && second_operator === '') {
         setState(3);
-      } else if (register[4] !== '' && register[2] === '') {
+      } else if (second_operator !== '' && third_number === '') {
         setState(4);
-      } else if (register[4] !== '' && register[2] !== '') {
+      } else if (second_operator !== '' && third_number !== '') {
         setState(5);
       }
   }
@@ -79,7 +83,7 @@ let Calculator = function() {
     }
     else if ( operator.indexOf(key_press) > -1 ) {
       if (previous_keypress == '=') {
-        register[3] = '';
+        first_operator = '';
       }
       setOperator();
     }
@@ -112,9 +116,14 @@ let Calculator = function() {
 
   function logInternals() {
     let cow_organ = [];
-    for (let i = 0; i < register.length; i++) {
-      cow_organ.push( register[i] == '' ? '&nbsp;' : register[i] );
-    }
+    cow_organ.push( first_number == '' ? '&nbsp;' : first_number );
+    cow_organ.push( second_number == '' ? '&nbsp;' : second_number );
+    cow_organ.push( third_number == '' ? '&nbsp;' : third_number );
+    cow_organ.push( first_operator == '' ? '&nbsp;' : first_operator );
+    cow_organ.push( second_operator == '' ? '&nbsp;' : second_operator );
+    // for (let i = 0; i < register.length; i++) {
+    //   cow_organ.push( register[i] == '' ? '&nbsp;' : register[i] );
+    // }
     let output = '';
     output += '   <ul>'
     output += '     <li>'
@@ -145,17 +154,17 @@ let Calculator = function() {
   function updateScreen() {
     let screen = document.getElementById("screen");
     if (getScreenFlag() === 0) {
-       if (register[0] === '') {
+       if (first_number === '') {
           screen.innerHTML = '0';
        } else {
-          screen.innerHTML = register[0];
+          screen.innerHTML = first_number;
        }
     }
     if (getScreenFlag() === 1) {
-       screen.innerHTML = register[1];
+       screen.innerHTML = second_number;
     }
     if (getScreenFlag() === 2) {
-       screen.innerHTML = register[2];
+       screen.innerHTML = third_number;
     }
   }
 
@@ -199,41 +208,41 @@ let Calculator = function() {
 
   function reckonAll() {
     if (isError()) return;
-    let temp_register = register[2];
+    let temp_register = third_number;
     reckonInside();
     reckonOutside();
-    register[1] = temp_register;
-    register[3] = register[4];
-    register[4] = '';
+    second_number = temp_register;
+    first_operator = second_operator;
+    second_operator = '';
   }
 
   function reckonInside() {
     if (isError()) return;
-    if (register[2] == '0' && register[4] == '/') {
+    if (third_number == '0' && second_operator == '/') {
       divisionByZero();
       return;
     }
     // handle the "7+=" case
-    if (register[2] === '') {
-      register[2] = register[1]
+    if (third_number === '') {
+      third_number = second_number
     }
-    let result = operate(register[1], register[4], register[2]);
-    register[1] = result.toString();
-    register[2] = '';
+    let result = operate(second_number, second_operator, third_number);
+    second_number = result.toString();
+    third_number = '';
     setScreenFlag(1);
   }
 
   function reckonOutside() {
     if (isError()) return;
-    if (register[1] == '0' && register[3] == '/') {
+    if (second_number == '0' && first_operator == '/') {
       divisionByZero();
       return;
     }
     if (getState() === 2) {
-      register[1] = register[0];
+      second_number = first_number;
     }
-    let result = operate(register[0], register[3], register[1]);
-    register[0] = result.toString();
+    let result = operate(first_number, first_operator, second_number);
+    first_number = result.toString();
     setScreenFlag(0);
   }
 
@@ -258,34 +267,33 @@ let Calculator = function() {
 
 // ============================================= ERROR HANDLING
   function divisionByZero() {
-    register[0] = 'DIV BY 0';
-    register[1] = 'DIV BY 0';
-    register[2] = 'DIV BY 0';
-    register[3] = '';
-    register[4] = '';
+    first_number = 'DIV BY 0';
+    second_number = 'DIV BY 0';
+    third_number = 'DIV BY 0';
+    first_operator = '';
+    second_operator = '';
     setScreenFlag(0);
   }
 
   function setError() {
-    register[0] = 'ERROR';
-    register[1] = 'ERROR';
-    register[2] = 'ERROR';
-    register[3] = '';
-    register[4] = '';
+    first_number = 'ERROR';
+    second_number = 'ERROR';
+    third_number = 'ERROR';
+    first_operator = '';
+    second_operator = '';
     setScreenFlag(0);
   }
 
   function isError() {
-    return register[0] === 'ERROR' || register[0] === 'DIV BY 0' || register[0] === 'NaN' ? 1 : 0;
+    return first_number === 'ERROR' || first_number === 'DIV BY 0' || first_number === 'NaN' ? 1 : 0;
   }
 
-// =========================================== ULTIMATE ACTIONS
   function clear() {
-     register[0] = '';
-     register[1] = '';
-     register[2] = '';
-     register[3] = '';
-     register[4] = '';
+     first_number = '';
+     second_number = '';
+     third_number = '';
+     first_operator = '';
+     second_operator = '';
      document.getElementById('screen').innerHTML = '0';
      setScreenFlag(0);
      setCalculatorState();
@@ -296,15 +304,15 @@ let Calculator = function() {
   function setNumber() {
     switch(getState()) {
       case 1:
-        appendNumber(0);
+        appendFirstNumber();
         break;
       case 2:
       case 3:
-        appendNumber(1);
+        appendSecondNumber();
         break;
       case 4:
       case 5:
-        appendNumber(2);
+        appendThirdNumber();
         break;
       default:
          console.log("something other than NUMBER happened!");
@@ -314,17 +322,17 @@ let Calculator = function() {
 
   function setOperator() {
     switch (getState()) {
-      case 1:
-      case 2:
+      case 1: // 0,A|   |   |   |   |
+      case 2: //  A |   |   | + |   |
         changeOuterCalculation();
         break;
-      case 3:
+      case 3: //  A | B |   |+,*|   |
         beginInnerCalculation();
         break;
-      case 4:
+      case 4: //  A | B |   | + | * |
         completeInnerCalculation();
         break;
-      case 5:
+      case 5: //  A | B | C | + | * |
         continueInnerCalculation();
         break;
       default:
@@ -335,20 +343,20 @@ let Calculator = function() {
 
   function setSign() {
     switch (getState()) {
-      case 1:
-        flipSign(0);
+      case 1: // 0,A|   |   |   |   |
+        flipFirstSign();
         break;
-      case 2:
-        flipSignAndTransfer(0);
+      case 2: //  A |   |   | + |   |
+        transferAndFlipFirstSign();
         break;
-      case 3:
-        flipSign(1);
+      case 3: //  A | B |   |+,*|   |
+        flipSecondSign();
         break;
-      case 4:
-        flipSignAndTransfer(1);
+      case 4: //  A | B |   | + | * |
+        transferAndFlipSecondSign();
         break;
-      case 5:
-        flipSign(2);
+      case 5: //  A | B | C | + | * |
+        flipThirdSign();
         break;
       default:
         console.log("something other than PLUS-MINUS happened!");
@@ -358,20 +366,20 @@ let Calculator = function() {
 
   function setDecimal() {
     switch (getState()) {
-      case 1:
+      case 1: // 0,A|   |   |   |   |
          setFirstDecimal();
          break;
-      case 2:
-         startNewDecimal(1);
+      case 2: //  A |   |   | + |   |
+         transferFirstDecimal();
          break;
-      case 3:
-         appendDecimal(1);
+      case 3: //  A | B |   |+,*|   |
+         setSecondDecimal();
          break;
-      case 4:
-         startNewDecimal(2);
+      case 4: //  A | B |   | + | * |
+         transferSecondDecimal();
          break;
-      case 5:
-         appendDecimal(2);
+      case 5: //  A | B | C | + | * |
+         setThirdDecimal();
          break;
       default:
          console.log("something other than . happened!");
@@ -381,20 +389,20 @@ let Calculator = function() {
 
   function calculateSquareRoot() {
     switch (getState()) {
-      case 1:
-         takeSquareRoot(0);
+      case 1: // 0,A|   |   |   |   |
+         calculateFirstRoot();
          break;
-      case 2:
-         transferSquareRoot(0);
+      case 2: //  A |   |   | + |   |
+         transferFirstRoot();
          break;
-      case 3:
-         takeSquareRoot(1);
+      case 3: //  A | B |   |+,*|   |
+         calculateSecondRoot();
          break;
-      case 4:
-         transferSquareRoot(1);
+      case 4: //  A | B |   | + | * |
+         transferSecondRoot();
          break;
-      case 5:
-         takeSquareRoot(2);
+      case 5: //  A | B | C | + | * |
+         calculateThirdRoot();
          break;
       default:
          console.log("something other than root happened!");
@@ -404,22 +412,42 @@ let Calculator = function() {
 
 // ============================================ REGISTER MANIPULATION
 
-  function appendNumber(index) {
-    appendToRegister(index);
+  function appendFirstNumber() {
+    if (first_number.length < 10) {
+      first_number += getKeyPress();
+    }
+  }
+
+  function appendSecondNumber() {
+    // if (first_number.length < 10) {
+    //   first_number += getKeyPress();
+    // }
+    if (second_number.length < 10) {
+      second_number += getKeyPress();
+    }
+  }
+
+  function appendThirdNumber() {
+    // if (first_number.length < 10) {
+    //   first_number += getKeyPress();
+    // }
+    if (third_number.length < 10) {
+      third_number += getKeyPress();
+    }
   }
 
   function changeOuterCalculation() {
-    updateRegister(3);
+    first_operator = getKeyPress();
   }
 
   function beginInnerCalculation() {
-    if ((getKeyPress() === '*' || getKeyPress() === '/') && (register[3] === '+' || register[3] === '-')) {
-      updateRegister(4);
+    if ((getKeyPress() === '*' || getKeyPress() === '/') && (first_operator === '+' || first_operator === '-')) {
+      second_operator = getKeyPress();
       setScreenFlag(1);
     } else {
       reckonOutside();
-      register[1] = '';
-      updateRegister(3);
+      second_number = '';
+      first_operator = getKeyPress();
       setScreenFlag(0);
     }
   }
@@ -427,10 +455,10 @@ let Calculator = function() {
   function completeInnerCalculation() {
     if (getKeyPress() === '+' || getKeyPress() === '-') {
       runEquals();
-      updateRegister(3);
+      first_operator = getKeyPress();
       setScreenFlag(0);
     } else {
-      updateRegister(4);
+      second_operator = getKeyPress();
       setScreenFlag(1);
     }
   }
@@ -438,102 +466,128 @@ let Calculator = function() {
   function continueInnerCalculation() { // case 5
     if (getKeyPress() === '+' || getKeyPress() === '-') {
       reckonAll();
-      register[1] = '';
-      register[2] = '';
-      register[3] = getKeyPress();
-      register[4] = '';
+      second_number = '';
+      third_number = '';
+      first_operator = getKeyPress();
+      second_operator = '';
     } else {
       reckonInside();
-      updateRegister(4);
+      second_operator = getKeyPress();
       setScreenFlag(1);
     }
   }
     
-  function updateRegister(index) {
-    if (isOperator(index)) {
-      clearRegister(index);
-    }
-    appendToRegister(index);
+  function flipFirstSign() {
+    first_number = Number(first_number * -1).toString();
+    setScreenFlag(0);
   }
 
-  function targetRegisterIsEmpty(index) {
-    return !register[index];
+  function transferAndFlipFirstSign() {
+    second_number = Number(first_number * -1).toString();
+    setScreenFlag(1);
   }
 
-  function isOperator(index) {
-    let operators = ['+','-','*','/']
-    return operators.indexOf(register[index]) !== -1;
+  function flipSecondSign() {
+    second_number = Number(second_number * -1).toString();
+    setScreenFlag(1);
   }
 
-  function clearRegister(index) {
-    register[index] = '';
+  function transferAndFlipSecondSign() {
+    third_number = Number(second_number * -1).toString();
+    setScreenFlag(1);
   }
 
-  function appendToRegister(index) {
-    if ( targetRegisterIsAppendable(index) ) {
-      register[index] += getKeyPress();
-    }
-  }
-
-  function targetRegisterIsAppendable(index) {
-    return register[index].length < 10;
-  }
-
-  function flipSign(index) {
-    register[index] = Number(register[index] * -1).toString();
-    setScreenFlag(index);
-  }
-
-  function flipSignAndTransfer(index) {
-    register[index+1] = Number(register[index] * -1).toString();
-    setScreenFlag(index);
+  function flipThirdSign() {
+    third_number = Number(third_number * -1).toString();
+    setScreenFlag(2);
   }
 
   function setFirstDecimal() {
-    if (register[0] === '' || register[0] === '0') {
-       startNewDecimal(0);
+    if (first_number === '' || first_number === '0') {
+       first_number = '0.';
     } else {
-       appendDecimal(0);
+      first_number += first_number.length < 10 ? '.' : '';
     }
   }
 
-  function appendDecimal(index) {
-    if (register[index].indexOf('.') === -1 && register[index].length < 10) {
-      register[index] = register[index] + '.';
+  function transferFirstDecimal() {
+    second_number = '0.';
+    setScreenFlag(1);
+  }
+
+  function setSecondDecimal() {
+    if (second_number.indexOf('.') === -1 && second_number.length < 10) {
+      second_number = second_number + '.';
     }
   }
 
-  function startNewDecimal(index) {
-    register[index] = '0.';
-    if ( getState > 1 ) {
-      setScreenFlag(index);
+  function transferSecondDecimal() {
+    third_number = '0.';
+    setScreenFlag(2);
+  }
+
+  function setThirdDecimal() {
+    if (third_number.indexOf('.') === -1 && third_number.length < 10) {
+      third_number = third_number + '.';
     }
   }
 
-  function takeSquareRoot(index) {
-    if (register[index] > 0) {
-      register[index] = trim(Math.sqrt(Number(register[index])).toString());
-      setScreenFlag(index);
-    } else if (register[index] === '' || register[index] === '0') {
-      register[index] = '0';
-      setScreenFlag(index);
+  function calculateFirstRoot() {
+    if (first_number > 0) {
+      first_number = trim(Math.sqrt(Number(first_number)).toString());
+      setScreenFlag(0);
+    } else if (first_number === '' || first_number === '0') {
+      first_number = '0';
+      setScreenFlag(0);
     } else {
       setError();
     }
   }
 
-  function transferSquareRoot(index) {
-    if (register[index] > 0) {
-      register[index + 1] = trim(Math.sqrt(Number(register[index])).toString());
-      setScreenFlag(index + 1);
+  function transferFirstRoot() {
+    if (first_number > 0) {
+      second_number = trim(Math.sqrt(Number(first_number)).toString());
+      setScreenFlag(1);
+    } else {
+      setError();
+    }
+  }
+
+  function calculateSecondRoot() {
+    if (second_number > 0) {
+      second_number = trim(Math.sqrt(Number(second_number)).toString());
+      setScreenFlag(1);
+    } else if (second_number === '' || second_number === '0') {
+      second_number = '0';
+      setScreenFlag(1);
+    } else {
+      setError();
+    }
+  }
+
+  function transferSecondRoot() {
+    if (second_number > 0) {
+      third_number = trim(Math.sqrt(Number(second_number)).toString());
+      setScreenFlag(2);
+    } else {
+      setError();
+    }
+  }
+
+  function calculateThirdRoot() {
+    if (third_number > 0) {
+      third_number = trim(Math.sqrt(Number(third_number)).toString());
+      setScreenFlag(2);
+    } else if (third_number === '' || third_number === '0') {
+      third_number = '0';
+      setScreenFlag(2);
     } else {
       setError();
     }
   }
 
   return {
-    sendKeyPress        : sendKeyPress,
-    register            : register
+    sendKeyPress : sendKeyPress
   };
 
 

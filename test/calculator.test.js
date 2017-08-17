@@ -216,7 +216,7 @@ q.test('complex operations', function(assert) {
   calculator.sendKeyPress('clear');
   calculator.sendKeyPress('4');
   calculator.sendKeyPress('root');
-  assert.equal(getScreenValue(), '2', '2*2=4');
+  assert.equal(getScreenValue(), '2', '4 root -> 2');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('1');
@@ -226,8 +226,7 @@ q.test('complex operations', function(assert) {
   calculator.sendKeyPress('clear');
   runCalculationSequence('1+');
   calculator.sendKeyPress('pm');
-  calculator.sendKeyPress('=');
-  assert.equal(getScreenValue(), '0', 'flip first register\'s sign and transfer');
+  assert.equal(getScreenValue(), '-1', 'flip first register\'s sign and transfer');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('1+2');
@@ -260,7 +259,7 @@ q.test('complex operations', function(assert) {
   calculator.sendKeyPress('clear');
   runCalculationSequence('4+');
   calculator.sendKeyPress('root');
-  assert.equal(getScreenValue(), '2', '4+ root -> 4*2');
+  assert.equal(getScreenValue(), '2', '4+ root -> 4+2');
   calculator.sendKeyPress('=');
   assert.equal(getScreenValue(), '6', '4+2=6');
 
@@ -274,7 +273,7 @@ q.test('complex operations', function(assert) {
   calculator.sendKeyPress('clear');
   runCalculationSequence('1+4');
   calculator.sendKeyPress('root');
-  assert.equal(getScreenValue(), '2', '2*2=4');
+  assert.equal(getScreenValue(), '2', '1+4 root -> 1+2');
   runCalculationSequence('*3=');
   assert.equal(getScreenValue(), '7', '1+2*3=7');
 
@@ -283,7 +282,6 @@ q.test('complex operations', function(assert) {
   assert.equal(getScreenValue(), '54', '9*6=54');
   calculator.sendKeyPress('-');
   assert.notEqual(getScreenValue(), undefined, '54 stays in register a');
-  assert.notEqual(calculator.register[0], undefined, '54 stays in register a');
 
   calculator.sendKeyPress('clear');
   runCalculationSequence('1/0=');
@@ -332,6 +330,9 @@ q.test('Error Handling', function(assert) {
 
 });
 
+// q.test('Screen Test', function(assert) {
+// });
+
 // ========= UTILITY FUNCTIONS
 
 let screen = document.getElementById('screen');
@@ -339,58 +340,6 @@ let screen = document.getElementById('screen');
 function getScreenValue() {
   return document.getElementById('screen').innerHTML;
 }
-
-function setCalculator(arr) {
-  calculator.register[0]   = arr[0]; 
-  calculator.register[1]   = arr[1]; 
-  calculator.register[2]   = arr[2]; 
-  calculator.register[3]   = arr[3]; 
-  calculator.register[4]   = arr[4]; 
-  calculator.setScreenFlag(arr[5]); 
-  calculator.setState(arr[7]); 
-  calculator.setCalculatorState();
-}
-
-function setBuffer(buffer) {
-  calculator.register[0]  = buffer[0]; 
-  calculator.register[1]  = buffer[1]; 
-  calculator.register[2]  = buffer[2]; 
-  calculator.register[3]  = buffer[3]; 
-  calculator.register[4]  = buffer[4]; 
-  calculator.buffer.screen_flag = buffer[5]; 
-  calculator.buffer.state       = buffer[7]; 
-  calculator.setCalculatorState();
-}
-
-function resetBuffer() {
-  setBuffer(['','','','','','0',1,1]);
-}
-
-function getResult() {
-  return [calculator.register[0], calculator.register[1], calculator.register[2], calculator.register[3], calculator.register[4]];
-}
-
-function stringifyBuffer() {
-  return calculator.register[0] + ', '
-       + calculator.register[1] + ', '
-       + calculator.register[2] + ', '
-       + calculator.register[3] + ', '
-       + calculator.register[4] + ', '
-       + calculator.getState();
-}
-  
-
-let default_buffer = {
-  register_a  : '',
-  register_b  : '',
-  register_c  : '',
-  operator_a  : '',
-  operator_b  : '',
-  screen_flag : 1,
-  state       : 1
-};
-
-let default_register = ['','','','',''];
 
 function runCalculationSequence(string) {
   let sequence = string.split('');
