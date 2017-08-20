@@ -4,49 +4,81 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
     <!--  STYLESHEETS  -->
     <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/calculator.css"/>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
 
     <title>Calculator | PJM</title>
   </head>
   <body>
-     <div class="calc-body">
-        <div id="screen" class="calc-screen black">
+
+    <header>
+      <a href="https://peterjmartinson.github.io"><div class="icon"></div></a>
+      <div class="name"><span>JAVASCRIPT CALCULATOR</span></div>
+    </header>
+
+    <div class="project">
+      <div class="calc-body">
+        <div id="screen" class="calc-screen">
         </div>
         <div>
-           <button class="calc-button accent" onclick="calculator.sendKeyPress('clear')"> C </button>
-           <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('pm')"> &#177; </button>
-           <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('root')"> &#8730; </button>
-           <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('/')"> &divide; </button>
+          <button class="calc-button accent" onclick="calculator.sendKeyPress('clear')"> C </button>
+          <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('pm')"> &#177; </button>
+          <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('root')"> &#8730; </button>
+          <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('/')"> &divide; </button>
         </div>
         <div>
-           <button class="calc-button primary" onclick="calculator.sendKeyPress(7)"> 7 </button>
-           <button class="calc-button primary" onclick="calculator.sendKeyPress(8)"> 8 </button>
-           <button class="calc-button primary" onclick="calculator.sendKeyPress(9)"> 9 </button>
-           <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('*')"> &times; </button>
+          <button class="calc-button primary" onclick="calculator.sendKeyPress(7)"> 7 </button>
+          <button class="calc-button primary" onclick="calculator.sendKeyPress(8)"> 8 </button>
+          <button class="calc-button primary" onclick="calculator.sendKeyPress(9)"> 9 </button>
+          <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('*')"> &times; </button>
         </div>
         <div>
-           <button class="calc-button primary" onclick="calculator.sendKeyPress(4)"> 4 </button>
-           <button class="calc-button primary" onclick="calculator.sendKeyPress(5)"> 5 </button>
-           <button class="calc-button primary" onclick="calculator.sendKeyPress(6)"> 6 </button>
-           <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('-')"> &ndash; </button>
+          <button class="calc-button primary" onclick="calculator.sendKeyPress(4)"> 4 </button>
+          <button class="calc-button primary" onclick="calculator.sendKeyPress(5)"> 5 </button>
+          <button class="calc-button primary" onclick="calculator.sendKeyPress(6)"> 6 </button>
+          <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('-')"> &ndash; </button>
         </div>
         <div>
-           <button class="calc-button primary" onclick="calculator.sendKeyPress(1)"> 1 </button>
-           <button class="calc-button primary" onclick="calculator.sendKeyPress(2)"> 2 </button>
-           <button class="calc-button primary" onclick="calculator.sendKeyPress(3)"> 3 </button>
-           <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('+')"> + </button>
+          <button class="calc-button primary" onclick="calculator.sendKeyPress(1)"> 1 </button>
+          <button class="calc-button primary" onclick="calculator.sendKeyPress(2)"> 2 </button>
+          <button class="calc-button primary" onclick="calculator.sendKeyPress(3)"> 3 </button>
+          <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('+')"> + </button>
         </div>
         <div>
-           <button class="calc-button primary" style="width:140px" onclick="calculator.sendKeyPress(0)"> 0 </button>
-           <button class="calc-button primary" onclick="calculator.sendKeyPress('.')"> . </button>
-           <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('=')"> = </button>
+          <button class="calc-button primary" style="width:140px" onclick="calculator.sendKeyPress(0)"> 0 </button>
+          <button class="calc-button primary" onclick="calculator.sendKeyPress('.')"> . </button>
+          <button class="calc-button gray-dark" onclick="calculator.sendKeyPress('=')"> = </button>
         </div>
-     </div>
-     <div id="cowport"></div>
+      </div>
+      <div id="cowport"></div>
+    </div>
+
+    <footer>
+      <div class="copyright">
+        Copyright 2017
+        <span>Peter J. Martinson</span>
+      </div>
+      <div class="contact">
+        Contact
+        <span>
+          <a href="mailto:peter.j.martinson@gmail.com">
+            peter.j.martinson@gmail.com
+          </a>
+        </span>
+      </div>
+      <div class="navigation">
+        Navigation
+        <span>
+          <a href="https://peterjmartinson.github.io/index.html">Home </a>&#151;
+          <a href="http://stonetelescope.wordpress.com" target="_blank">Stories </a>&#151;
+          <a href="https://twitter.com/StoneTelescope" target="_blank">Twitter</a>
+        </span>
+      </div>
+    </footer>
 
     <script src="js/calculator.js"></script>
     <script>
