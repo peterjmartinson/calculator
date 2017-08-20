@@ -50,7 +50,7 @@ a:hover {
 
 header {
   font-family:     'Quattrocento Sans', 'Helvetica',sans-serif;
-  font-size:       1.2rem;
+  font-size:   1.7rem;
   color:           gray;
   margin:          16px 16px 16px 16px;
   padding-bottom:  16px;
@@ -146,21 +146,31 @@ main{
 }
 
 header {
-  margin-top:  64px;
+  position: relative;
+  margin-top:  32px;
   font-size:   1.7rem;
   min-height:  64px;
 }
 
 header .icon {
-  float: right;
+  /* float: right; */
+  display: inline-block;
   background:  url(../assets/st_icon_bw_64.png) no-repeat;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   width:       64px;
   height:      64px;
+  margin: 0px;
 }
 
 header .name {
   display:     inline-block;
-  float: left;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 100px;
+  /* float: left; */
 }
 
 footer {

@@ -83,10 +83,12 @@
   min-width: 120px;
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 720px) {
   .project {
     width: 600px;
-    height: 500px;
+    height: 400px;
+    padding-top: 32px;
+    padding-bottom: 32px;
     margin: auto;
   }
 
