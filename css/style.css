@@ -1,98 +1,186 @@
-/* calculator styles */
+/**
+ * Styling for Portfolio 2.0
+ * Copyright 2017 Peter Martinson
+*/
 
-.border {
-  border: 1px solid black;
+@import url('https://fonts.googleapis.com/css?family=EB+Garamond|Quattrocento+Sans');
+
+html {
+  font-size:      10px;
+  font-family:    'EB Garamond','Times New Roman',serif;
+  color:          black;
+  background:     white;
+  border:         0px;
+  border-bottom:  5px solid black;
+  min-height:     100vh;
+  padding:        0px;
+  box-sizing:     border-box;
 }
 
-.primary {
-  background-color: #107691;
+body {
+  max-width:    40rem;
+  margin:       auto;
+  font-size:    1.3rem;
 }
 
-.gray-dark {
-  background-color: #354044;
+.caps {
+  font-size: 70%;
+
 }
 
-.gray-light {
-  background-color: #f8fafa;
+h1 {
+  font-size: 3rem;
 }
 
-.white {
-  background-color: #ffffff;
+h2 {
 }
 
-.black {
-  background-color: #000000;
+h3 {
 }
 
-.accent {
-  background-color: #E97F13;
+a {
+  text-decoration:  none;
+  color:            black;
 }
 
-.calc-body {
-  width: 280px;
-  height: 410px;
-  margin: auto;
+a:hover {
+  box-shadow: 0px 0px 5px 5px orange;
+  background: orange;
 }
 
-.calc-button {
-  font-family: "Helvetica", sans-serif;
-  font-size: 24px;
-  border: 1px solid black;
-  width: 70px;
-  height: 70px;
-  float: left;
-  color: #000000;
+header {
+  font-family:     'Quattrocento Sans', 'Helvetica',sans-serif;
+  font-size:       1.2rem;
+  color:           gray;
+  margin:          16px 16px 16px 16px;
+  padding-bottom:  16px;
 }
 
-.calc-button:hover {
-  background-color: #d9b310;
+header a {
+  color: gray;
 }
 
-.calc-screen {
-  font-family: "Inconsolata", monospace;
-  background-color: #000000;
-  color: #E97F13;
-  text-align: right;
-  vertical-align: middle;
-  font-size: 45px;
-  font-weight: normal;
-  border: 1px solid black;
-  width: auto;
-  height: 50px;
-  margin: auto;
-  padding: 0px 14px 0px 0px;
+header .icon {
+  display:     block;
+  background:  url(../assets/st_icon_bw_64.png) no-repeat;
+  width:       64px;
+  height:      64px;
+  margin:      0 auto;
+  padding:     0px;
 }
 
-#cowport {
-  display: inline;
-  color: #000000;
-  width: 255px;
+header .name {
+  display: block;
+  margin: 0px;
+  padding-top: 20px;
+  padding-bottom: 20px;
   text-align: center;
 }
 
-#cowport ul {
-  list-style-type: none;
-  padding: 0px;
+main {
+  font-size:    1.5rem;
+  line-height:  1.5;
+  border-top: 1px solid #aaaaaa;
+  border-bottom: 1px solid #aaaaaa;
+  margin: 16px;
 }
 
-#cowport span {
-  font-family: "Inconsolata", monospace;
+section {
+  margin-top: 10px;
+  padding-bottom: 10px;
+  /* border-bottom: 1px solid #cecece; */
+  max-width: 60rem;
+}
+
+.work {
+  text-align: center;
+}
+
+.work a {
+  position: relative;
   display: inline-block;
-  background: #c0c0c0;
-  border: 1px solid white;
-  padding: 5px;
-  min-width: 120px;
+  padding: 10px;
+  border: 1px solid black;
+  z-index: 0;
 }
 
-@media (min-width: 1000px) {
-  .calc-body {
-    float: left;
-    margin-left: 100px;
-    margin-right: 100px;
-  }
+.work a:hover {
+  border: 0px;
+  padding: 11px;
+  z-index: 1;
+}
 
-  #cowport {
-    text-align: left;
-  }
+footer {
+  font-family:     'Quattrocento Sans', 'Helvetica',sans-serif;
+  font-size:       1.2rem;
+  font-variant: small-caps;
+  color: gray;
+  margin: 16px;
+}
 
+footer div {
+  margin-bottom: 16px;
+}
+
+footer span {
+  display: block;
+  font-variant: none;
+  font-family:  'EB Garamond',serif;
+  color: black;
+}
+
+
+
+@media all and (min-width: 720px) {
+
+body {
+  max-width:    60rem;
+  margin:       auto;
+  font-size:    1.5rem;
+}
+
+main{
+  clear: both;
+  font-size:    2rem;
+  line-height:  1.5;
+}
+
+header {
+  margin-top:  64px;
+  font-size:   1.7rem;
+  min-height:  64px;
+}
+
+header .icon {
+  float: right;
+  background:  url(../assets/st_icon_bw_64.png) no-repeat;
+  width:       64px;
+  height:      64px;
+}
+
+header .name {
+  display:     inline-block;
+  float: left;
+}
+
+footer {
+  font-size:   1.7rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  font-family: 'Quattrocento Sans', sans-serif;
+  margin: 16px;
+  /* max-width: 60rem; */
+}
+
+footer div {
+  flex-grow: 1;
+  display: inline-block;
+  text-align: center;
+}
+
+footer span {
+  display: block;
+  font-family:  'EB Garamond',serif;
+}
 }
